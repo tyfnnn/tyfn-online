@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Projekte - TYFN ILKR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #2B2B2B;
+            --accent-color: #DB4A2B;
+            --text-light: #E6E6DD;
+            --text-secondary: #B8B8B0;
+            --hover-color: #3A3A3A;
+            --card-bg: #363636;
+            --border-color: #4A4A4A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .portfolio-section {
+            width: 100%;
+            padding: 4rem 0;
+            background-color: var(--bg-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            color: var(--text-light);
+        }
+
+        .back-button svg {
+            margin-right: 0.5rem;
+            width: 16px;
+            height: 16px;
+        }
+
+        .back-button:hover svg {
+            transform: translateX(-2px);
+        }
+
+        .portfolio-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .portfolio-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .portfolio-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #A63520 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image.ui-design {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #FF6B47 100%);
+        }
+
+        .project-image.app-dev {
+            background: linear-gradient(135deg, #4A6B66 0%, var(--accent-color) 100%);
+        }
+
+        .project-image.creative {
+            background: linear-gradient(135deg, #B8947A 0%, var(--accent-color) 100%);
+        }
+
+        .project-image.web-dev {
+            background: linear-gradient(135deg, #D4A574 0%, var(--accent-color) 100%);
+        }
+
+        .project-image.ux-research {
+            background: linear-gradient(135deg, #7A4B3A 0%, var(--accent-color) 100%);
+        }
+
+        .project-image.mobile-app {
+            background: linear-gradient(135deg, #5A7A7A 0%, var(--accent-color) 100%);
+        }
+
+        .project-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-tag {
+            background: var(--hover-color);
+            color: var(--text-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--text-light);
+        }
+
+        .project-link svg {
+            margin-left: 0.5rem;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover svg {
+            transform: translateX(2px);
+        }
+
+        .spacer {
+            height: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-title {
+                font-size: 2rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="portfolio-section">
+        <div class="container">
+            <a href="/index.html" class="back-button">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Zurück zur Startseite
+            </a>
+            
+            <div class="portfolio-header">
+                <h2 class="portfolio-title">Meine Projekte</h2>
+                <p class="portfolio-subtitle">
+                    Eine Auswahl meiner besten Arbeiten in UX/UI Design, App-Entwicklung und kreativer Gestaltung
+                </p>
+            </div>
+
+            <div class="portfolio-grid">
+                <!-- Zentrik NGO Management App -->
+                <a href="/portfolio/projects/zentrik_detail_page.html" class="project-card">
+                    <div class="project-image app-dev" style="background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png'); background-size: cover; background-position: center;">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Zentrik NGO Management</h3>
+                        <p class="project-description">
+                            Professionelle Android-App für NGO-Management mit Projektmanagement, Finanzverwaltung, Spenden-Tracking und Beleg-Management. Vollständige Lösung für gemeinnützige Organisationen.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Kotlin</span>
+                            <span class="project-tag">Jetpack Compose</span>
+                            <span class="project-tag">Android</span>
+                            <span class="project-tag">Supabase</span>
+                            <span class="project-tag">NGO Management</span>
+                        </div>
+                        <div class="project-link">
+                            Projekt ansehen
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Stellar Horizon Project Card -->
+                <a href="/portfolio/projects/stellar_horizon_detail.html" class="project-card">
+                    <div class="project-image app-dev" style="background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752659137/stellar-horizon-title_h0aah5.png'); background-size: cover; background-position: center;">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Stellar Horizon</h3>
+                        <p class="project-description">
+                            Interaktive iOS-App für Weltraum-Exploration mit 3D-Erde, ISS-Live-Tracker, Astronomie-Galerie und Space-News. Transformiert dein iOS-Gerät in ein Portal zum Kosmos.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Swift</span>
+                            <span class="project-tag">SwiftUI</span>
+                            <span class="project-tag">SceneKit</span>
+                            <span class="project-tag">Firebase</span>
+                            <span class="project-tag">iOS</span>
+                            <span class="project-tag">3D Visualization</span>
+                        </div>
+                        <div class="project-link">
+                            Projekt ansehen
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+    </section>
+</body>
+</html>

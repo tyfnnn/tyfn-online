@@ -23,6 +23,214 @@
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link href="./style2.css" rel="stylesheet" type="text/css" />
   <style>
+    /* CTO Glassmorphism Card Styles */
+.cto-section {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.cto-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.cto-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.cto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cto-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(255, 116, 72, 0.1) 0%, 
+    rgba(255, 72, 72, 0.1) 50%, 
+    rgba(255, 238, 203, 0.1) 100%);
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cto-card:hover::before {
+  opacity: 1;
+}
+
+.cto-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cto-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cto-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #ff7448, #ff4848);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.cto-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #E6E6DD;
+  font-weight: 500;
+}
+
+.cto-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #E6E6DD;
+}
+
+.cto-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.skill-tag {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.cto-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cto-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.cto-card:hover .arrow-icon {
+  transform: translateX(3px);
+}
+
+/* Floating elements for extra visual interest */
+.floating-element {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(1) {
+  width: 60px;
+  height: 60px;
+  top: 10%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+  width: 40px;
+  height: 40px;
+  bottom: 15%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cto-card {
+    padding: 2rem;
+  }
+  
+  .cto-title {
+    font-size: 2rem;
+  }
+  
+  .cto-subtitle {
+    font-size: 1rem;
+  }
+  
+  .cto-description {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 479px) {
+  .cto-card {
+    padding: 1.5rem;
+  }
+  
+  .cto-title {
+    font-size: 1.8rem;
+  }
+  
+  .cto-skills {
+    gap: 0.3rem;
+  }
+  
+  .skill-tag {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
     @media (min-width:992px) {
       html.w-mod-js:not(.w-mod-ix) [data-w-id="b22c09d8-d50b-f8bc-f86c-0f430e464a3b"] {
         -webkit-transform: translate3d(100%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
@@ -749,6 +957,42 @@
       </div>
     </div>
   </div>
+  <!-- CTO Glassmorphism Card - Fügen Sie diesen Code vor <div class="spacer-xxhuge-3"></div> ein -->
+<section class="cto-section">
+  <div class="padding-global-2">
+    <div class="cto-card-container">
+      <a href="portfolio.html" class="cto-card">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        
+        <div class="cto-content">
+          <div class="cto-badge">Mobile Developer</div>
+          
+          <h2 class="cto-title">Portfolio & Projekte</h2>
+          
+          <p class="cto-subtitle">Entdecken Sie meine App-Entwicklungen</p>
+          
+          <p class="cto-description">
+            Als leidenschaftlicher Mobile Developer entwickle ich innovative Apps für iOS und Android. Von der ersten Idee bis zur Veröffentlichung im App Store - hier finden Sie eine Auswahl meiner erfolgreichsten Mobile-Projekte und Entwicklungen.
+          </p>
+          
+          <div class="cto-skills">
+            <span class="skill-tag">Swift & iOS</span>
+            <span class="skill-tag">Kotlin & Android</span>
+            <span class="skill-tag">React Native</span>
+            <span class="skill-tag">UI/UX Design</span>
+            <span class="skill-tag">App Store Optimization</span>
+          </div>
+          
+          <div class="cto-action">
+            <span>Portfolio ansehen</span>
+            <span class="arrow-icon">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
   <div class="spacer-xxhuge-3"></div>
 </section>
 <section id="process" class="section_home-process">

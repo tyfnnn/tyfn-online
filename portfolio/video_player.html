@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Zentrik App Preview</title>
+
+    <!-- Open Graph Meta Tags für soziale Medien -->
+    <meta property="og:title" content="Zentrik App Preview">
+    <meta property="og:description" content="Zentrik Demo: Moderne Android-App für Organisationsverwaltung mit Beleg-Erfassung, Authentifizierung und intuitivem Design.">
+    <meta property="og:image" content="https://res.cloudinary.com/dmokvj08w/image/upload/v1752616485/Bildschirmfoto_2025-07-15_um_23.54.25_dmfobq.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="video.other">
+    <meta property="og:url" content="https://tyfn.online/video-player.html">
+    <meta property="og:site_name" content="Ihr Website Name">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2B2B2B 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .player-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            background: rgba(219, 74, 43, 0.1);
+            border: 1px solid rgba(230, 230, 221, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(230, 230, 221, 0.1);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 20px 20px 0 0;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .controls {
+            position: relative;
+            background: rgba(43, 43, 43, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-top: 1px solid rgba(230, 230, 221, 0.1);
+        }
+
+        .play-pause-btn {
+            background: linear-gradient(135deg, rgba(219, 74, 43, 0.8), rgba(219, 74, 43, 0.6));
+            border: 1px solid rgba(230, 230, 221, 0.3);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #E6E6DD;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(219, 74, 43, 0.3);
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(219, 74, 43, 1), rgba(219, 74, 43, 0.8));
+            box-shadow: 0 6px 20px rgba(219, 74, 43, 0.4);
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(230, 230, 221, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #DB4A2B, rgba(219, 74, 43, 0.8));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(219, 74, 43, 0.5);
+        }
+
+        .time-display {
+            color: #E6E6DD;
+            font-size: 14px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-btn {
+            background: rgba(230, 230, 221, 0.1);
+            border: 1px solid rgba(230, 230, 221, 0.2);
+            border-radius: 8px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #E6E6DD;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .volume-btn:hover {
+            background: rgba(230, 230, 221, 0.2);
+            transform: scale(1.05);
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(230, 230, 221, 0.2);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #DB4A2B;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(219, 74, 43, 0.4);
+        }
+
+        .fullscreen-btn {
+            background: rgba(230, 230, 221, 0.1);
+            border: 1px solid rgba(230, 230, 221, 0.2);
+            border-radius: 8px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #E6E6DD;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(230, 230, 221, 0.2);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                padding: 12px 15px;
+                gap: 10px;
+            }
+            
+            .play-pause-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            
+            .volume-slider {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="video-wrapper">
+            <video id="videoPlayer" preload="metadata">
+                <source src="https://res.cloudinary.com/dmokvj08w/video/upload/v1752611510/Zentrik_ci9nlp.mov" type="video/mp4">
+                Ihr Browser unterstützt das Video-Tag nicht.
+            </video>
+        </div>
+        
+        <div class="controls">
+            <button class="play-pause-btn" id="playPauseBtn">▶</button>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+            
+            <div class="volume-container">
+                <button class="volume-btn" id="volumeBtn">🔊</button>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+            </div>
+            
+            <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // Play/Pause Funktionalität
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = '⏸';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '▶';
+            }
+        });
+
+        // Video-Event-Listener
+        video.addEventListener('loadedmetadata', () => {
+            updateTimeDisplay();
+        });
+
+        video.addEventListener('timeupdate', () => {
+            updateProgress();
+            updateTimeDisplay();
+        });
+
+        // Progress Bar Update
+        function updateProgress() {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Zeit-Anzeige Update
+        function updateTimeDisplay() {
+            const current = formatTime(video.currentTime);
+            const duration = formatTime(video.duration);
+            timeDisplay.textContent = `${current} / ${duration}`;
+        }
+
+        // Zeit formatieren
+        function formatTime(time) {
+            if (isNaN(time)) return '0:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Progress Bar Click
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const newTime = (clickX / width) * video.duration;
+            video.currentTime = newTime;
+        });
+
+        // Lautstärke-Kontrolle
+        volumeSlider.addEventListener('input', () => {
+            video.volume = volumeSlider.value / 100;
+            updateVolumeIcon();
+        });
+
+        volumeBtn.addEventListener('click', () => {
+            video.muted = !video.muted;
+            updateVolumeIcon();
+        });
+
+        function updateVolumeIcon() {
+            if (video.muted || video.volume === 0) {
+                volumeBtn.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                volumeBtn.textContent = '🔉';
+            } else {
+                volumeBtn.textContent = '🔊';
+            }
+        }
+
+        // Vollbild
+        fullscreenBtn.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                video.requestFullscreen();
+            }
+        });
+
+        // Tastatur-Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playPauseBtn.click();
+            } else if (e.code === 'ArrowLeft') {
+                video.currentTime -= 10;
+            } else if (e.code === 'ArrowRight') {
+                video.currentTime += 10;
+            } else if (e.code === 'KeyF') {
+                fullscreenBtn.click();
+            }
+        });
+
+        // Video Ende
+        video.addEventListener('ended', () => {
+            playPauseBtn.textContent = '▶';
+        });
+    </script>
+</body>
+</html>
