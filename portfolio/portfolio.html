@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Projekte - TYFN ILKR</title>
+    <title>Portfolio Projekte - TAYFUN ILKER</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
@@ -32,16 +32,22 @@
             line-height: 1.6;
         }
 
-        .portfolio-section {
-            width: 100%;
-            padding: 4rem 0;
-            background-color: var(--bg-primary);
-        }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
+        }
+
+        /* Navigation */
+        .nav {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .back-button {
@@ -51,7 +57,6 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            margin-bottom: 2rem;
         }
 
         .back-button:hover {
@@ -64,8 +69,10 @@
             height: 16px;
         }
 
-        .back-button:hover svg {
-            transform: translateX(-2px);
+        .portfolio-section {
+            width: 100%;
+            padding: 4rem 0;
+            background-color: var(--bg-primary);
         }
 
         .portfolio-header {
@@ -236,15 +243,22 @@
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/index.html" class="back-button">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Zurück zur Startseite
+                </a>
+            </div>
+        </div>
+    </nav>
+
     <section class="portfolio-section">
         <div class="container">
-            <a href="/index.html" class="back-button">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Zurück zur Startseite
-            </a>
-            
             <div class="portfolio-header">
                 <h2 class="portfolio-title">Meine Projekte</h2>
                 <p class="portfolio-subtitle">

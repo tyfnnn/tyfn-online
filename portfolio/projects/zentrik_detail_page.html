@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zentrik NGO Management App - TYFN ILKR</title>
+    <title>Zentrik NGO Management App - TAYFUN ILKER</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
@@ -105,6 +105,7 @@
             margin-right: auto;
         }
 
+        /* Optimiertes Hero-Bild mit Preload */
         .hero-image {
             width: 100%;
             height: 400px;
@@ -116,10 +117,13 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+        }
+
+        .hero-image.loaded {
+            background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png');
         }
 
         .hero-image::before {
@@ -132,6 +136,16 @@
             background: linear-gradient(135deg, var(--ngo-primary) 0%, var(--ngo-secondary) 100%);
             opacity: 0.1;
             z-index: 1;
+        }
+
+        .hero-image .loading-indicator {
+            font-size: 2rem;
+            color: var(--text-light);
+            z-index: 2;
+        }
+
+        .hero-image.loaded .loading-indicator {
+            display: none;
         }
 
         .hero-tags {
@@ -690,7 +704,7 @@
                 Die erste spezialisierte Buchhaltungs- und Verwaltungsapp für NGOs und gemeinnützige Vereine. 
                 Entwickelt von und für die NGO-Community.
             </p>
-            <div class="hero-image"></div>
+            <div class="hero-image" id="heroImage"></div>
             <div class="hero-tags">
                 <span class="hero-tag primary">Kotlin</span>
                 <span class="hero-tag primary">Jetpack Compose</span>
@@ -1066,6 +1080,26 @@
         video.addEventListener('ended', () => {
             playPauseBtn.textContent = '▶';
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const heroImage = document.querySelector('.hero-image');
+    const imageUrl = 'https://res.cloudinary.com/dmokvj08w/image/upload/c_scale,w_1200,f_auto,q_auto/v1752658414/zentrik-accounting_hqbrnv.png';
+    
+    function loadImage(attempts = 0) {
+        if (attempts >= 3) return;
+        
+        const img = new Image();
+        img.onload = function() {
+            heroImage.style.backgroundImage = `url('${imageUrl}')`;
+        };
+        img.onerror = function() {
+            setTimeout(() => loadImage(attempts + 1), 1000 * Math.pow(2, attempts));
+        };
+        img.src = imageUrl + (attempts > 0 ? `?cb=${Date.now()}` : '');
+    }
+    
+    loadImage();
+});
     </script>
 </body>
 </html>
