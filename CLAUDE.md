@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Portfolio site for Tayfun Ilker (tyfn.online). Originally a Webflow export; now an **Astro v5** static site with built-in i18n routing. English is served at `/`, German at `/de/` — no build-time cloning, no manual language duplication.
+Portfolio site for Tayfun Ilker (tyfn.online). Originally a Webflow export; now an **Astro v5** static site with built-in i18n routing and a shared component tree. English is served at `/`, German at `/de/` — markup lives once, translated text lives in `src/i18n/{en,de}.json`.
 
 ## Commands
 
@@ -26,44 +26,52 @@ Configured in `astro.config.mjs`:
 - `defaultLocale: 'en'`, `locales: ['en', 'de']`, `routing: { prefixDefaultLocale: false }`
 - English routes live under `src/pages/*.astro` and are served at `/`, `/portfolio/`, `/portfolio/zentrik/`, `/portfolio/stellar-horizon/`.
 - German mirrors live under `src/pages/de/*.astro` and serve at `/de/`, `/de/portfolio/`, …
-- The language switcher in each page uses `getRelativeLocaleUrl()` from `astro:i18n` via the layouts, so a click on `EN | DE` always resolves to the current page's counterpart in the other locale.
+- Cross-locale links are built at render time via `getRelativeLocaleUrl()` from `astro:i18n`. The `EN | DE` switcher in `Navbar.astro` always resolves to the current page's counterpart in the other locale.
 
 ### Layouts
 
 Two layouts own `<html>`, `<head>`, `<body>`, canonical, and `hreflang` (en / de / x-default):
 
 - `src/layouts/BaseLayout.astro` — for the homepages. Loads `/style.css` and the Webflow JS stack (jQuery → `webflow.*.js` → GSAP → ScrollTrigger → SplitType → Lenis) in the exact original order required by the IX2 runtime. Preserves `data-wf-domain`, `data-wf-page`, and `data-wf-site` attributes on `<html>` — the Webflow runtime checks for them.
-- `src/layouts/PortfolioLayout.astro` — for portfolio listing + project detail pages. Minimal head, no Webflow scripts, no `style.css`; loads Google Fonts and the project's own inline styles via `<slot name="head-extra">`.
+- `src/layouts/PortfolioLayout.astro` — for the portfolio listing and project detail pages. Minimal head, no Webflow scripts, no `style.css`; pages inject their own Google Fonts + inline style block via `<slot name="head-extra">`.
 
 Both layouts expose slots: `head-extra` (inline `<style>`/`<link>` per page) and `scripts-after` (inline `<script>` blocks that must run after the library scripts).
 
-### Pages are thin shells over HTML snippets
+### Homepage: section components
 
-The original Webflow HTML is **enormous** and brittle — every section is wired to Webflow IX2 via `data-w-id`, `w-node-*` IDs, and inline style attributes. Rather than refactoring the markup into Astro components (which would risk silently breaking animations), each page imports three raw HTML slices from `src/snippets/` via Vite's `?raw` loader and renders them inside the layout with `<Fragment set:html={...}>`:
+`src/pages/index.astro` and `src/pages/de/index.astro` are thin ~40-line shells that compose the homepage from section components under `src/components/home/`:
 
-- `home-head.html` → inline `<style>` blocks from the original `<head>`
-- `home-body.html` → the body markup (nav, hero, sections, footer)
-- `home-scripts.html` → the trailing inline `<script>` block (must run after the library scripts, so it goes in the `scripts-after` slot)
-
-The same pattern is used for the three portfolio snippets (`portfolio-index-*.html`, `portfolio-zentrik-*.html`, `portfolio-stellar-*.html`).
-
-**If you need to change page content, edit the snippet file, not the `.astro` page.** The page file only sets metadata (title, description, `lang`, `pathname`, `bodyClass`) and wires the slots.
-
-### Path rewrites baked into the snippets
-
-When the snippets were extracted from the original HTML, these substitutions were applied so the content works under the new Astro routing:
-
-| Original | Rewritten to |
+| Component | Purpose |
 |---|---|
-| `./style.css`, `./javascript/…`, `./assets/…` | `/style.css`, `/javascript/…`, `/assets/…` |
-| `indexde.html` (EN switcher) | `/de/` |
-| `index.html` (DE switcher) | `/` |
-| `portfolio/portfolio.html` | `/portfolio/` or `/de/portfolio/` (locale-specific) |
-| `portfolio/projects/zentrik_detail_page.html` | `/de/portfolio/zentrik/` |
-| `portfolio/projects/stellar_horizon_detail.html` | `/de/portfolio/stellar-horizon/` |
-| `stellar-horizon.pdf` (relative) | `/portfolio/projects/stellar-horizon.pdf` |
+| `Navbar.astro` | Top nav, status line, logo home-link, language switcher |
+| `Hero.astro` | H1, pixelate profile image, email line, tagline |
+| `About.astro` | About heading + long body paragraphs |
+| `Projects.astro` | `<section id="projects">` wrapper with bg-grid, scroll marquee and the MacBook mockup (Lottie + background video + iPhone/iPad/Watch blur stack). Exposes a default `<slot />` where `CtoCard` is mounted — matching the original nested `<section class="cto-section">` placement |
+| `CtoCard.astro` | Glassmorphism call-to-action card linking to the portfolio |
+| `Process.astro` | 4-step process grid |
+| `Footer.astro` | CTA heading, email link, social icons, copyright, pre-rendered Lottie fallback SVG |
 
-When you extract or re-sync new slices from upstream HTML, re-apply the same sed rewrites.
+Each component takes a `lang` prop (and `pathname` where cross-locale links are needed) and reads its strings via `useTranslations(lang)` from `src/i18n/t.ts`.
+
+### Portfolio: shared components
+
+`src/components/portfolio/`:
+
+| Component | Purpose |
+|---|---|
+| `PortfolioIndex.astro` | The two-card listing page, fully driven by `i18n/*.json` keys under `portfolio.{index,zentrik,stellar}` |
+| `ZentrikDetail.astro` | Thin wrapper that imports `zentrik-detail-{en,de}.html` via `?raw` and renders the right locale via `<Fragment set:html>` |
+| `StellarDetail.astro` | Same pattern for the Stellar Horizon detail page |
+
+The Zentrik and Stellar detail pages contain lots of structural HTML markup per paragraph (`<span class="highlight">`, feature grids, stats, CTA buttons). Rather than exploding into 100+ translation keys with embedded markup, the bodies live as locale-specific snippet files and the component picks one based on `lang`. This matches how the long `About` body is handled (`about-body-{en,de}.html`).
+
+### i18n strings
+
+- `src/i18n/en.json` and `src/i18n/de.json` are the dictionaries. They must stay structurally identical — `useTranslations(lang)` falls back to English for missing keys but any divergence is a silent bug waiting to happen.
+- `src/i18n/t.ts` exports `useTranslations(lang)` which returns a typed `t(key)` function with dot-notation lookups (`t('cto.badge')`, `t('portfolio.zentrik.card_title')`, etc.). The `TranslationKey` type is derived from the EN dictionary so mis-spellings fail at build time.
+- For translated text that contains HTML (`<br />`, `<strong>`, `<span class="highlight">`), either:
+  - put the whole fragment in one JSON value and render it via `<Fragment set:html={t('…')} />` or `<element set:html={t('…')} />`, OR
+  - extract the content to a locale-specific `.html` snippet under `src/snippets/` and import it via `?raw` (used for `about-body-{en,de}.html` and the portfolio detail bodies).
 
 ### Static assets
 
@@ -74,21 +82,37 @@ Everything in `public/` is served at the same URL path:
 - `public/assets/` — images, SVGs, Lottie JSON animations, and the hero video (`screen-record.mp4` + `.webm` fallback)
 - `public/portfolio/projects/stellar-horizon.pdf` — downloadable project PDF
 
-External assets (hero video, mockup images, some Lottie JSON) also load from Cloudinary — those URLs are absolute and hardcoded in the snippets.
+External assets (hero video, mockup images, some Lottie JSON) also load from Cloudinary — those URLs are absolute and hardcoded in the components.
 
-## Language duplication status
+### Remaining snippets
 
-Phase A of the migration left the homepage markup still duplicated between `src/snippets/en/home-*.html` and `src/snippets/de/home-*.html` — each language has its own full HTML copy. The structural duplication (markup ~86 %, translated text ~14 %) hasn't been removed yet. This was a deliberate trade-off to avoid a risky component refactor over ~1,400 lines of Webflow IX2 markup per page.
+Not every piece of the old Webflow export has been componentised. These still live as raw HTML snippets and are loaded via Vite's `?raw` import:
 
-Phase B (future work): extract shared sections into `.astro` components and move the ~14 % translated text into `src/i18n/{en,de}.json` so markup lives once.
-
-## Open translation work
-
-See `TODO.md`. The English portfolio pages (`src/pages/portfolio/*.astro`) are currently placeholder stubs that link to the German version; the German portfolio pages (`src/pages/de/portfolio/*.astro`) are the real content. Translating those into English and replacing the stubs is tracked there.
+```
+src/snippets/
+├── en/home-head.html           # CTO glassmorphism + IX2 initial-state CSS, injected
+│                                 via BaseLayout head-extra on both locales
+├── en/home-scripts.html        # Pixelate + SplitType + GSAP init, injected via
+│                                 BaseLayout scripts-after on both locales
+├── home/
+│   ├── about-body-{en,de}.html   # About paragraph body per locale
+│   └── footer-lottie-fallback.html # Pre-rendered Webflow Lottie SVG cache
+└── portfolio/
+    ├── index-head.html         # Google Fonts + portfolio-index CSS (locale-neutral)
+    ├── zentrik-head.html
+    ├── zentrik-scripts.html
+    ├── zentrik-detail-{en,de}.html
+    ├── stellar-head.html
+    ├── stellar-scripts.html
+    └── stellar-detail-{en,de}.html
+```
 
 ## Conventions
 
-- Don't touch `data-wf-*`, `class="w-…"`, `w-node-*` IDs, or `data-w-id` attributes in the snippets — the Webflow IX2 runtime references them and any rename breaks animations silently.
-- Don't run a formatter over the snippet files; they are machine-generated exports and must stay byte-identical to what Webflow produced (minus the path rewrites above).
+- Don't touch `data-wf-*`, `class="w-…"`, `w-node-*` IDs, or `data-w-id` attributes in the homepage components or snippets — the Webflow IX2 runtime references them and any rename breaks animations silently.
+- Don't run a formatter over the `src/snippets/` files; they are Webflow-exported HTML and need to stay byte-identical to what IX2 expects.
 - Script load order in `BaseLayout.astro` must stay exactly: jQuery → webflow → gsap → scroll-trigger → split-type → lenis. Don't add `defer`, `type="module"`, or reorder.
+- When you add a new translated string, add it to both `en.json` and `de.json` in the same place. The TS type derived from `en.json` will catch a missing EN key; a missing DE key silently falls back to EN at runtime, so grep both JSON files when adding keys.
+- Every page component receives `lang` explicitly — don't read `Astro.currentLocale` from inside a section component, accept it as a prop from the page.
+- When adding an internal link to a content file, compute the href with `getRelativeLocaleUrl(lang, '/path/')` rather than hardcoding `/de/...`, so both locales stay in sync.
 - Keep macOS `._*` and `.DS_Store` files out of commits (already covered by `.gitignore`).
