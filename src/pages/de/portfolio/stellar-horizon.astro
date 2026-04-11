@@ -1,0 +1,16 @@
+---
+import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
+import head from '../../../snippets/de/portfolio-stellar-head.html?raw';
+import body from '../../../snippets/de/portfolio-stellar-body.html?raw';
+import scripts from '../../../snippets/de/portfolio-stellar-scripts.html?raw';
+---
+<PortfolioLayout
+  lang="de"
+  pathname="/portfolio/stellar-horizon/"
+  title="Stellar Horizon - Explore the Universe - TAYFUN ILKER"
+  description="Interaktive iOS-App für Weltraum-Exploration mit 3D-Erde, ISS-Live-Tracker, Astronomie-Galerie und Space-News."
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <Fragment set:html={body} />
+  <Fragment slot="scripts-after" set:html={scripts} />
+</PortfolioLayout>

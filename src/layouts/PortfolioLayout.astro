@@ -1,0 +1,39 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: 'en' | 'de';
+  /** Logischer Pfad ohne Locale-Präfix, z. B. "/portfolio/" oder "/portfolio/zentrik/" */
+  pathname: string;
+}
+
+const { title, description = '', lang, pathname } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const enHref = new URL(getRelativeLocaleUrl('en', pathname), Astro.site).toString();
+const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toString();
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="en" href={enHref} />
+  <link rel="alternate" hreflang="de" href={deHref} />
+  <link rel="alternate" hreflang="x-default" href={enHref} />
+
+  <link href="/assets/t-icon.png" rel="shortcut icon" type="image/x-icon" />
+
+  <slot name="head-extra" />
+</head>
+<body>
+  <slot />
+  <slot name="scripts-after" />
+</body>
+</html>

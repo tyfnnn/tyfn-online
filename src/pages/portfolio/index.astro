@@ -1,0 +1,42 @@
+---
+// TODO(i18n): English portfolio listing not yet translated.
+// Source: portfolio/portfolio.html (German only).
+import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+---
+<PortfolioLayout
+  lang="en"
+  pathname="/portfolio/"
+  title="Portfolio — TAYFUN ILKER"
+  description="Selected projects by Tayfun Ilker."
+>
+  <style slot="head-extra">
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #2B2B2B;
+      color: #E6E6DD;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    main {
+      text-align: center;
+      padding: 2rem;
+      max-width: 520px;
+    }
+    h1 { font-size: 2rem; margin: 0 0 1rem; color: #DB4A2B; }
+    p { line-height: 1.6; margin: 0 0 1.2rem; }
+    a { color: #DB4A2B; text-decoration: none; border-bottom: 1px solid currentColor; }
+    a:hover { opacity: 0.8; }
+    .links { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; }
+  </style>
+  <main>
+    <h1>Portfolio</h1>
+    <p>The English version of this page is coming soon.</p>
+    <div class="links">
+      <a href="/de/portfolio/">View in German →</a>
+      <a href="/">← Back to home</a>
+    </div>
+  </main>
+</PortfolioLayout>

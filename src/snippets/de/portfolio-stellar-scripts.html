@@ -1,0 +1,111 @@
+    <script>
+        // Video Player JavaScript
+        const video = document.getElementById('videoPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // Play/Pause Funktionalität
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = '⏸';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '▶';
+            }
+        });
+
+        // Video-Event-Listener
+        video.addEventListener('loadedmetadata', () => {
+            updateTimeDisplay();
+        });
+
+        video.addEventListener('timeupdate', () => {
+            updateProgress();
+            updateTimeDisplay();
+        });
+
+        // Progress Bar Update
+        function updateProgress() {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Zeit-Anzeige Update
+        function updateTimeDisplay() {
+            const current = formatTime(video.currentTime);
+            const duration = formatTime(video.duration);
+            timeDisplay.textContent = `${current} / ${duration}`;
+        }
+
+        // Zeit formatieren
+        function formatTime(time) {
+            if (isNaN(time)) return '0:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Progress Bar Click
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const newTime = (clickX / width) * video.duration;
+            video.currentTime = newTime;
+        });
+
+        // Lautstärke-Kontrolle
+        volumeSlider.addEventListener('input', () => {
+            video.volume = volumeSlider.value / 100;
+            updateVolumeIcon();
+        });
+
+        volumeBtn.addEventListener('click', () => {
+            video.muted = !video.muted;
+            updateVolumeIcon();
+        });
+
+        function updateVolumeIcon() {
+            if (video.muted || video.volume === 0) {
+                volumeBtn.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                volumeBtn.textContent = '🔉';
+            } else {
+                volumeBtn.textContent = '🔊';
+            }
+        }
+
+        // Vollbild
+        fullscreenBtn.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                video.requestFullscreen();
+            }
+        });
+
+        // Tastatur-Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playPauseBtn.click();
+            } else if (e.code === 'ArrowLeft') {
+                video.currentTime -= 10;
+            } else if (e.code === 'ArrowRight') {
+                video.currentTime += 10;
+            } else if (e.code === 'KeyF') {
+                fullscreenBtn.click();
+            }
+        });
+
+        // Video Ende
+        video.addEventListener('ended', () => {
+            playPauseBtn.textContent = '▶';
+        });
+    </script>

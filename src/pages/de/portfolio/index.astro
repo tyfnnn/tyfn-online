@@ -1,0 +1,14 @@
+---
+import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
+import head from '../../../snippets/de/portfolio-index-head.html?raw';
+import body from '../../../snippets/de/portfolio-index-body.html?raw';
+---
+<PortfolioLayout
+  lang="de"
+  pathname="/portfolio/"
+  title="Portfolio Projekte - TAYFUN ILKER"
+  description="Eine Auswahl meiner Projekte in UX/UI-Design, App-Entwicklung und kreativer Gestaltung."
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <Fragment set:html={body} />
+</PortfolioLayout>
