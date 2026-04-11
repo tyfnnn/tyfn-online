@@ -1,0 +1,176 @@
+---
+---
+<script is:inline>
+  (function () {
+    var KEY = 'langScrambleTrigger';
+    var SCROLL_KEY = 'langScrambleScrollY';
+    var SNAP_KEY = 'langScrambleSnapshot';
+    var GLYPHS = '!<>-_\\/[]{}=+*^?#@%&';
+
+    function collectTextNodes(root) {
+      var nodes = [];
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (n) {
+          return n.nodeValue && n.nodeValue.trim()
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT;
+        }
+      });
+      var n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      return nodes;
+    }
+
+    function snapshotPage() {
+      var snap = [];
+      var targets = document.querySelectorAll('[data-scramble]');
+      targets.forEach(function (el) {
+        var texts = [];
+        collectTextNodes(el).forEach(function (n) { texts.push(n.nodeValue); });
+        snap.push(texts);
+      });
+      return snap;
+    }
+
+    document.addEventListener(
+      'click',
+      function (e) {
+        var t = e.target;
+        if (t && t.closest && t.closest('[data-lang-switch]')) {
+          try {
+            sessionStorage.setItem(KEY, '1');
+            sessionStorage.setItem(SCROLL_KEY, String(window.scrollY || window.pageYOffset || 0));
+            sessionStorage.setItem(SNAP_KEY, JSON.stringify(snapshotPage()));
+          } catch (_) {}
+        }
+      },
+      true
+    );
+
+    var shouldRun = false;
+    try { shouldRun = sessionStorage.getItem(KEY) === '1'; } catch (_) {}
+    if (!shouldRun) return;
+    try { sessionStorage.removeItem(KEY); } catch (_) {}
+
+    var savedY = 0;
+    try {
+      savedY = parseInt(sessionStorage.getItem(SCROLL_KEY) || '0', 10) || 0;
+      sessionStorage.removeItem(SCROLL_KEY);
+    } catch (_) {}
+
+    var snapshot = [];
+    try {
+      snapshot = JSON.parse(sessionStorage.getItem(SNAP_KEY) || '[]') || [];
+      sessionStorage.removeItem(SNAP_KEY);
+    } catch (_) {}
+
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+    function restoreScroll() {
+      if (savedY <= 0) return;
+      var lenis = window.lenis;
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(savedY, { immediate: true, force: true });
+      } else {
+        window.scrollTo(0, savedY);
+      }
+    }
+
+    function rand() {
+      return GLYPHS.charAt((Math.random() * GLYPHS.length) | 0);
+    }
+
+    function isWhitespace(ch) {
+      return ch === ' ' || ch === '\n' || ch === '\t' || ch === '\u00a0';
+    }
+
+    function morphNode(node, oldText, newText, duration) {
+      var maxLen = Math.max(oldText.length, newText.length);
+      var start = performance.now();
+      // Pre-snap to old text so first paint matches the previous locale.
+      node.nodeValue = oldText;
+
+      function frame(now) {
+        var p = Math.min(1, (now - start) / duration);
+        var reveal = p * maxLen;
+        var out = '';
+        for (var i = 0; i < maxLen; i++) {
+          var newCh = i < newText.length ? newText.charAt(i) : '';
+          var oldCh = i < oldText.length ? oldText.charAt(i) : '';
+          if (i < reveal - 2) {
+            out += newCh;
+          } else if (i < reveal) {
+            // active flicker zone
+            if (newCh && isWhitespace(newCh)) out += newCh;
+            else if (oldCh && isWhitespace(oldCh)) out += oldCh;
+            else out += rand();
+          } else {
+            // not yet — keep showing old language
+            if (oldCh) out += oldCh;
+            else out += isWhitespace(newCh) ? newCh : rand();
+          }
+        }
+        node.nodeValue = out;
+        if (p < 1) requestAnimationFrame(frame);
+        else node.nodeValue = newText;
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    function run() {
+      restoreScroll();
+      requestAnimationFrame(restoreScroll);
+      setTimeout(restoreScroll, 50);
+      setTimeout(restoreScroll, 200);
+
+      var targets = document.querySelectorAll('[data-scramble]');
+      var stagger = 0;
+      targets.forEach(function (el, elIdx) {
+        var nodes = collectTextNodes(el);
+        if (!nodes.length) return;
+        var snapNode = snapshot[elIdx] || [];
+
+        // Pre-snap entire element to old text immediately to avoid a flash
+        // of the new language before the morph kicks in.
+        nodes.forEach(function (n, ni) {
+          if (typeof snapNode[ni] === 'string') n.nodeValue = snapNode[ni];
+        });
+
+        var delay = stagger;
+        stagger += 120;
+        setTimeout(function () {
+          nodes.forEach(function (n, ni) {
+            var newText = n.nodeValue; // currently showing old text after pre-snap
+            // Recover the real new text from the closure-stored newText: but we
+            // overwrote it above. Instead, read from the data attribute we set.
+            var realNew = n.__newText;
+            var oldText = typeof snapNode[ni] === 'string' ? snapNode[ni] : '';
+            var maxLen = Math.max(oldText.length, realNew.length);
+            var dur = Math.min(2800, 1200 + maxLen * 45);
+            morphNode(n, oldText, realNew, dur);
+          });
+        }, delay);
+      });
+    }
+
+    function prepare() {
+      // Capture the new (post-navigation) text on each scramble target's text
+      // nodes BEFORE we overwrite them with the snapshot, so the morph has a
+      // target to animate toward.
+      var targets = document.querySelectorAll('[data-scramble]');
+      targets.forEach(function (el) {
+        collectTextNodes(el).forEach(function (n) {
+          n.__newText = n.nodeValue;
+        });
+      });
+      run();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', prepare);
+    } else {
+      prepare();
+    }
+  })();
+</script>

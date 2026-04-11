@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
 import CustomCursor from '../components/CustomCursor.astro';
+import LangScramble from '../components/LangScramble.astro';
 
 interface Props {
   title: string;
@@ -122,5 +123,6 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
   <script is:inline src="/javascript/lenis.js"></script>
 
   <slot name="scripts-after" />
+  <LangScramble />
 </body>
 </html>

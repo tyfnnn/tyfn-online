@@ -25,12 +25,12 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
       </svg>
-      <span>{backLabel}</span>
+      <span data-scramble>{backLabel}</span>
     </a>
     <a href={homeHref} class="pnav-logo">TAYFUN ILKER</a>
     <div class="pnav-right">
       {status && <span class="project-status">{status}</span>}
-      <a href={otherLocaleHref} class="pnav-lang" aria-label="Switch language">EN | DE</a>
+      <a href={otherLocaleHref} class="pnav-lang" aria-label="Switch language" data-lang-switch>EN | DE</a>
     </div>
   </div>
 </nav>
