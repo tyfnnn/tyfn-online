@@ -1,0 +1,53 @@
+---
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const email = t('common.email');
+const mailtoHref = `mailto:${email}?subject=Hi!`;
+---
+<header id="top" class="section_home-header">
+  <div class="padding-global">
+    <div class="home-header_component">
+      <div class="home-header_content-wrapper">
+        <div class="home-header_content">
+          <div class="home-header_heading-wrapper">
+            <h1 letters-fade-in-random="" text-split="" style="opacity:1" class="heading-style-h1">
+              <span style="display:inline-block;position:relative" class="h1-span-one">UX-FOCUSED</span>
+              <span style="display:inline-block;position:relative" class="h1-span-two">DESIGNER&amp;</span>
+              <span style="display:inline-block;position:relative" class="h1-span-three">MOBILE</span>
+              <span style="display:inline-block;position:relative" class="h1-span-four">DEVELOPER</span>
+            </h1>
+          </div>
+          <div class="pixelate">
+            <div class="overflow-hidden-custom">
+              <div class="pixelate_wrapper"><img
+                src="/assets/tyfn-ilkr-profile.jpeg"
+                loading="eager"
+                sizes="(max-width: 767px) 35vw, (max-width: 991px) 21vw, 18vw"
+                srcset="/assets/tyfn-ilkr-profile-500w.jpeg 500w, /assets/tyfn-ilkr-profile-700w.jpeg 724w"
+                alt="Tayfun Ilker Photograph"
+                class="pixelate_image"
+              /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="transform:translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);transform-style:preserve-3d"
+        class="home-header_bottom"
+      >
+        <div id="w-node-a7b6606f-5e98-7111-fffc-81a29c862844-0c146dc5" class="home-header_mail-wrapper">
+          <div class="b0ermu">{t('hero.email_label')}</div><a href={mailtoHref} class="text-style-link">{email}</a>
+        </div>
+        <div id="w-node-_4f778c18-6fa7-26b5-d774-e10a509dfc91-0c146dc5" class="hide-mobile-portrait-2">
+          <div id="w-node-_78ce2ad8-a348-2cf2-f3d6-033bb09908d8-0c146dc5" class="to3zy6" set:html={t('hero.tagline')} />
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

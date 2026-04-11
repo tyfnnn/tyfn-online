@@ -7,6 +7,10 @@
     "status_mobile": "work —",
     "status_desktop": "offers and<br />collaborations  —"
   },
+  "hero": {
+    "email_label": "Email:",
+    "tagline": "Passionate about crafting<br />unforgettable experiences."
+  },
   "footer": {
     "cta_heading": "HAVE AN IDEA?",
     "email_label": "Drop me an email:",

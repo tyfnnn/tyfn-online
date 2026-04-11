@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import homeHead from '../snippets/en/home-head.html?raw';
 import homeScripts from '../snippets/en/home-scripts.html?raw';
 import Navbar from '../components/home/Navbar.astro';
+import Hero from '../components/home/Hero.astro';
 import Footer from '../components/home/Footer.astro';
 
 const lang = (Astro.url.searchParams.get('lang') === 'de' ? 'de' : 'en') as 'en' | 'de';
@@ -16,10 +17,9 @@ const lang = (Astro.url.searchParams.get('lang') === 'de' ? 'de' : 'en') as 'en'
 >
   <Fragment slot="head-extra" set:html={homeHead} />
   <Navbar lang={lang} pathname="/" />
-  <main style="min-height:40vh;padding:4rem 2rem;color:#E6E6DD;">
-    <h1>Phase B smoke test</h1>
-    <p>Append <code>?lang=de</code> to toggle.</p>
-  </main>
-  <Footer lang={lang} />
+  <div class="wrapper">
+    <Hero lang={lang} />
+    <Footer lang={lang} />
+  </div>
   <Fragment slot="scripts-after" set:html={homeScripts} />
 </BaseLayout>

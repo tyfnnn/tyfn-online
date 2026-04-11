@@ -7,6 +7,10 @@
     "status_mobile": "Angebote —",
     "status_desktop": "Angebote und<br />Kollaborationen  —"
   },
+  "hero": {
+    "email_label": "Email:",
+    "tagline": "Leidenschaftlich darin<br />unvergessliche Erlebnisse zu schaffen."
+  },
   "footer": {
     "cta_heading": "Eine Idee?",
     "email_label": "Hinterlasse eine E-Mail:",
