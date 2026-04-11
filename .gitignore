@@ -1,0 +1,19 @@
+# Astro build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+._*
+
+# Editor
+.idea/
+*.swp
+
+# Env
+.env
+.env.*
+!.env.example
