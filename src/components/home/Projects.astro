@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from '../../i18n/t';
+import ProjectsScene from './ProjectsScene.astro';
 
 interface Props {
   lang: Lang;
@@ -58,101 +59,35 @@ const scrollText = t('projects.scroll_text');
     <div class="super-text one"><strong>{scrollText}</strong> - {scrollText} - <strong>{scrollText}</strong> -</div>
   </div>
   <div class="spacer-xxhuge-2"></div>
-  <div class="padding-global-2">
-    <div class="home-work_list">
-      <div class="mockup1_component">
-        <div class="mockup1_animation-content">
-          <div class="mockup1_lottie-animation-wrapper">
-            <div
-              data-w-id="48189745-dcbb-b30b-771a-f9ff4b8aeed9"
-              data-is-ix2-target="1"
-              class="lottie-animation"
-              data-animation-type="lottie"
-              data-src="/assets/MacBookMockUp.json"
-              data-loop="0"
-              data-direction="1"
-              data-autoplay="0"
-              data-renderer="svg"
-              data-default-duration="2.936269483339564"
-              data-duration="0"
-            ></div>
-            <div style="opacity:0" class="mockup1_video-wrapper">
-              <div
-                data-poster-url="/assets/screen-record-poster.jpg"
-                data-video-urls="/assets/screen-record.mp4"
-                data-autoplay="true"
-                data-loop="true"
-                data-wf-ignore="true"
-                class="mockup1_video w-background-video w-background-video-atom"
-              ><video
-                id="48189745-dcbb-b30b-771a-f9ff4b8aeedb-video"
-                autoplay=""
-                loop=""
-                muted=""
-                playsinline=""
-                data-wf-ignore="true"
-                data-object-fit="cover"
-              >
-                <source src="/assets/screen-record.mp4" data-wf-ignore="true" />
-              </video><noscript>
-                <style is:global>
-                  [data-wf-bgvideo-fallback-img] {
-                    display: none;
-                  }
-
-                  @media (prefers-reduced-motion: reduce) {
-                    [data-wf-bgvideo-fallback-img] {
-                      position: absolute;
-                      z-index: -100;
-                      display: inline-block;
-                      height: 100%;
-                      width: 100%;
-                      object-fit: cover;
-                    }
-                  }
-                </style><img data-wf-bgvideo-fallback-img="true" src="/assets/screen-record-poster.jpg" alt="" />
-              </noscript>
-                <div aria-live="polite">
-                  <button
-                    type="button"
-                    data-w-bg-video-control="true"
-                    aria-controls="48189745-dcbb-b30b-771a-f9ff4b8aeedb-video"
-                    class="w-backgroundvideo-backgroundvideoplaypausebutton w-background-video--control"
-                  ><span><img src="/assets/pause.svg" loading="lazy" alt="Pause video" /></span><span hidden=""><img loading="lazy" alt="Play video" src="/assets/play.svg" /></span></button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mockup1_background-text-wrapper">
-          <div class="mockup1_background-text1">
-            <img src="/assets/iphone-mockup.png" loading="lazy" width="Auto" alt="" class="image" />
-            <div class="mockup1_blur1"></div>
-          </div>
-          <div class="mockup1_background-text2">
-            <img src="/assets/ipad-mockup.png" loading="lazy" width="Auto" alt="" class="image" />
-            <div class="mockup1_blur2"></div>
-          </div>
-          <div class="mockup1_background-text1">
-            <img
-              src="/assets/apple-watch-mockup.png"
-              loading="lazy"
-              width="Auto"
-              sizes="(max-width: 991px) 21vw, 13vw"
-              srcset="/assets/apple-watch-mockup-500w.png 500w, /assets/apple-watch-mockup-800w.png 800w, /assets/apple-watch-mockup-809w.png 809w"
-              alt=""
-              class="image"
-            />
-            <div class="mockup1_blur1 mockup1_blur4"></div>
-          </div>
-        </div>
-        <div class="mockup1-ix-triggers">
-          <div data-w-id="48189745-dcbb-b30b-771a-f9ff4b8aeeea" class="mockup1-ix-trigger1"></div>
-          <div data-w-id="48189745-dcbb-b30b-771a-f9ff4b8aeeeb" class="mockup1-ix-trigger2"></div>
-        </div>
-      </div>
-    </div>
+  <ProjectsScene lang={lang} />
+  <div class="scene-outro">
+    <div class="scene-outro_eye">{t('projects.scene.outro.eye')}</div>
+    <div class="scene-outro_head">{t('projects.scene.outro.head')}</div>
   </div>
   <slot />
   <div class="spacer-xxhuge-3"></div>
 </section>
+
+<style>
+  .scene-outro {
+    text-align: center;
+    padding: 0 32px;
+    margin: -40px auto 48px;
+    max-width: 720px;
+    position: relative;
+    z-index: 2;
+  }
+  .scene-outro_eye {
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(240, 237, 230, 0.42);
+    margin-bottom: 14px;
+  }
+  .scene-outro_head {
+    font-size: 44px;
+    line-height: 1.15;
+    color: #F0EDE6;
+    font-weight: 500;
+  }
+</style>
