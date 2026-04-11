@@ -276,11 +276,39 @@ const beats = {
 
 
   @media (max-width: 991px) {
-    .projects-scene #ps-mirror,
-    .projects-scene #ps-kmp {
+    .projects-scene .ps-phase {
+      flex-direction: column;
+      gap: 24px;
+      padding: 0 20px;
+    }
+    .projects-scene .ps-mirror-panel {
       grid-template-columns: 1fr;
     }
-    .projects-scene .ps-story { display: none; }
+    .projects-scene .ps-kmp-panel {
+      grid-template-columns: 1fr;
+    }
+    .projects-scene .ps-story {
+      position: static;
+      transform: none;
+      width: 100%;
+      text-align: center;
+    }
+    .projects-scene .ps-story.left,
+    .projects-scene .ps-story.right { text-align: center; }
+    .projects-scene .ps-story.hidden {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .projects-scene .ps-story.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .projects-scene .ps-head { font-size: 28px; }
+    .projects-scene .ps-body { font-size: 16px; }
+    .projects-scene .ps-code-block { font-size: 13px; }
+    .projects-scene .ps-mirror-panel .ps-code-block,
+    .projects-scene .ps-kmp-panel .ps-code-block.ps-side,
+    .projects-scene .ps-kmp-panel .ps-code-block.ps-shared { padding: 20px; min-height: auto; }
   }
 </style>
 
