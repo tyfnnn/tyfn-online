@@ -1,16 +1,36 @@
 ---
 import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
 import ZentrikDetail from '../../components/portfolio/ZentrikDetail.astro';
+import { useTranslations } from '../../i18n/t';
+import { SITE_URL, PERSON_NAME } from '../../i18n/site';
 import head from '../../snippets/portfolio/zentrik-head.html?raw';
 import scripts from '../../snippets/portfolio/zentrik-scripts.html?raw';
 
 const lang = 'en' as const;
+const t = useTranslations(lang);
+const pathname = '/portfolio/zentrik/';
+const image = 'https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: t('portfolio.zentrik.card_title'),
+  description: t('portfolio.zentrik.card_description'),
+  url: `${SITE_URL}${pathname}`,
+  image,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Android',
+  author: { '@type': 'Person', name: PERSON_NAME, url: `${SITE_URL}/` },
+};
 ---
 <PortfolioLayout
   lang={lang}
-  pathname="/portfolio/zentrik/"
-  title="Zentrik NGO Management App — TAYFUN ILKER"
-  description="Android app for NGO management: project management, finance tracking, donation management, and receipt handling."
+  pathname={pathname}
+  title={t('portfolio.zentrik.page_title')}
+  description={t('portfolio.zentrik.page_description')}
+  image={image}
+  imageAlt={t('portfolio.zentrik.card_title')}
+  jsonLd={jsonLd}
 >
   <Fragment slot="head-extra" set:html={head} />
   <ZentrikDetail lang={lang} />

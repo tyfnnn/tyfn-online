@@ -1,0 +1,129 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+  pathname: string;
+  back: 'home' | 'portfolio';
+  status?: string;
+}
+
+const { lang, pathname, back, status } = Astro.props;
+const t = useTranslations(lang);
+
+const backHref = getRelativeLocaleUrl(lang, back === 'home' ? '/' : '/portfolio/');
+const backLabel = back === 'home' ? t('portfolio.back_to_home') : t('portfolio.back_to_portfolio');
+const homeHref = getRelativeLocaleUrl(lang, '/');
+
+const otherLocale: Lang = lang === 'en' ? 'de' : 'en';
+const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
+---
+<nav class="pnav">
+  <div class="pnav-grid">
+    <a href={backHref} class="pnav-back">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      <span>{backLabel}</span>
+    </a>
+    <a href={homeHref} class="pnav-logo">TAYFUN ILKER</a>
+    <div class="pnav-right">
+      {status && <span class="project-status">{status}</span>}
+      <a href={otherLocaleHref} class="pnav-lang" aria-label="Switch language">EN | DE</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .pnav {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color, #4A4A4A);
+  }
+
+  .pnav-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pnav-back {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-color, #DB4A2B);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+
+  .pnav-back:hover {
+    color: var(--text-light, #E6E6DD);
+  }
+
+  .pnav-back svg {
+    margin-right: 0.5rem;
+    width: 16px;
+    height: 16px;
+  }
+
+  .pnav-logo {
+    justify-self: center;
+    color: var(--text-light, #E6E6DD);
+    text-decoration: none;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+    transition: color 0.3s ease;
+  }
+
+  .pnav-logo:hover {
+    color: var(--accent-color, #DB4A2B);
+  }
+
+  .pnav-right {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pnav-lang {
+    color: var(--accent-color, #DB4A2B);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .pnav-lang:hover {
+    color: var(--text-light, #E6E6DD);
+  }
+
+  @media (max-width: 768px) {
+    .pnav-grid {
+      padding: 0 1rem;
+      grid-template-columns: auto 1fr;
+      grid-template-areas: "back right" "logo logo";
+      row-gap: 0.75rem;
+    }
+    .pnav-back { grid-area: back; }
+    .pnav-right { grid-area: right; }
+    .pnav-logo {
+      grid-area: logo;
+      justify-self: center;
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+    }
+    .pnav-back span { display: none; }
+    .pnav-back svg { margin-right: 0; width: 20px; height: 20px; }
+  }
+</style>

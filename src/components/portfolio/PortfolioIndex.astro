@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useTranslations, type Lang } from '../../i18n/t';
+import PortfolioNav from './PortfolioNav.astro';
 
 interface Props {
   lang: Lang;
@@ -8,22 +9,10 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const homeHref = getRelativeLocaleUrl(lang, '/');
 const zentrikHref = getRelativeLocaleUrl(lang, '/portfolio/zentrik/');
 const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
 ---
-<nav class="nav">
-  <div class="container">
-    <div class="nav-content">
-      <a href={homeHref} class="back-button">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        {t('portfolio.back_to_home')}
-      </a>
-    </div>
-  </div>
-</nav>
+<PortfolioNav lang={lang} pathname="/portfolio/" back="home" />
 
 <section class="portfolio-section">
   <div class="container">

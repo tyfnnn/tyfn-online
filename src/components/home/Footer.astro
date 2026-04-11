@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from '../../i18n/t';
+import { SOCIAL_LINKS } from '../../i18n/site';
 import lottieFallbackSvg from '../../snippets/home/footer-lottie-fallback.html?raw';
 
 interface Props {
@@ -41,15 +42,11 @@ const mailtoHref = `mailto:${email}?subject=Protfolio%20Website`;
   </div>
   <div class="footer_lottie-wrapper">
     <div class="footer-social-block-three">
-      <a href="https://github.com/tyfnnn" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
-        <img src="/assets/github.svg" loading="lazy" width="55" alt="GitHub" />
-      </a>
-      <a href="https://www.linkedin.com/in/tyfnnn" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
-        <img src="/assets/linkedin.svg" loading="lazy" width="55" alt="LinkedIn" />
-      </a>
-      <a href="https://www.instagram.com/tyfn_code.and.design/" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
-        <img src="/assets/instagram.svg" loading="lazy" width="55" alt="Instagram" />
-      </a>
+      {SOCIAL_LINKS.map((s) => (
+        <a href={s.url} target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
+          <img src={s.icon} loading="lazy" width="55" alt={s.name} />
+        </a>
+      ))}
     </div>
     <div class="footer-bottom-2">
       <div class="footer-copyright-2">© 2025</div>

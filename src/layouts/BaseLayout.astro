@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import Seo from '../components/Seo.astro';
 
 interface Props {
   title: string;
@@ -7,6 +8,9 @@ interface Props {
   lang: 'en' | 'de';
   /** Logischer Pfad ohne Locale-Präfix, z. B. "/" oder "/portfolio/" */
   pathname: string;
+  image?: string;
+  imageAlt?: string;
+  jsonLd?: unknown;
   /** data-wf-page aus Original-HTML */
   wfPage?: string;
   /** data-wf-site aus Original-HTML */
@@ -20,6 +24,9 @@ const {
   description,
   lang,
   pathname,
+  image,
+  imageAlt,
+  jsonLd,
   wfPage = '675f1f0e41c3cbd6e18005b8',
   wfSite = '675f1f0e41c3cbd6e1800581',
   bodyClass,
@@ -42,13 +49,16 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
   <meta charset="utf-8" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="twitter:title" content={title} />
-  <meta property="twitter:description" content={description} />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <Seo
+    title={title}
+    description={description}
+    lang={lang}
+    image={image}
+    imageAlt={imageAlt}
+    jsonLd={jsonLd}
+  />
 
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="en" href={enHref} />

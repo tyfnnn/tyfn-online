@@ -9,17 +9,47 @@ import Projects from '../../components/home/Projects.astro';
 import CtoCard from '../../components/home/CtoCard.astro';
 import Process from '../../components/home/Process.astro';
 import Footer from '../../components/home/Footer.astro';
+import {
+  SITE_URL,
+  SITE_NAME,
+  PERSON_NAME,
+  PERSON_JOB_TITLE,
+  PERSON_EMAIL,
+  SOCIAL_LINKS,
+} from '../../i18n/site';
 
 const lang = 'de';
 const pathname = '/';
 const title = 'TAYFUN ILKER | Mobile Developer';
 const description = 'Mobile Developer und multidisziplinärer UX/UI-Designer mit Fokus auf kreative, funktionale digitale Erlebnisse. Spezialisiert auf einzigartige Layouts, Animationen und innovative App-Entwicklung mit Swift und Kotlin.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: PERSON_NAME,
+    jobTitle: PERSON_JOB_TITLE,
+    url: `${SITE_URL}/`,
+    image: `${SITE_URL}/assets/tyfn-ilkr-profile.jpeg`,
+    email: PERSON_EMAIL,
+    sameAs: SOCIAL_LINKS.map((s) => s.url),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    url: `${SITE_URL}/`,
+    name: SITE_NAME,
+    inLanguage: ['en', 'de'],
+  },
+];
 ---
 <BaseLayout
   lang={lang}
   pathname={pathname}
   title={title}
   description={description}
+  imageAlt="Tayfun Ilker — Mobile Developer"
+  jsonLd={jsonLd}
   bodyClass="body-change"
 >
   <Fragment slot="head-extra" set:html={homeHead} />

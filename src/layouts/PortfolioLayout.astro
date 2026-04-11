@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import Seo from '../components/Seo.astro';
 
 interface Props {
   title: string;
@@ -7,9 +8,12 @@ interface Props {
   lang: 'en' | 'de';
   /** Logischer Pfad ohne Locale-Präfix, z. B. "/portfolio/" oder "/portfolio/zentrik/" */
   pathname: string;
+  image?: string;
+  imageAlt?: string;
+  jsonLd?: unknown;
 }
 
-const { title, description = '', lang, pathname } = Astro.props;
+const { title, description = '', lang, pathname, image, imageAlt, jsonLd } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const enHref = new URL(getRelativeLocaleUrl('en', pathname), Astro.site).toString();
@@ -18,10 +22,19 @@ const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toStrin
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   {description && <meta name="description" content={description} />}
+
+  <Seo
+    title={title}
+    description={description}
+    lang={lang}
+    image={image}
+    imageAlt={imageAlt}
+    jsonLd={jsonLd}
+  />
 
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="en" href={enHref} />

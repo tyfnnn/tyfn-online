@@ -1,16 +1,36 @@
 ---
 import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
 import StellarDetail from '../../components/portfolio/StellarDetail.astro';
+import { useTranslations } from '../../i18n/t';
+import { SITE_URL, PERSON_NAME } from '../../i18n/site';
 import head from '../../snippets/portfolio/stellar-head.html?raw';
 import scripts from '../../snippets/portfolio/stellar-scripts.html?raw';
 
 const lang = 'en' as const;
+const t = useTranslations(lang);
+const pathname = '/portfolio/stellar-horizon/';
+const image = 'https://res.cloudinary.com/dmokvj08w/image/upload/v1752659137/stellar-horizon-title_h0aah5.png';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: t('portfolio.stellar.card_title'),
+  description: t('portfolio.stellar.card_description'),
+  url: `${SITE_URL}${pathname}`,
+  image,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'iOS',
+  author: { '@type': 'Person', name: PERSON_NAME, url: `${SITE_URL}/` },
+};
 ---
 <PortfolioLayout
   lang={lang}
-  pathname="/portfolio/stellar-horizon/"
-  title="Stellar Horizon — Explore the Universe — TAYFUN ILKER"
-  description="Interactive iOS app for space exploration with 3D Earth, ISS live tracker, astronomy gallery, and space news."
+  pathname={pathname}
+  title={t('portfolio.stellar.page_title')}
+  description={t('portfolio.stellar.page_description')}
+  image={image}
+  imageAlt={t('portfolio.stellar.card_title')}
+  jsonLd={jsonLd}
 >
   <Fragment slot="head-extra" set:html={head} />
   <StellarDetail lang={lang} />
