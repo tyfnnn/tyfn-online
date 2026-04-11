@@ -1,0 +1,73 @@
+---
+import { useTranslations, type Lang } from '../../i18n/t';
+import lottieFallbackSvg from '../../snippets/home/footer-lottie-fallback.html?raw';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const email = t('common.email');
+const mailtoHref = `mailto:${email}?subject=Protfolio%20Website`;
+---
+<footer data-w-id="0f34ce89-ed6a-accd-a6a7-e774183aacbf" class="footer">
+  <div class="padding-global-3">
+    <div class="footer_component">
+      <div class="footer_content-wrapper">
+        <div class="footer_content">
+          <h2 letters-footer="" text-split="" style="opacity:1" class="heading-style-h1-4">{t('footer.cta_heading')}</h2>
+          <div class="footer_contact-wrapper">
+            <div class="_7x62im">{t('footer.email_label')}</div><a
+              data-w-id="efba1a56-0058-9b53-9beb-6c12b6571525"
+              href={mailtoHref}
+              class="link-mail-w-inline-block w-inline-block"
+            >
+              <div
+                data-w-id="902b49b4-a83a-aebd-9dc8-ab931c544cbf"
+                style="transform:translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);transform-style:preserve-3d"
+                class="link-mail_one"
+              >{email}</div>
+              <div
+                data-w-id="9e6c2a7e-7a49-db7d-2ea3-e8aacdeab73d"
+                style="transform:translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);transform-style:preserve-3d"
+                class="link-mail_two"
+              >{t('footer.magic_line')}</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer_lottie-wrapper">
+    <div class="footer-social-block-three">
+      <a href="https://github.com/tyfnnn" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
+        <img src="/assets/github.svg" loading="lazy" width="55" alt="GitHub" />
+      </a>
+      <a href="https://www.linkedin.com/in/tyfnnn" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
+        <img src="/assets/linkedin.svg" loading="lazy" width="55" alt="LinkedIn" />
+      </a>
+      <a href="https://www.instagram.com/tyfn_code.and.design/" target="_blank" rel="noopener noreferrer" class="footer-social-link-three">
+        <img src="/assets/instagram.svg" loading="lazy" width="55" alt="Instagram" />
+      </a>
+    </div>
+    <div class="footer-bottom-2">
+      <div class="footer-copyright-2">© 2025</div>
+    </div>
+  </div>
+  <div
+    data-src="/assets/animation_bupur.json"
+    class="footer_lottie"
+    data-default-duration="1.6666666666666667"
+    data-autoplay="0"
+    data-animation-type="lottie"
+    data-renderer="svg"
+    data-loop="0"
+    data-w-id="73832888-a2be-a629-8657-06b7d197b464"
+    data-duration="1.6666666666666667"
+    data-is-ix2-target="1"
+    data-ix2-initial-state="15"
+    data-direction="1"
+    set:html={lottieFallbackSvg}
+  />
+</footer>

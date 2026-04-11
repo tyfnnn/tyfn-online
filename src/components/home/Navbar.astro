@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+  pathname: string;
+}
+
+const { lang, pathname } = Astro.props;
+const t = useTranslations(lang);
+
+const homeHref = getRelativeLocaleUrl(lang, pathname);
+const otherLocale: Lang = lang === 'en' ? 'de' : 'en';
+const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
+---
+<nav
+  style="transform:translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);transform-style:preserve-3d"
+  class="nav-2"
+>
+  <div class="nav-container">
+    <div id="w-node-_033701e7-d2a8-ce12-d940-38901bdd0ebf-0c146dc5" class="nav-info">
+      <div class="_0bzhxl">{t('nav.status_prefix')} <span class="show-mobile-portrait"><br /><Fragment set:html={t('nav.status_mobile')} /></span><span class="hide-mobile-portrait" set:html={t('nav.status_desktop')} /></div>
+    </div><a
+      href={`${homeHref}#top`}
+      id="w-node-dc72511b-6b3d-d591-2df5-e36d6a7c95c9-0c146dc5"
+      class="nav-logo-w-inline-block w-inline-block"
+    >
+      <div class="_4mxc6w"><span style="font-variation-settings:&quot;ital&quot; 900, &quot;wght&quot; 500" class="textspan-italic-small">TAYFUN ILKER</span></div>
+    </a>
+    <div id="w-node-c5fc8f12-887c-1e88-ca92-69dccd02e36d-0c146dc5" class="nav-info-2"><a href={otherLocaleHref} class="text-style-link">EN | DE</a></div>
+  </div>
+</nav>

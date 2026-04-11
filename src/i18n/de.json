@@ -1,5 +1,15 @@
 {
   "common": {
     "email": "tyfn.ilkr@gmail.com"
+  },
+  "nav": {
+    "status_prefix": "Offen für",
+    "status_mobile": "Angebote —",
+    "status_desktop": "Angebote und<br />Kollaborationen  —"
+  },
+  "footer": {
+    "cta_heading": "Eine Idee?",
+    "email_label": "Hinterlasse eine E-Mail:",
+    "magic_line": "LET'S CREATE MAGIC!"
   }
 }
