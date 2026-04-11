@@ -11,6 +11,12 @@
     "email_label": "Email:",
     "tagline": "Leidenschaftlich darin<br />unvergessliche Erlebnisse zu schaffen."
   },
+  "about": {
+    "title": "Über mich"
+  },
+  "projects": {
+    "scroll_text": "MOBILE ENTWICKLUNG"
+  },
   "footer": {
     "cta_heading": "Eine Idee?",
     "email_label": "Hinterlasse eine E-Mail:",

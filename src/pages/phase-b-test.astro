@@ -4,6 +4,8 @@ import homeHead from '../snippets/en/home-head.html?raw';
 import homeScripts from '../snippets/en/home-scripts.html?raw';
 import Navbar from '../components/home/Navbar.astro';
 import Hero from '../components/home/Hero.astro';
+import About from '../components/home/About.astro';
+import Projects from '../components/home/Projects.astro';
 import Footer from '../components/home/Footer.astro';
 
 const lang = (Astro.url.searchParams.get('lang') === 'de' ? 'de' : 'en') as 'en' | 'de';
@@ -19,7 +21,9 @@ const lang = (Astro.url.searchParams.get('lang') === 'de' ? 'de' : 'en') as 'en'
   <Navbar lang={lang} pathname="/" />
   <div class="wrapper">
     <Hero lang={lang} />
-    <Footer lang={lang} />
+    <About lang={lang} />
   </div>
+  <Projects lang={lang} />
+  <Footer lang={lang} />
   <Fragment slot="scripts-after" set:html={homeScripts} />
 </BaseLayout>

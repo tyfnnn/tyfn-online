@@ -1,0 +1,31 @@
+---
+import { useTranslations, type Lang } from '../../i18n/t';
+import bodyEn from '../../snippets/home/about-body-en.html?raw';
+import bodyDe from '../../snippets/home/about-body-de.html?raw';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const body = lang === 'de' ? bodyDe : bodyEn;
+---
+<section id="about" class="section_home-about">
+  <div class="spacer-xxhuge"></div>
+  <div class="padding-global">
+    <div class="grid-2col">
+      <h2
+        letters-slide-up=""
+        text-split=""
+        id="w-node-_0b69b444-eef1-e689-b0fc-e7d115c19d54-0c146dc5"
+        style="opacity:1"
+        class="wv1d6l"
+      >{t('about.title')}</h2>
+      <div id="w-node-_9b54ceed-ec37-1986-e4ff-68f56e98a115-0c146dc5" class="max-width-xlarge">
+        <p id="w-node-da0c72f4-78f7-1ac4-cc4d-df04c390e93a-0c146dc5" class="text-size-medium" set:html={body} />
+      </div>
+    </div>
+  </div>
+  <div class="spacer-xxhuge"></div>
+</section>

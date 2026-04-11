@@ -11,6 +11,12 @@
     "email_label": "Email:",
     "tagline": "Passionate about crafting<br />unforgettable experiences."
   },
+  "about": {
+    "title": "About"
+  },
+  "projects": {
+    "scroll_text": "MOBILE DEVELOPMENT"
+  },
   "footer": {
     "cta_heading": "HAVE AN IDEA?",
     "email_label": "Drop me an email:",
