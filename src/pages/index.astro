@@ -1,20 +1,40 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import homeHead from '../snippets/en/home-head.html?raw';
-import homeBody from '../snippets/en/home-body.html?raw';
 import homeScripts from '../snippets/en/home-scripts.html?raw';
+import Navbar from '../components/home/Navbar.astro';
+import Hero from '../components/home/Hero.astro';
+import About from '../components/home/About.astro';
+import Projects from '../components/home/Projects.astro';
+import CtoCard from '../components/home/CtoCard.astro';
+import Process from '../components/home/Process.astro';
+import Footer from '../components/home/Footer.astro';
 
+const lang = 'en';
+const pathname = '/';
 const title = 'TAYFUN ILKER | Mobile Developer';
 const description = 'Mobile Developer and Multidisciplinary UX/UI designer with a focus on creative, functional digital experiences. Specialized in unique layouts, animations, and innovative app development using Swift and Kotlin.';
 ---
 <BaseLayout
-  lang="en"
-  pathname="/"
+  lang={lang}
+  pathname={pathname}
   title={title}
   description={description}
   bodyClass="body-change"
 >
   <Fragment slot="head-extra" set:html={homeHead} />
-  <Fragment set:html={homeBody} />
+  <Navbar lang={lang} pathname={pathname} />
+  <div
+    style="opacity:1;-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
+    class="wrapper"
+  >
+    <Hero lang={lang} />
+    <About lang={lang} />
+  </div>
+  <Projects lang={lang}>
+    <CtoCard lang={lang} />
+  </Projects>
+  <Process lang={lang} />
+  <Footer lang={lang} />
   <Fragment slot="scripts-after" set:html={homeScripts} />
 </BaseLayout>
