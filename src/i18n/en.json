@@ -15,7 +15,48 @@
     "title": "About"
   },
   "projects": {
-    "scroll_text": "MOBILE DEVELOPMENT"
+    "scroll_text": "MOBILE DEVELOPMENT",
+    "scene": {
+      "mirror": {
+        "swift": {
+          "eye": "The language",
+          "head": "Swift.",
+          "body": "Apple's native, expressive tongue. I think in it — not just with it."
+        },
+        "kotlin": {
+          "eye": "The language",
+          "head": "Kotlin.",
+          "body": "JetBrains' answer. Same precision, a different world."
+        },
+        "same_idea": {
+          "eye": "The principle",
+          "head": "<em>Same</em> idea.",
+          "body": "One user model. Once as a Swift struct, once as a Kotlin data class."
+        },
+        "two_homes": {
+          "eye": "The result",
+          "head": "Two homes.",
+          "body": "No translation needed. I'm native in both worlds."
+        }
+      },
+      "kmp": {
+        "one_logic": {
+          "eye": "Kotlin Multiplatform",
+          "head": "<em>One</em> logic.",
+          "body": "Shared business logic in commonMain — written once, running on both platforms."
+        },
+        "result": {
+          "eye": "The result",
+          "head": "iOS and Android.",
+          "body": "Each platform gets its own actual implementation. Native UI, zero compromises."
+        }
+      },
+      "outro": {
+        "eye": "See it in action",
+        "head": "Explore my portfolio.",
+        "cta": "View projects"
+      }
+    }
   },
   "cto": {
     "badge": "Mobile Developer",

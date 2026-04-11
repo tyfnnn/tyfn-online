@@ -1,0 +1,436 @@
+---
+import type { Lang } from '../../i18n/t';
+import en from '../../i18n/en.json';
+import de from '../../i18n/de.json';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const dicts = { en, de } as const;
+const dict = dicts[lang];
+const m = dict.projects.scene.mirror;
+const k = dict.projects.scene.kmp;
+
+const beats = {
+  mirror: [
+    { s: 0.05, e: 0.20, side: 'l', ...m.swift },
+    { s: 0.22, e: 0.38, side: 'r', ...m.kotlin },
+    { s: 0.40, e: 0.52, side: 'l', ...m.same_idea },
+    { s: 0.54, e: 0.62, side: 'r', ...m.two_homes },
+  ],
+  kmp: [
+    { s: 0.68, e: 0.83, side: 'l', ...k.one_logic },
+    { s: 0.86, e: 0.98, side: 'r', ...k.result },
+  ],
+};
+---
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+<div class="projects-scene">
+  <div class="ps-section" id="ps-section">
+    <div class="ps-stage">
+      <!-- Phase 1: Mirror -->
+      <div class="ps-phase" id="ps-mirror">
+        <div class="ps-story left hidden" id="ps-m-ls">
+          <div class="ps-eye"  id="ps-m-l-eye"></div>
+          <div class="ps-head" id="ps-m-l-head"></div>
+          <div class="ps-body" id="ps-m-l-body"></div>
+        </div>
+        <div class="ps-mirror-panel">
+          <div class="ps-code-block">
+            <div class="ps-lang-tag">
+              <div class="ps-lang-dot" style="background:var(--ps-swift)"></div>
+              <span class="ps-lang-name">Swift</span>
+            </div>
+            <div id="ps-sc"></div>
+          </div>
+          <div class="ps-code-block">
+            <div class="ps-lang-tag">
+              <div class="ps-lang-dot" style="background:var(--ps-kotlin)"></div>
+              <span class="ps-lang-name">Kotlin</span>
+            </div>
+            <div id="ps-kc"></div>
+          </div>
+        </div>
+        <div class="ps-story right hidden" id="ps-m-rs">
+          <div class="ps-eye"  id="ps-m-r-eye"></div>
+          <div class="ps-head" id="ps-m-r-head"></div>
+          <div class="ps-body" id="ps-m-r-body"></div>
+        </div>
+      </div>
+
+      <!-- Phase 2: KMP -->
+      <div class="ps-phase" id="ps-kmp">
+        <div class="ps-story left hidden" id="ps-k-ls">
+          <div class="ps-eye"  id="ps-k-l-eye"></div>
+          <div class="ps-head" id="ps-k-l-head"></div>
+          <div class="ps-body" id="ps-k-l-body"></div>
+        </div>
+        <div class="ps-kmp-panel">
+          <div class="ps-code-block ps-side">
+            <div class="ps-lang-tag">
+              <div class="ps-lang-dot" style="background:var(--ps-swift)"></div>
+              <span class="ps-lang-name">iosMain</span>
+            </div>
+            <div id="ps-ic"></div>
+          </div>
+          <div class="ps-code-block ps-shared">
+            <div class="ps-lang-tag">
+              <div class="ps-lang-dot" style="background:var(--ps-kmp)"></div>
+              <span class="ps-lang-name">commonMain</span>
+            </div>
+            <div id="ps-cc"></div>
+          </div>
+          <div class="ps-code-block ps-side">
+            <div class="ps-lang-tag">
+              <div class="ps-lang-dot" style="background:var(--ps-kotlin)"></div>
+              <span class="ps-lang-name">androidMain</span>
+            </div>
+            <div id="ps-ac"></div>
+          </div>
+        </div>
+        <div class="ps-story right hidden" id="ps-k-rs">
+          <div class="ps-eye"  id="ps-k-r-eye"></div>
+          <div class="ps-head" id="ps-k-r-head"></div>
+          <div class="ps-body" id="ps-k-r-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .projects-scene {
+    --ps-bg:            #08080B;
+    --ps-border:        rgba(255,255,255,0.07);
+    --ps-border-strong: rgba(255,255,255,0.12);
+    --ps-text:          #F0EDE6;
+    --ps-text-dim:      rgba(240,237,230,0.42);
+    --ps-text-ghost:    rgba(240,237,230,0.18);
+    --ps-swift:         #FF6534;
+    --ps-kotlin:        #9B72FF;
+    --ps-kmp:           #1DB87A;
+  }
+
+  .projects-scene .ps-section {
+    position: relative;
+    height: 500vh;
+  }
+  .projects-scene .ps-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .projects-scene .ps-phase {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 100%;
+    max-width: 1320px;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .projects-scene .ps-story {
+    position: absolute;
+    top: 50%;
+    width: 280px;
+    transform: translateY(-50%);
+    transition: opacity 0.55s cubic-bezier(.4,0,.2,1),
+                transform 0.55s cubic-bezier(.4,0,.2,1);
+  }
+  .projects-scene .ps-story.left  { text-align: right; }
+  .projects-scene .ps-story.right { text-align: left; }
+  .projects-scene .ps-story.hidden { opacity: 0; pointer-events: none; }
+  .projects-scene .ps-story.left.hidden  { transform: translate(-20px, -50%); }
+  .projects-scene .ps-story.right.hidden { transform: translate(20px, -50%); }
+  .projects-scene .ps-story.visible { opacity: 1; transform: translate(0, -50%); }
+
+  .projects-scene .ps-eye {
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ps-text-dim);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .projects-scene .ps-head {
+    font-size: 42px;
+    line-height: 1.15;
+    color: var(--ps-text);
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .projects-scene .ps-head em { font-style: italic; color: var(--ps-text-dim); font-weight: 400; }
+  .projects-scene .ps-body {
+    font-size: 18px;
+    color: rgba(240,237,230,0.72);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .projects-scene .ps-code-block {
+    background: #0D0D12;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    line-height: 2;
+  }
+  .projects-scene .ps-lang-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ps-border);
+  }
+  .projects-scene .ps-lang-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .projects-scene .ps-lang-name {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ps-text-ghost);
+    font-weight: 400;
+  }
+  .projects-scene .ps-line-row {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .projects-scene .ps-line-inner {
+    white-space: pre;
+    clip-path: inset(0 100% 0 0);
+    will-change: clip-path;
+  }
+  .projects-scene .ps-cursor {
+    display: none;
+    width: 2px; height: 14px;
+    background: var(--ps-text);
+    margin-left: 2px;
+    flex-shrink: 0;
+    animation: ps-blink 0.85s step-end infinite;
+  }
+  @keyframes ps-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .projects-scene .ps-kw-s { color: var(--ps-swift); }
+  .projects-scene .ps-kw-k { color: var(--ps-kotlin); }
+  .projects-scene .ps-kw-m { color: var(--ps-kmp); }
+  .projects-scene .ps-ty   { color: #60B8FF; }
+  .projects-scene .ps-pr   { color: var(--ps-text); }
+  .projects-scene .ps-cm   { color: var(--ps-text-ghost); font-style: italic; }
+  .projects-scene .ps-st   { color: #E8C97E; }
+
+  .projects-scene .ps-mirror-panel,
+  .projects-scene .ps-kmp-panel {
+    width: 100%;
+    display: grid;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--ps-border-strong);
+    background: var(--ps-border);
+    gap: 1px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .projects-scene .ps-mirror-panel > *,
+  .projects-scene .ps-kmp-panel > * { min-width: 0; }
+
+  .projects-scene .ps-mirror-panel {
+    max-width: 660px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .projects-scene .ps-mirror-panel .ps-code-block { padding: 30px; min-height: 300px; }
+
+  .projects-scene #ps-kmp { opacity: 0; }
+  .projects-scene .ps-kmp-panel {
+    max-width: 820px;
+    grid-template-columns: 1fr 1.5fr 1fr;
+  }
+  .projects-scene .ps-kmp-panel .ps-code-block.ps-side   { padding: 26px; min-height: 250px; background: #0B0B0F; }
+  .projects-scene .ps-kmp-panel .ps-code-block.ps-shared { padding: 26px; min-height: 250px; background: #0C0E14; }
+
+  .projects-scene #ps-mirror .ps-story.left  { right: calc(50% + 350px); }
+  .projects-scene #ps-mirror .ps-story.right { left:  calc(50% + 350px); }
+  .projects-scene #ps-kmp .ps-story.left     { right: calc(50% + 430px); }
+  .projects-scene #ps-kmp .ps-story.right    { left:  calc(50% + 430px); }
+
+
+  @media (max-width: 991px) {
+    .projects-scene #ps-mirror,
+    .projects-scene #ps-kmp {
+      grid-template-columns: 1fr;
+    }
+    .projects-scene .ps-story { display: none; }
+  }
+</style>
+
+<script is:inline define:vars={{ beats }}>
+  (function () {
+    const swiftLines = [
+      { h: '<span class="ps-cm">// User model</span>',                                                                   s:0.04, e:0.13 },
+      { h: '<span class="ps-kw-s">struct</span> <span class="ps-ty">User</span> {',                                      s:0.13, e:0.24 },
+      { h: '    <span class="ps-kw-s">let</span> <span class="ps-pr">name</span>: <span class="ps-ty">String</span>',    s:0.24, e:0.34 },
+      { h: '    <span class="ps-kw-s">let</span> <span class="ps-pr">age</span>: <span class="ps-ty">Int</span>',        s:0.34, e:0.42 },
+      { h: '    <span class="ps-kw-s">let</span> <span class="ps-pr">email</span>: <span class="ps-ty">String</span>',   s:0.42, e:0.50 },
+      { h: '}',                                                                                                           s:0.50, e:0.56 },
+    ];
+    const kotlinLines = [
+      { h: '<span class="ps-cm">// User model</span>',                                                                   s:0.04, e:0.13 },
+      { h: '<span class="ps-kw-k">data class</span> <span class="ps-ty">User</span>(',                                   s:0.13, e:0.24 },
+      { h: '    <span class="ps-kw-k">val</span> <span class="ps-pr">name</span>: <span class="ps-ty">String</span>,',   s:0.24, e:0.34 },
+      { h: '    <span class="ps-kw-k">val</span> <span class="ps-pr">age</span>: <span class="ps-ty">Int</span>,',       s:0.34, e:0.42 },
+      { h: '    <span class="ps-kw-k">val</span> <span class="ps-pr">email</span>: <span class="ps-ty">String</span>',   s:0.42, e:0.50 },
+      { h: ')',                                                                                                           s:0.50, e:0.56 },
+    ];
+    const commonLines = [
+      { h: '<span class="ps-cm">// shared business logic</span>',                                                                                  s:0.68, e:0.75 },
+      { h: '<span class="ps-kw-m">expect</span> <span class="ps-kw-k">fun</span> <span class="ps-pr">platformName</span>(): <span class="ps-ty">String</span>', s:0.75, e:0.83 },
+      { h: '',                                                                                                                                     s:0.83, e:0.84 },
+      { h: '<span class="ps-kw-k">fun</span> <span class="ps-pr">greeting</span>() =',                                                             s:0.84, e:0.89 },
+      { h: '    <span class="ps-st">"Built for ${</span><span class="ps-pr">platformName</span><span class="ps-st">()}"</span>',                   s:0.89, e:0.95 },
+    ];
+    const iosLines = [
+      { h: '<span class="ps-kw-m">actual</span> <span class="ps-kw-k">fun</span> <span class="ps-pr">platformName</span>() =', s:0.84, e:0.91 },
+      { h: '    <span class="ps-st">"iOS"</span>',                                                                              s:0.91, e:0.96 },
+    ];
+    const androidLines = [
+      { h: '<span class="ps-kw-m">actual</span> <span class="ps-kw-k">fun</span> <span class="ps-pr">platformName</span>() =', s:0.84, e:0.91 },
+      { h: '    <span class="ps-st">"Android"</span>',                                                                          s:0.91, e:0.96 },
+    ];
+
+    function buildLines(id, lines) {
+      const c = document.getElementById(id);
+      if (!c) return;
+      c.innerHTML = '';
+      lines.forEach((l, i) => {
+        const row = document.createElement('div');
+        row.className = 'ps-line-row';
+        const inner = document.createElement('span');
+        inner.className = 'ps-line-inner';
+        inner.id = id + '_' + i;
+        inner.innerHTML = l.h;
+        const cur = document.createElement('span');
+        cur.className = 'ps-cursor';
+        cur.id = id + '_c' + i;
+        row.appendChild(inner);
+        row.appendChild(cur);
+        c.appendChild(row);
+      });
+    }
+
+    buildLines('ps-sc', swiftLines);
+    buildLines('ps-kc', kotlinLines);
+    buildLines('ps-cc', commonLines);
+    buildLines('ps-ic', iosLines);
+    buildLines('ps-ac', androidLines);
+
+    function c01(v) { return Math.max(0, Math.min(1, v)); }
+
+    function revealLines(id, lines, p) {
+      let active = -1;
+      lines.forEach((l, i) => {
+        const t = c01((p - l.s) / Math.max(0.001, l.e - l.s));
+        const el = document.getElementById(id + '_' + i);
+        if (el) el.style.clipPath = 'inset(0 ' + ((1 - t) * 100).toFixed(2) + '% 0 0)';
+        if (p >= l.s && p < l.e) active = i;
+      });
+      return active;
+    }
+
+    function setCursors(id, lines, active) {
+      lines.forEach((_, i) => {
+        const cur = document.getElementById(id + '_c' + i);
+        if (cur) cur.style.display = (i === active) ? 'block' : 'none';
+      });
+    }
+
+    function applyBeat(rootId, eyeId, headId, bodyId, list, p, side) {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+      let match = null;
+      list.forEach(b => { if (p >= b.s && p <= b.e && b.side === side) match = b; });
+      const cls = 'ps-story ' + (side === 'l' ? 'left' : 'right');
+      if (match) {
+        document.getElementById(eyeId).textContent = match.eye;
+        document.getElementById(headId).innerHTML  = match.head;
+        document.getElementById(bodyId).textContent = match.body;
+        root.className = cls + ' visible';
+      } else {
+        root.className = cls + ' hidden';
+      }
+    }
+
+    function getP() {
+      const sec = document.getElementById('ps-section');
+      if (!sec) return 0;
+      const rect = sec.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const scrolled = window.scrollY - top;
+      const range = sec.offsetHeight - window.innerHeight;
+      return c01(scrolled / Math.max(1, range));
+    }
+
+    let raf = null;
+    function render() {
+      const p = getP();
+
+      const FADE_S = 0.60, FADE_E = 0.67;
+      const kmpA    = c01((p - FADE_S) / (FADE_E - FADE_S));
+      const mirrorA = 1 - kmpA;
+
+      const mirrorEl = document.getElementById('ps-mirror');
+      const kmpEl    = document.getElementById('ps-kmp');
+      if (mirrorEl) mirrorEl.style.opacity = mirrorA;
+      if (kmpEl)    kmpEl.style.opacity    = kmpA;
+
+      if (mirrorA > 0) {
+        const al = revealLines('ps-sc', swiftLines, p);
+        revealLines('ps-kc', kotlinLines, p);
+        setCursors('ps-sc', swiftLines, al);
+        setCursors('ps-kc', kotlinLines, al);
+        applyBeat('ps-m-ls','ps-m-l-eye','ps-m-l-head','ps-m-l-body', beats.mirror, p, 'l');
+        applyBeat('ps-m-rs','ps-m-r-eye','ps-m-r-head','ps-m-r-body', beats.mirror, p, 'r');
+      }
+
+      if (kmpA > 0) {
+        const ac = revealLines('ps-cc', commonLines, p);
+        const ai = revealLines('ps-ic', iosLines, p);
+        const aa = revealLines('ps-ac', androidLines, p);
+        setCursors('ps-cc', commonLines, ac);
+        setCursors('ps-ic', iosLines, ai);
+        setCursors('ps-ac', androidLines, aa);
+        applyBeat('ps-k-ls','ps-k-l-eye','ps-k-l-head','ps-k-l-body', beats.kmp, p, 'l');
+        applyBeat('ps-k-rs','ps-k-r-eye','ps-k-r-head','ps-k-r-body', beats.kmp, p, 'r');
+      }
+    }
+
+    function onScroll() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(render);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    render();
+  })();
+</script>
