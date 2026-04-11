@@ -18,11 +18,11 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
         <div class="floating-element"></div>
 
         <div class="cto-content">
-          <div class="cto-badge">{t('cto.badge')}</div>
+          <div class="cto-badge" data-scramble>{t('cto.badge')}</div>
 
-          <h2 class="cto-title">{t('cto.title')}</h2>
+          <h2 class="cto-title" data-scramble>{t('cto.title')}</h2>
 
-          <p class="cto-subtitle">{t('cto.subtitle')}</p>
+          <p class="cto-subtitle" data-scramble>{t('cto.subtitle')}</p>
 
           <p class="cto-description">
             {t('cto.description')}
@@ -37,7 +37,7 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
           </div>
 
           <div class="cto-action">
-            <span>{t('cto.action')}</span>
+            <span data-scramble>{t('cto.action')}</span>
             <span class="arrow-icon">→</span>
           </div>
         </div>
