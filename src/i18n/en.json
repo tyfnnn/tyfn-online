@@ -17,6 +17,18 @@
   "projects": {
     "scroll_text": "MOBILE DEVELOPMENT"
   },
+  "cto": {
+    "badge": "Mobile Developer",
+    "title": "Portfolio & Projects",
+    "subtitle": "Explore my app developments",
+    "description": "As a passionate Mobile Developer, I create innovative apps for iOS and Android. From initial concept to App Store release - here you'll find a selection of my most successful mobile projects and developments.",
+    "skill_1": "Swift & iOS",
+    "skill_2": "Kotlin & Android",
+    "skill_3": "React Native",
+    "skill_4": "UI/UX Design",
+    "skill_5": "App Store Optimization",
+    "action": "View Portfolio"
+  },
   "footer": {
     "cta_heading": "HAVE AN IDEA?",
     "email_label": "Drop me an email:",

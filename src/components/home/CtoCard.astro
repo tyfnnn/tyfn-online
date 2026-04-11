@@ -1,0 +1,47 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+---
+<section class="cto-section">
+  <div class="padding-global-2">
+    <div class="cto-card-container">
+      <a href={portfolioHref} class="cto-card">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+
+        <div class="cto-content">
+          <div class="cto-badge">{t('cto.badge')}</div>
+
+          <h2 class="cto-title">{t('cto.title')}</h2>
+
+          <p class="cto-subtitle">{t('cto.subtitle')}</p>
+
+          <p class="cto-description">
+            {t('cto.description')}
+          </p>
+
+          <div class="cto-skills">
+            <span class="skill-tag">{t('cto.skill_1')}</span>
+            <span class="skill-tag">{t('cto.skill_2')}</span>
+            <span class="skill-tag">{t('cto.skill_3')}</span>
+            <span class="skill-tag">{t('cto.skill_4')}</span>
+            <span class="skill-tag">{t('cto.skill_5')}</span>
+          </div>
+
+          <div class="cto-action">
+            <span>{t('cto.action')}</span>
+            <span class="arrow-icon">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
