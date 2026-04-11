@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
+import CustomCursor from '../components/CustomCursor.astro';
 
 interface Props {
   title: string;
@@ -43,9 +44,16 @@ const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toStrin
 
   <link href="/assets/t-icon.png" rel="shortcut icon" type="image/x-icon" />
 
+  <style is:inline>
+    @media (pointer: fine) {
+      html, body, *, *::before, *::after { cursor: none !important; }
+    }
+  </style>
+
   <slot name="head-extra" />
 </head>
 <body>
+  <CustomCursor />
   <slot />
   <slot name="scripts-after" />
 </body>

@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
+import CustomCursor from '../components/CustomCursor.astro';
 
 interface Props {
   title: string;
@@ -60,6 +61,16 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
     jsonLd={jsonLd}
   />
 
+  <link rel="dns-prefetch" href="https://use.typekit.net" />
+  <link
+    rel="preload"
+    as="image"
+    href="/assets/tyfn-ilkr-profile-500w.jpeg"
+    imagesrcset="/assets/tyfn-ilkr-profile-500w.jpeg 500w, /assets/tyfn-ilkr-profile-700w.jpeg 724w"
+    imagesizes="(max-width: 767px) 35vw, (max-width: 991px) 21vw, 18vw"
+    fetchpriority="high"
+  />
+
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="en" href={enHref} />
   <link rel="alternate" hreflang="de" href={deHref} />
@@ -81,9 +92,16 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
     window.__i18nOtherHref = otherLocaleUrl;
   </script>
 
+  <style is:inline>
+    @media (pointer: fine) {
+      html, body, *, *::before, *::after { cursor: none !important; }
+    }
+  </style>
+
   <slot name="head-extra" />
 </head>
 <body class={bodyClass}>
+  <CustomCursor />
   <slot />
 
   <script
