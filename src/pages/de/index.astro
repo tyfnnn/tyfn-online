@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import homeHead from '../../snippets/de/home-head.html?raw';
+import homeBody from '../../snippets/de/home-body.html?raw';
+import homeScripts from '../../snippets/de/home-scripts.html?raw';
+
+const title = 'TAYFUN ILKER | Mobile Developer';
+const description = 'Mobile Developer und multidisziplinärer UX/UI-Designer mit Fokus auf kreative, funktionale digitale Erlebnisse. Spezialisiert auf einzigartige Layouts, Animationen und innovative App-Entwicklung mit Swift und Kotlin.';
+---
+<BaseLayout
+  lang="de"
+  pathname="/"
+  title={title}
+  description={description}
+  bodyClass="body-change"
+>
+  <Fragment slot="head-extra" set:html={homeHead} />
+  <Fragment set:html={homeBody} />
+  <Fragment slot="scripts-after" set:html={homeScripts} />
+</BaseLayout>
