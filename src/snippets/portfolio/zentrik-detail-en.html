@@ -1,0 +1,288 @@
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/portfolio/" class="back-button">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to portfolio
+                </a>
+                <div class="project-status">In production</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Zentrik NGO Management</h1>
+            <p class="hero-subtitle">
+                The first accounting and management app built specifically for NGOs and non-profit associations.
+                Designed by and for the NGO community.
+            </p>
+            <div class="hero-image" id="heroImage"></div>
+            <div class="hero-tags">
+                <span class="hero-tag primary">Kotlin</span>
+                <span class="hero-tag primary">Jetpack Compose</span>
+                <span class="hero-tag">Android</span>
+                <span class="hero-tag">Supabase</span>
+                <span class="hero-tag">PostgreSQL</span>
+                <span class="hero-tag">NGO Management</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Info -->
+    <section class="project-info">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>The challenge</h3>
+                    <p>
+                        For my final project I took on a special challenge: a specialised accounting app for NGOs and non-profit associations.
+                        <span class="highlight">Why do NGOs need a dedicated solution?</span> Conventional accounting apps are built for profit-oriented companies and don't account for the specific demands of the non-profit sector.
+                    </p>
+                    <p>
+                        NGOs have to keep their finances separated across the <span class="highlight">four spheres</span> (non-profit sphere, asset management, special-purpose operation, and commercial operation) and often work with international partners in multiple currencies.
+                    </p>
+                    <p>
+                        As a volunteer at a humanitarian association I know the <span class="highlight">pain points</span> of conventional solutions firsthand. One of the biggest problems: no way to automatically convert receipts into the relevant daily exchange rate. <span class="highlight">I solved that problem.</span>
+                    </p>
+                    <p>
+                        The NGO-specific member structure and automatic currency conversion allow NGOs to <span class="highlight">save hundreds of hours of work</span> — time that can go into the association's actual mission instead.
+                    </p>
+                </div>
+                <div class="project-details">
+                    <h3>Project details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Role</span>
+                        <span class="detail-value">Full-Stack Developer & UX Designer</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Development time</span>
+                        <span class="detail-value">1 month (intensive)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Android (cross-platform planned)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Backend</span>
+                        <span class="detail-value">Supabase (PostgreSQL)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Technologies</span>
+                        <span class="detail-value">Kotlin, Jetpack Compose</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Target group</span>
+                        <span class="detail-value">NGOs, associations, foundations</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">Production & ongoing development</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Demo -->
+    <section class="video-demo">
+        <div class="container">
+            <h2 class="section-title">App in action</h2>
+            <div class="video-container">
+                <div class="player-container">
+                    <div class="video-wrapper">
+                        <video id="videoPlayer" preload="metadata">
+                            <source src="https://res.cloudinary.com/dmokvj08w/video/upload/v1752611510/Zentrik_ci9nlp.mov" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <div class="video-controls">
+                        <button class="play-pause-btn" id="playPauseBtn">▶</button>
+
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+
+                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+
+                        <div class="volume-container">
+                            <button class="volume-btn" id="volumeBtn">🔊</button>
+                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                        </div>
+
+                        <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">NGO-specific features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3 class="feature-title">Four-sphere accounting</h3>
+                    <p class="feature-description">
+                        Automatic separation of non-profit sphere, asset management, special-purpose operation, and commercial operation in line with German non-profit law.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌍</span>
+                    <h3 class="feature-title">Multi-currency system</h3>
+                    <p class="feature-description">
+                        Automatic conversion of receipts into current exchange rates. Ideal for international NGOs and partnerships.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">✅</span>
+                    <h3 class="feature-title">Multi-level approvals</h3>
+                    <p class="feature-description">
+                        Flexible approval system for receipts, including members from partner organisations abroad.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3 class="feature-title">Project management</h3>
+                    <p class="feature-description">
+                        Full project management with budget tracking, deadline management, and progress monitoring.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3 class="feature-title">Mobile receipt management</h3>
+                    <p class="feature-description">
+                        Camera integration for capturing receipts on the spot, with automatic text recognition and categorisation.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3 class="feature-title">Donation tracking</h3>
+                    <p class="feature-description">
+                        Comprehensive donation management with automatic donation receipts and donor-relationship management.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3 class="feature-title">GDPR-compliant</h3>
+                    <p class="feature-description">
+                        EU hosting via Supabase with full GDPR compliance and privacy-by-design.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">💡</span>
+                    <h3 class="feature-title">Cost-optimised</h3>
+                    <p class="feature-description">
+                        An open-source backend with PostgreSQL gives NGOs better cost control than proprietary alternatives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title">App insights</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">📊</div>
+                <div class="gallery-item">💰</div>
+                <div class="gallery-item">📱</div>
+                <div class="gallery-item">🎯</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact">
+        <div class="container">
+            <h2 class="section-title">Project impact</h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-number">100+</div>
+                    <div class="impact-label">Hours of work saved</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">4</div>
+                    <div class="impact-label">NGO spheres covered</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">20+</div>
+                    <div class="impact-label">Supported currencies</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">1</div>
+                    <div class="impact-label">Month of development</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process">
+        <div class="container">
+            <h2 class="section-title">Development process</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Problem analysis</h3>
+                    <p class="step-description">
+                        Identifying pain points from my own experience in NGO work and researching existing solutions.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">Technology choice</h3>
+                    <p class="step-description">
+                        A deliberate choice of Supabase as an NGO-friendly, cost-effective, GDPR-compliant backend.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">Rapid development</h3>
+                    <p class="step-description">
+                        Intensive development phase using Kotlin and Jetpack Compose for a native Android experience.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3 class="step-title">NGO testing</h3>
+                    <p class="step-description">
+                        Real-world testing with actual NGO use cases and feedback from the non-profit community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Interested in NGO technology?</h2>
+            <p class="cta-description">
+                Find out more about how Zentrik was built, or let's talk about your NGO project.
+                I plan to develop this solution further as a cross-platform app.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:tyfn.ilkr@gmail.com?subject=Zentrik%20NGO%20App%20Inquiry" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Discuss your project
+                </a>
+                <a href="/portfolio/" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4 4m4-4l-4-4"></path>
+                    </svg>
+                    More projects
+                </a>
+            </div>
+        </div>
+    </section>

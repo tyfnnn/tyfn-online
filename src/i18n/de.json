@@ -29,6 +29,35 @@
     "skill_5": "App Store Optimierung",
     "action": "Portfolio ansehen"
   },
+  "portfolio": {
+    "back_to_home": "Zurück zur Startseite",
+    "index": {
+      "page_title": "Portfolio Projekte - TAYFUN ILKER",
+      "page_description": "Eine Auswahl meiner Projekte in UX/UI-Design, App-Entwicklung und kreativer Gestaltung.",
+      "title": "Meine Projekte",
+      "subtitle": "Eine Auswahl meiner besten Arbeiten in UX/UI Design, App-Entwicklung und kreativer Gestaltung",
+      "view_project": "Projekt ansehen"
+    },
+    "zentrik": {
+      "card_title": "Zentrik NGO Management",
+      "card_description": "Professionelle Android-App für NGO-Management mit Projektmanagement, Finanzverwaltung, Spenden-Tracking und Beleg-Management. Vollständige Lösung für gemeinnützige Organisationen.",
+      "tag_1": "Kotlin",
+      "tag_2": "Jetpack Compose",
+      "tag_3": "Android",
+      "tag_4": "Supabase",
+      "tag_5": "NGO Management"
+    },
+    "stellar": {
+      "card_title": "Stellar Horizon",
+      "card_description": "Interaktive iOS-App für Weltraum-Exploration mit 3D-Erde, ISS-Live-Tracker, Astronomie-Galerie und Space-News. Transformiert dein iOS-Gerät in ein Portal zum Kosmos.",
+      "tag_1": "Swift",
+      "tag_2": "SwiftUI",
+      "tag_3": "SceneKit",
+      "tag_4": "Firebase",
+      "tag_5": "iOS",
+      "tag_6": "3D Visualization"
+    }
+  },
   "process": {
     "title": "Prozess",
     "subtitle": "Wobei ich dich unterstütze:",

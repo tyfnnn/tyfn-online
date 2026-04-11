@@ -1,16 +1,18 @@
 ---
 import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
-import head from '../../../snippets/de/portfolio-zentrik-head.html?raw';
-import body from '../../../snippets/de/portfolio-zentrik-body.html?raw';
-import scripts from '../../../snippets/de/portfolio-zentrik-scripts.html?raw';
+import ZentrikDetail from '../../../components/portfolio/ZentrikDetail.astro';
+import head from '../../../snippets/portfolio/zentrik-head.html?raw';
+import scripts from '../../../snippets/portfolio/zentrik-scripts.html?raw';
+
+const lang = 'de' as const;
 ---
 <PortfolioLayout
-  lang="de"
+  lang={lang}
   pathname="/portfolio/zentrik/"
   title="Zentrik NGO Management App - TAYFUN ILKER"
   description="Professionelle Android-App für NGO-Management mit Projektmanagement, Finanzverwaltung, Spenden-Tracking und Beleg-Management."
 >
   <Fragment slot="head-extra" set:html={head} />
-  <Fragment set:html={body} />
+  <ZentrikDetail lang={lang} />
   <Fragment slot="scripts-after" set:html={scripts} />
 </PortfolioLayout>

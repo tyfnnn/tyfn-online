@@ -1,38 +1,18 @@
 ---
-// TODO(i18n): English Zentrik project page not yet translated.
-// Source: portfolio/projects/zentrik_detail_page.html (German only).
 import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+import ZentrikDetail from '../../components/portfolio/ZentrikDetail.astro';
+import head from '../../snippets/portfolio/zentrik-head.html?raw';
+import scripts from '../../snippets/portfolio/zentrik-scripts.html?raw';
+
+const lang = 'en' as const;
 ---
 <PortfolioLayout
-  lang="en"
+  lang={lang}
   pathname="/portfolio/zentrik/"
   title="Zentrik NGO Management App — TAYFUN ILKER"
-  description="Android app for NGO management: project management, finance, donation tracking, receipt management."
+  description="Android app for NGO management: project management, finance tracking, donation management, and receipt handling."
 >
-  <style slot="head-extra">
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #2B2B2B;
-      color: #E6E6DD;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    main { text-align: center; padding: 2rem; max-width: 520px; }
-    h1 { font-size: 2rem; margin: 0 0 1rem; color: #DB4A2B; }
-    p { line-height: 1.6; margin: 0 0 1.2rem; }
-    a { color: #DB4A2B; text-decoration: none; border-bottom: 1px solid currentColor; }
-    a:hover { opacity: 0.8; }
-    .links { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; }
-  </style>
-  <main>
-    <h1>Zentrik NGO Management</h1>
-    <p>The English version of this page is coming soon.</p>
-    <div class="links">
-      <a href="/de/portfolio/zentrik/">View in German →</a>
-      <a href="/portfolio/">← Back to portfolio</a>
-    </div>
-  </main>
+  <Fragment slot="head-extra" set:html={head} />
+  <ZentrikDetail lang={lang} />
+  <Fragment slot="scripts-after" set:html={scripts} />
 </PortfolioLayout>

@@ -1,0 +1,343 @@
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/portfolio/" class="back-button">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to portfolio
+                </a>
+                <div class="project-status">Open Source</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Stellar Horizon</h1>
+            <p class="hero-subtitle">
+                Discover the universe from your iOS device. With stunning imagery, real-time data, and interactive features, this app brings the wonders of space exploration straight into your hands.
+            </p>
+            <div class="hero-image"></div>
+            <div class="hero-tags">
+                <span class="hero-tag primary">SwiftUI</span>
+                <span class="hero-tag primary">SceneKit</span>
+                <span class="hero-tag">iOS</span>
+                <span class="hero-tag">Firebase</span>
+                <span class="hero-tag">NASA API</span>
+                <span class="hero-tag">Space Technology</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Info -->
+    <section class="project-info">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>The vision</h3>
+                    <p>
+                        Stellar Horizon turns your iOS device into a portal to the cosmos. The app combines <span class="highlight">state-of-the-art iOS technology</span> with official space APIs from NASA, ESA, and other space agencies.
+                    </p>
+                    <p>
+                        At the heart of the app is an <span class="highlight">interactive 3D Earth</span> built with SceneKit that visualises historical climate data. Users can rotate the Earth in real time and explore different textures.
+                    </p>
+                    <p>
+                        The <span class="highlight">ISS live tracker</span> shows the current position of the International Space Station on a MapKit-based map and notifies users of upcoming flyovers at their location.
+                    </p>
+                    <p>
+                        With the built-in <span class="highlight">astronomy gallery</span>, users can browse breathtaking astrophotography, like images, and leave comments. A Space News Hub keeps them up to date with the latest developments in spaceflight.
+                    </p>
+                </div>
+                <div class="project-details">
+                    <h3>Project details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Role</span>
+                        <span class="detail-value">iOS Developer & UX Designer</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Development time</span>
+                        <span class="detail-value">1 month</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">iOS (iPhone & iPad)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Backend</span>
+                        <span class="detail-value">Firebase (Auth + Firestore)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Technologies</span>
+                        <span class="detail-value">SwiftUI, SceneKit, MapKit</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">APIs</span>
+                        <span class="detail-value">NASA, ESA, N2YO.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Website</span>
+                        <span class="detail-value">stellarhorizon.visual-stories.de</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Demo -->
+    <section class="video-demo">
+        <div class="container">
+            <h2 class="section-title">App demo</h2>
+            <div class="video-container">
+                <div class="player-container">
+                    <div class="video-wrapper">
+                        <video id="videoPlayer" preload="metadata">
+                            <source src="https://res.cloudinary.com/dmokvj08w/video/upload/v1752659708/stellar-horizon-demo_ocuktq.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <div class="video-controls">
+                        <button class="play-pause-btn" id="playPauseBtn">▶</button>
+
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+
+                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+
+                        <div class="volume-container">
+                            <button class="volume-btn" id="volumeBtn">🔊</button>
+                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                        </div>
+
+                        <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PDF Preview -->
+    <section class="pdf-preview">
+        <div class="container">
+            <h2 class="section-title">Project presentation</h2>
+
+            <!-- Desktop PDF Viewer -->
+            <div class="pdf-container">
+                <div class="pdf-header">
+                    <h3>Stellar Horizon — presentation</h3>
+                </div>
+                <div class="pdf-viewer">
+                    <embed src="/portfolio/projects/stellar-horizon.pdf" type="application/pdf" width="100%" height="600px">
+                    <div class="pdf-fallback">
+                        <a href="/portfolio/projects/stellar-horizon.pdf" download="Stellar_Horizon_Documentation.pdf" class="btn btn-primary">
+                            📄 Download PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile PDF Preview -->
+            <div class="pdf-preview-mobile">
+                <span class="pdf-icon">📄</span>
+                <div class="pdf-info">
+                    <h3>Stellar Horizon — presentation</h3>
+                    <p>
+                        Detailed documentation of the app's development, architecture, and technical features.
+                        Includes screenshots, code samples, and a walkthrough of the development process.
+                    </p>
+                </div>
+                <div class="pdf-actions">
+                    <a href="/portfolio/projects/stellar-horizon.pdf" download="Stellar_Horizon_Documentation.pdf" class="pdf-btn pdf-btn-primary">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Download PDF
+                    </a>
+                    <a href="/portfolio/projects/stellar-horizon.pdf" target="_blank" class="pdf-btn pdf-btn-secondary">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                        Open in a new tab
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Innovative features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🔭</span>
+                    <h3 class="feature-title">Astronomy gallery</h3>
+                    <p class="feature-description">
+                        Browse stunning astrophotography from NASA, ESA, and other space agencies. Like and comment on your favourite cosmic images.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌍</span>
+                    <h3 class="feature-title">Interactive 3D Earth</h3>
+                    <p class="feature-description">
+                        Explore a SceneKit-based 3D Earth model with realistic textures and lighting. Visualise historical climate data through selectable Earth textures.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛰️</span>
+                    <h3 class="feature-title">ISS live tracker</h3>
+                    <p class="feature-description">
+                        Follow the International Space Station in real time on a MapKit map. Monitor its current position, speed, and orbit.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📰</span>
+                    <h3 class="feature-title">Space News Hub</h3>
+                    <p class="feature-description">
+                        Stay up to date with curated articles from NASA, ESA, and other space agencies. Save important stories for later.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">👤</span>
+                    <h3 class="feature-title">User accounts</h3>
+                    <p class="feature-description">
+                        Secure authentication via Firebase with email/password or Google Sign-In. Anonymous browsing is available for quick access.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Lottie animations</h3>
+                    <p class="feature-description">
+                        High-quality and custom animations for a polished and fluid user experience throughout the app.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3 class="feature-title">Privacy</h3>
+                    <p class="feature-description">
+                        Full privacy compliance with a secure Firebase integration and optional anonymous usage for maximum privacy.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3 class="feature-title">Native iOS app</h3>
+                    <p class="feature-description">
+                        Built entirely in SwiftUI for optimal performance and seamless integration with the iOS ecosystem and all of its native features.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title">App impressions</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dmokvj08w/image/upload/v1752669653/bild1_xhfvj7.png" alt="Stellar Horizon App Screenshot 1" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dmokvj08w/image/upload/v1752669654/bild2_texue6.png" alt="Stellar Horizon App Screenshot 2" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dmokvj08w/image/upload/v1752669655/bild4_nzxe6k.png" alt="Stellar Horizon App Screenshot 3" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://res.cloudinary.com/dmokvj08w/image/upload/v1752669658/bild3_pqm1bg.png" alt="Stellar Horizon App Screenshot 4" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact">
+        <div class="container">
+            <h2 class="section-title">Technical highlights</h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-number">100%</div>
+                    <div class="impact-label">Built in SwiftUI</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">3</div>
+                    <div class="impact-label">Primary APIs integrated</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">24/7</div>
+                    <div class="impact-label">ISS live tracking</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">1000+</div>
+                    <div class="impact-label">Astronomy images</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process">
+        <div class="container">
+            <h2 class="section-title">Development process</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Concept & design</h3>
+                    <p class="step-description">
+                        Designing the app architecture and the UI/UX with a focus on intuitive controls and an immersive space experience.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">API integration</h3>
+                    <p class="step-description">
+                        Implementing the NASA, ESA, and N2YO APIs for real-time data and high-quality space content.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">3D development</h3>
+                    <p class="step-description">
+                        Building the interactive 3D Earth in SceneKit, including realistic textures and animations.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3 class="step-title">App Store launch</h3>
+                    <p class="step-description">
+                        Final testing, App Store optimisation, and a successful launch backed by positive user reviews.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Discover the universe</h2>
+            <p class="cta-description">
+                Explore the Stellar Horizon source code on GitHub and learn more about the technical build
+                of this innovative space app using SwiftUI and SceneKit.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/tyfnnn/Stellar-Horizon" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                    GitHub repository
+                </a>
+                <a href="/portfolio/" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4 4m4-4l-4-4"></path>
+                    </svg>
+                    More projects
+                </a>
+            </div>
+        </div>
+    </section>

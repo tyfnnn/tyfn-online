@@ -1,14 +1,18 @@
 ---
 import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
+import PortfolioIndex from '../../../components/portfolio/PortfolioIndex.astro';
 import head from '../../../snippets/de/portfolio-index-head.html?raw';
-import body from '../../../snippets/de/portfolio-index-body.html?raw';
+import { useTranslations } from '../../../i18n/t';
+
+const lang = 'de' as const;
+const t = useTranslations(lang);
 ---
 <PortfolioLayout
-  lang="de"
+  lang={lang}
   pathname="/portfolio/"
-  title="Portfolio Projekte - TAYFUN ILKER"
-  description="Eine Auswahl meiner Projekte in UX/UI-Design, App-Entwicklung und kreativer Gestaltung."
+  title={t('portfolio.index.page_title')}
+  description={t('portfolio.index.page_description')}
 >
   <Fragment slot="head-extra" set:html={head} />
-  <Fragment set:html={body} />
+  <PortfolioIndex lang={lang} />
 </PortfolioLayout>

@@ -1,0 +1,92 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const homeHref = getRelativeLocaleUrl(lang, '/');
+const zentrikHref = getRelativeLocaleUrl(lang, '/portfolio/zentrik/');
+const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
+---
+<nav class="nav">
+  <div class="container">
+    <div class="nav-content">
+      <a href={homeHref} class="back-button">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        {t('portfolio.back_to_home')}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<section class="portfolio-section">
+  <div class="container">
+    <div class="portfolio-header">
+      <h2 class="portfolio-title">{t('portfolio.index.title')}</h2>
+      <p class="portfolio-subtitle">
+        {t('portfolio.index.subtitle')}
+      </p>
+    </div>
+
+    <div class="portfolio-grid">
+      <a href={zentrikHref} class="project-card">
+        <div
+          class="project-image app-dev"
+          style="background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png'); background-size: cover; background-position: center;"
+        ></div>
+        <div class="project-content">
+          <h3 class="project-title">{t('portfolio.zentrik.card_title')}</h3>
+          <p class="project-description">
+            {t('portfolio.zentrik.card_description')}
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">{t('portfolio.zentrik.tag_1')}</span>
+            <span class="project-tag">{t('portfolio.zentrik.tag_2')}</span>
+            <span class="project-tag">{t('portfolio.zentrik.tag_3')}</span>
+            <span class="project-tag">{t('portfolio.zentrik.tag_4')}</span>
+            <span class="project-tag">{t('portfolio.zentrik.tag_5')}</span>
+          </div>
+          <div class="project-link">
+            {t('portfolio.index.view_project')}
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <a href={stellarHref} class="project-card">
+        <div
+          class="project-image app-dev"
+          style="background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752659137/stellar-horizon-title_h0aah5.png'); background-size: cover; background-position: center;"
+        ></div>
+        <div class="project-content">
+          <h3 class="project-title">{t('portfolio.stellar.card_title')}</h3>
+          <p class="project-description">
+            {t('portfolio.stellar.card_description')}
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">{t('portfolio.stellar.tag_1')}</span>
+            <span class="project-tag">{t('portfolio.stellar.tag_2')}</span>
+            <span class="project-tag">{t('portfolio.stellar.tag_3')}</span>
+            <span class="project-tag">{t('portfolio.stellar.tag_4')}</span>
+            <span class="project-tag">{t('portfolio.stellar.tag_5')}</span>
+            <span class="project-tag">{t('portfolio.stellar.tag_6')}</span>
+          </div>
+          <div class="project-link">
+            {t('portfolio.index.view_project')}
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

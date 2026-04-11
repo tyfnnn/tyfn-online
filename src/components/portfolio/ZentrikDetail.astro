@@ -1,0 +1,13 @@
+---
+import type { Lang } from '../../i18n/t';
+import bodyEn from '../../snippets/portfolio/zentrik-detail-en.html?raw';
+import bodyDe from '../../snippets/portfolio/zentrik-detail-de.html?raw';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const body = lang === 'de' ? bodyDe : bodyEn;
+---
+<Fragment set:html={body} />
