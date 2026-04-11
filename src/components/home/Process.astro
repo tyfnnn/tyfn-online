@@ -1,0 +1,69 @@
+---
+import { useTranslations, type Lang } from '../../i18n/t';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section id="process" class="section_home-process">
+  <div class="spacer-xhuge"></div>
+  <div class="padding-global-5">
+    <div class="process_grid-title">
+      <h2
+        letters-slide-up=""
+        text-split=""
+        id="w-node-_9dedbd5f-509d-cec8-b521-beb8d357c516-0c146dc5"
+        style="opacity:1"
+        class="unaybv"
+      >{t('process.title')}</h2>
+      <div id="w-node-_9e13dbc4-bcc0-19bf-8324-5d1aa94d32d4-0c146dc5" class="process_text-wrapper">
+        <div id="w-node-_59709a6b-63a7-de7e-a256-e776132d61fb-0c146dc5" class="max-width-xlarge-2">
+          <div
+            line-animation=""
+            text-split=""
+            id="w-node-_010fd501-ff9b-588e-b16e-487dcb84fcfe-0c146dc5"
+            style="opacity:1"
+            class="text-size-medium-2"
+          >{t('process.subtitle')}</div>
+        </div>
+      </div>
+    </div>
+    <div class="line-divider"></div>
+    <div class="process_grid-2col">
+      <div class="process-item">
+        <div class="process-number">01</div>
+        <div class="process-content">
+          <h3 class="process-heading">{t('process.step_1_heading')}</h3>
+          <p class="process-text">{t('process.step_1_body')}</p>
+        </div>
+      </div>
+
+      <div class="process-item">
+        <div class="process-number">02</div>
+        <div class="process-content">
+          <h3 class="process-heading">{t('process.step_2_heading')}</h3>
+          <p class="process-text">{t('process.step_2_body')}</p>
+        </div>
+      </div>
+
+      <div class="process-item">
+        <div class="process-number">03</div>
+        <div class="process-content">
+          <h3 class="process-heading">{t('process.step_3_heading')}</h3>
+          <p class="process-text">{t('process.step_3_body')}</p>
+        </div>
+      </div>
+
+      <div class="process-item">
+        <div class="process-number">04</div>
+        <div class="process-content">
+          <h3 class="process-heading">{t('process.step_4_heading')}</h3>
+          <p class="process-text">{t('process.step_4_body')}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

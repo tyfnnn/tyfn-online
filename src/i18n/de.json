@@ -29,6 +29,18 @@
     "skill_5": "App Store Optimierung",
     "action": "Portfolio ansehen"
   },
+  "process": {
+    "title": "Prozess",
+    "subtitle": "Wobei ich dich unterstütze:",
+    "step_1_heading": "App-Konzeption",
+    "step_1_body": "Ich beginne mit sorgfältiger Planung und Konzeptentwicklung. Durch Marktanalyse und Nutzerforschung definiere ich Kernfunktionen, erstelle Wireframes und stelle sicher, dass die App echten Mehrwert für ihre Zielgruppe liefert.",
+    "step_2_heading": "UI/UX Design",
+    "step_2_body": "Die Designphase dreht sich um intuitive und ansprechende Benutzeroberflächen. Ich entwickle umfassende UI-Konzepte mit klarer Navigation und konsistenten Designelementen und optimiere die Nutzererfahrung durch iteratives Prototyping und Feedback.",
+    "step_3_heading": "App-Entwicklung",
+    "step_3_body": "Die technische Umsetzung nutzt moderne Entwicklungstools und Frameworks. Ich lege Wert auf sauberen, wartbaren Code und eine robuste Architektur. Durch effizientes Projektmanagement sorge ich für die fristgerechte Lieferung stabiler, benutzerfreundlicher Apps mit hervorragender Performance.",
+    "step_4_heading": "Testing & Optimierung",
+    "step_4_body": "Gründliche Tests auf verschiedenen Geräten und Systemen garantieren einwandfreie Funktionalität. Ich optimiere die Performance und beseitige potenzielle Schwachstellen. Durch kontinuierliches Monitoring und Updates bleibt die App langfristig performant und flexibel gegenüber neuen Anforderungen."
+  },
   "footer": {
     "cta_heading": "Eine Idee?",
     "email_label": "Hinterlasse eine E-Mail:",
