@@ -29,7 +29,7 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
     </a>
     <a href={homeHref} class="pnav-logo">TAYFUN ILKER</a>
     <div class="pnav-right">
-      {status && <span class="project-status">{status}</span>}
+      {status && <span class="project-status" data-scramble>{status}</span>}
       <a href={otherLocaleHref} class="pnav-lang" aria-label="Switch language" data-lang-switch>EN | DE</a>
     </div>
   </div>
@@ -37,8 +37,14 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
 
 <style>
   .pnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     padding: 1.5rem 0;
     border-bottom: 1px solid var(--border-color, #4A4A4A);
+    background: rgba(43, 43, 43, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .pnav-grid {
