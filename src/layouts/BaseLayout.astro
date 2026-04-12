@@ -3,6 +3,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import LangScramble from '../components/LangScramble.astro';
+import FabMenu from '../components/FabMenu.astro';
 
 interface Props {
   title: string;
@@ -103,6 +104,7 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
 </head>
 <body class={bodyClass}>
   <CustomCursor />
+  <FabMenu lang={lang} />
   <slot />
 
   <script

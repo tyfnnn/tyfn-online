@@ -118,6 +118,14 @@
     "step_4_heading": "Testing & Optimierung",
     "step_4_body": "Gründliche Tests auf verschiedenen Geräten und Systemen garantieren einwandfreie Funktionalität. Ich optimiere die Performance und beseitige potenzielle Schwachstellen. Durch kontinuierliches Monitoring und Updates bleibt die App langfristig performant und flexibel gegenüber neuen Anforderungen."
   },
+  "fab": {
+    "home": "Startseite",
+    "about": "Über mich",
+    "projects": "Projekte",
+    "portfolio": "Portfolio",
+    "process": "Prozess",
+    "contact": "Kontakt"
+  },
   "footer": {
     "cta_heading": "Eine Idee?",
     "email_label": "Hinterlasse eine E-Mail:",

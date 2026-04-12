@@ -118,6 +118,14 @@
     "step_4_heading": "Testing & Optimization",
     "step_4_body": "Rigorous testing across various devices and systems ensures flawless functionality. I optimize performance and address potential weaknesses. Through continuous monitoring and updates, I maintain optimal app performance and adaptability to evolving requirements."
   },
+  "fab": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "portfolio": "Portfolio",
+    "process": "Process",
+    "contact": "Contact"
+  },
   "footer": {
     "cta_heading": "HAVE AN IDEA?",
     "email_label": "Drop me an email:",
