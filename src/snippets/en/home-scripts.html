@@ -31,14 +31,12 @@
       }
       setAmount(v) { this.amount = v; return this; }
       setWidth() { this._resize(); return this; }
-      done() {
-        this.canvas.style.display = "none";
-      }
+      show() { this.canvas.style.display = ""; return this; }
+      hide() { this.canvas.style.display = "none"; return this; }
       render() {
         var ctx = this.ctx, w = this.w, h = this.h, a = this.amount;
         ctx.clearRect(0, 0, w, h);
         if (a <= 0) {
-          this.done();
           return this;
         }
         var maxBlock = Math.min(w, h) * 0.12;
@@ -69,11 +67,16 @@
           ease: "steps(8)",
           onUpdate: function () {
             pixelate.setAmount(pixel.value).render();
+          },
+          onComplete: function () {
+            pixelate.hide();
           }
         });
 
         $(wrapper).on("mouseenter", function () {
-          pixelate.canvas.style.display = "";
+          pixelate.show();
+          pixel.value = 0.85;
+          pixelate.setAmount(pixel.value).render();
           gsap.to(pixel, {
             value: 0,
             duration: 0.6,
@@ -81,12 +84,15 @@
             overwrite: true,
             onUpdate: function () {
               pixelate.setAmount(pixel.value).render();
+            },
+            onComplete: function () {
+              pixelate.hide();
             }
           });
         });
 
         $(wrapper).on("mouseleave", function () {
-          pixelate.canvas.style.display = "";
+          pixelate.show();
           gsap.to(pixel, {
             value: 0.85,
             duration: 0.5,
