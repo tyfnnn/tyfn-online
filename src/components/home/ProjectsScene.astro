@@ -154,7 +154,21 @@ const beats = {
     transform: translateY(-50%);
     transition: opacity 0.55s cubic-bezier(.4,0,.2,1),
                 transform 0.55s cubic-bezier(.4,0,.2,1);
+    --ps-glow: transparent;
   }
+  .projects-scene .ps-story::before {
+    content: '';
+    position: absolute;
+    inset: -60px -80px;
+    background: radial-gradient(ellipse at center, var(--ps-glow) 0%, transparent 70%);
+    opacity: 0.32;
+    filter: blur(44px);
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 0.55s cubic-bezier(.4,0,.2,1);
+  }
+  .projects-scene .ps-story.hidden::before { opacity: 0; }
   .projects-scene .ps-story.left  { text-align: right; }
   .projects-scene .ps-story.right { text-align: left; }
   .projects-scene .ps-story.hidden { opacity: 0; pointer-events: none; }
@@ -429,17 +443,23 @@ const beats = {
       });
     }
 
-    function applyBeat(rootId, eyeId, headId, bodyId, list, p, side) {
-      const root = document.getElementById(rootId);
+    var glowColors = {
+      mirror: { l: '#FF6534', r: '#9B72FF' },
+      kmp:    { l: '#1DB87A', r: '#1DB87A' }
+    };
+
+    function applyBeat(rootId, eyeId, headId, bodyId, list, p, side, phase) {
+      var root = document.getElementById(rootId);
       if (!root) return;
-      let match = null;
-      list.forEach(b => { if (p >= b.s && p <= b.e && b.side === side) match = b; });
-      const cls = 'ps-story ' + (side === 'l' ? 'left' : 'right');
+      var match = null;
+      list.forEach(function(b) { if (p >= b.s && p <= b.e && b.side === side) match = b; });
+      var cls = 'ps-story ' + (side === 'l' ? 'left' : 'right');
       if (match) {
         document.getElementById(eyeId).textContent = match.eye;
         document.getElementById(headId).innerHTML  = match.head;
         document.getElementById(bodyId).textContent = match.body;
         root.className = cls + ' visible';
+        root.style.setProperty('--ps-glow', glowColors[phase][side]);
       } else {
         root.className = cls + ' hidden';
       }
@@ -473,8 +493,8 @@ const beats = {
         revealLines('ps-kc', kotlinLines, p);
         setCursors('ps-sc', swiftLines, al);
         setCursors('ps-kc', kotlinLines, al);
-        applyBeat('ps-m-ls','ps-m-l-eye','ps-m-l-head','ps-m-l-body', beats.mirror, p, 'l');
-        applyBeat('ps-m-rs','ps-m-r-eye','ps-m-r-head','ps-m-r-body', beats.mirror, p, 'r');
+        applyBeat('ps-m-ls','ps-m-l-eye','ps-m-l-head','ps-m-l-body', beats.mirror, p, 'l', 'mirror');
+        applyBeat('ps-m-rs','ps-m-r-eye','ps-m-r-head','ps-m-r-body', beats.mirror, p, 'r', 'mirror');
       }
 
       if (kmpA > 0) {
@@ -484,8 +504,8 @@ const beats = {
         setCursors('ps-cc', commonLines, ac);
         setCursors('ps-ic', iosLines, ai);
         setCursors('ps-ac', androidLines, aa);
-        applyBeat('ps-k-ls','ps-k-l-eye','ps-k-l-head','ps-k-l-body', beats.kmp, p, 'l');
-        applyBeat('ps-k-rs','ps-k-r-eye','ps-k-r-head','ps-k-r-body', beats.kmp, p, 'r');
+        applyBeat('ps-k-ls','ps-k-l-eye','ps-k-l-head','ps-k-l-body', beats.kmp, p, 'l', 'kmp');
+        applyBeat('ps-k-rs','ps-k-r-eye','ps-k-r-head','ps-k-r-body', beats.kmp, p, 'r', 'kmp');
       }
     }
 
