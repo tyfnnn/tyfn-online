@@ -1,53 +1,102 @@
 <script>
-  $(".pixelate_wrapper").each(function (index) {
-    let image = $(this).find(".pixelate_image")[0];
-    let pixelate = new Pixelate(image, { amount: 1 }); // Set initial pixelation to 1
+  (function () {
+    class Pixelate {
+      constructor(img, opts) {
+        this.img = img;
+        this.amount = opts.amount || 0;
+        this.canvas = document.createElement("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        this.canvas.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;";
+        img.parentNode.style.position = "relative";
+        img.parentNode.appendChild(this.canvas);
+        img.style.visibility = "hidden";
+        this._resize();
+        this.render();
+      }
+      _resize() {
+        var r = window.devicePixelRatio || 1;
+        var w = this.img.parentNode.clientWidth;
+        var h = this.img.parentNode.clientHeight;
+        this.canvas.width = w * r;
+        this.canvas.height = h * r;
+        this.ctx.scale(r, r);
+        this.w = w;
+        this.h = h;
+      }
+      setAmount(v) { this.amount = v; return this; }
+      setWidth() { this._resize(); return this; }
+      render() {
+        var ctx = this.ctx, w = this.w, h = this.h, a = this.amount;
+        ctx.clearRect(0, 0, w, h);
+        if (a <= 0) {
+          ctx.drawImage(this.img, 0, 0, w, h);
+          return this;
+        }
+        var minBlock = 2, maxBlock = Math.min(w, h) * 0.12;
+        var blockSize = Math.max(minBlock, Math.round(maxBlock * a));
+        ctx.imageSmoothingEnabled = false;
+        var sw = Math.max(1, Math.ceil(w / blockSize));
+        var sh = Math.max(1, Math.ceil(h / blockSize));
+        ctx.drawImage(this.img, 0, 0, sw, sh);
+        ctx.drawImage(this.canvas, 0, 0, sw, sh, 0, 0, w, h);
+        return this;
+      }
+    }
 
-    let pixel = { value: 0.9 };
+    $(".pixelate_wrapper").each(function () {
+      var wrapper = this;
+      var image = $(wrapper).find(".pixelate_image")[0];
 
-    $(this).on("mouseenter", function () {
-      let tl = gsap.timeline({
-        onUpdate: () => {
-          pixelate.setAmount(pixel.value).render();
-        },
-        defaults: {
-          delay: 0.15
-        },
-        ease: "power2.out"
-      });
+      function init() {
+        var pixelate = new Pixelate(image, { amount: 1 });
+        var pixel = { value: 1 };
 
-      // Gradually change the pixel value from the initial value to 0.97
-      tl.set(pixel, { value: 0.97, delay: 0.2 }); // Pixel value 0.97 with a delay of 0.15s
-      tl.set(pixel, { value: 0.95, delay: 0.2 }); // Pixel value 0.86 with a delay of 0.15s
-      tl.set(pixel, { value: 0, delay: 0.2 });    // Pixel value 0 with a delay of 0.15s
+        gsap.to(pixel, {
+          value: 0,
+          duration: 2.4,
+          delay: 1.2,
+          ease: "steps(8)",
+          onUpdate: function () {
+            pixelate.setAmount(pixel.value).render();
+          }
+        });
 
-      tl.play(); // Start the timeline animation
+        $(wrapper).on("mouseenter", function () {
+          gsap.to(pixel, {
+            value: 0,
+            duration: 0.6,
+            ease: "steps(4)",
+            overwrite: true,
+            onUpdate: function () {
+              pixelate.setAmount(pixel.value).render();
+            }
+          });
+        });
+
+        $(wrapper).on("mouseleave", function () {
+          gsap.to(pixel, {
+            value: 0.85,
+            duration: 0.5,
+            ease: "steps(4)",
+            overwrite: true,
+            onUpdate: function () {
+              pixelate.setAmount(pixel.value).render();
+            }
+          });
+        });
+
+        window.addEventListener("resize", function () {
+          pixelate.setWidth().render();
+        });
+      }
+
+      if (image.complete && image.naturalWidth > 0) {
+        init();
+      } else {
+        image.addEventListener("load", init);
+      }
     });
-
-    $(this).on("mouseleave", function () {
-      let tl = gsap.timeline({
-        onUpdate: () => {
-          pixelate.setAmount(pixel.value).render();
-        },
-        defaults: {
-          delay: 0.15
-        },
-        ease: "power2.out"
-      });
-
-      // Gradually change the pixel value from 0 back to the initial value (0.9)
-      tl.set(pixel, { value: 0, delay: 0.15 }); // Pixel value 0.97 with a delay of 0.15s
-      tl.set(pixel, { value: 0.95, delay: 0.15 }); // Pixel value 0.86 with a delay of 0.15s
-      tl.set(pixel, { value: 0.97, delay: 0.15 });    // Pixel value 0 with a delay of 0.15s
-
-
-      tl.play(); // Start the timeline animation
-    });
-
-    window.addEventListener("resize", function () {
-      pixelate.setWidth(image.parentNode.clientWidth).render();
-    });
-  });
+  })();
 </script>
 <script>
   // Split text into spans
