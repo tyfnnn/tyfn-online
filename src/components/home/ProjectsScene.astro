@@ -103,6 +103,12 @@ const beats = {
           <div class="ps-body" id="ps-k-r-body"></div>
         </div>
       </div>
+
+      <!-- Parallax floating logos -->
+      <img src="/assets/swift.svg" alt="" class="plx-logo plx-swift" width="52" height="52" />
+      <img src="/assets/kotlin.svg" alt="" class="plx-logo plx-kotlin" width="44" height="44" />
+      <img src="/assets/xcode.svg" alt="" class="plx-logo plx-xcode" width="48" height="48" />
+      <img src="/assets/android-studio.svg" alt="" class="plx-logo plx-android" width="46" height="46" />
     </div>
   </div>
 </div>
@@ -360,6 +366,30 @@ const beats = {
     .projects-scene .ps-cursor {
       height: 10px;
     }
+    .projects-scene .plx-logo { width: 40px; height: 40px; }
+  }
+
+  .projects-scene .plx-logo {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 0 24px rgba(255,255,255,0.08));
+  }
+  .projects-scene .plx-swift   { left: 6%;  top: 5%; }
+  .projects-scene .plx-kotlin  { right: 8%; top: 35%; }
+  .projects-scene .plx-xcode   { left: 14%; top: 65%; }
+  .projects-scene .plx-android { right: 16%; top: 85%; }
+
+  @media (max-width: 991px) {
+    .projects-scene .plx-logo  { width: 48px; height: 48px; }
+    .projects-scene .plx-swift   { left: 3%; }
+    .projects-scene .plx-kotlin  { right: 3%; }
+    .projects-scene .plx-xcode   { left: 8%; }
+    .projects-scene .plx-android { right: 8%; }
   }
 </style>
 
@@ -475,9 +505,26 @@ const beats = {
       return c01(scrolled / Math.max(1, range));
     }
 
+    var plxItems = [
+      { el: document.querySelector('.plx-swift'),   speed: 900,  offset: 0 },
+      { el: document.querySelector('.plx-kotlin'),  speed: 700,  offset: 80 },
+      { el: document.querySelector('.plx-xcode'),   speed: 1100, offset: -40 },
+      { el: document.querySelector('.plx-android'), speed: 800,  offset: 120 },
+    ];
+
     let raf = null;
     function render() {
       const p = getP();
+
+      var plxFadeIn  = c01(p * 5);
+      var plxFadeOut = c01((1 - p) * 5);
+      var plxOpacity = Math.min(plxFadeIn, plxFadeOut) * 0.65;
+      plxItems.forEach(function(item) {
+        if (!item.el) return;
+        var y = item.offset + (0.5 - p) * item.speed;
+        item.el.style.opacity = plxOpacity;
+        item.el.style.transform = 'translateY(' + y.toFixed(1) + 'px)';
+      });
 
       const FADE_S = 0.60, FADE_E = 0.67;
       const kmpA    = c01((p - FADE_S) / (FADE_E - FADE_S));
