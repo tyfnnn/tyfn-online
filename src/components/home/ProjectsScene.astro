@@ -310,6 +310,43 @@ const beats = {
     .projects-scene .ps-kmp-panel .ps-code-block.ps-side,
     .projects-scene .ps-kmp-panel .ps-code-block.ps-shared { padding: 20px; min-height: auto; }
   }
+
+  @media (max-width: 479px) {
+    .projects-scene .ps-phase {
+      padding: 0 12px;
+      gap: 16px;
+    }
+    .projects-scene .ps-mirror-panel,
+    .projects-scene .ps-kmp-panel {
+      border-radius: 14px;
+    }
+    .projects-scene .ps-head { font-size: 20px; margin-bottom: 10px; }
+    .projects-scene .ps-eye  { font-size: 11px; margin-bottom: 10px; }
+    .projects-scene .ps-body { font-size: 13px; line-height: 1.5; }
+    .projects-scene .ps-code-block {
+      font-size: 10px;
+      line-height: 1.7;
+    }
+    .projects-scene .ps-line-row {
+      height: 20px;
+    }
+    .projects-scene .ps-lang-tag {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+    }
+    .projects-scene .ps-lang-name {
+      font-size: 10px;
+    }
+    .projects-scene .ps-lang-dot {
+      width: 5px; height: 5px;
+    }
+    .projects-scene .ps-mirror-panel .ps-code-block,
+    .projects-scene .ps-kmp-panel .ps-code-block.ps-side,
+    .projects-scene .ps-kmp-panel .ps-code-block.ps-shared { padding: 14px; }
+    .projects-scene .ps-cursor {
+      height: 10px;
+    }
+  }
 </style>
 
 <script is:inline define:vars={{ beats }}>
