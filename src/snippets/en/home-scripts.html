@@ -7,16 +7,20 @@
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.canvas.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;";
-        img.parentNode.style.position = "relative";
-        img.parentNode.appendChild(this.canvas);
+        this.container = img.closest(".pixelate") || img.parentNode;
+        var wrap = img.parentNode;
+        wrap.style.position = "relative";
+        wrap.style.width = "100%";
+        wrap.style.height = "100%";
+        wrap.appendChild(this.canvas);
         img.style.visibility = "hidden";
         this._resize();
         this.render();
       }
       _resize() {
         var r = window.devicePixelRatio || 1;
-        var w = this.img.parentNode.clientWidth;
-        var h = this.img.parentNode.clientHeight;
+        var w = this.container.clientWidth;
+        var h = this.container.clientHeight;
         this.canvas.width = w * r;
         this.canvas.height = h * r;
         this.ctx.scale(r, r);
