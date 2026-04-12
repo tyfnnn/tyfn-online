@@ -117,9 +117,8 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
   @media (max-width: 768px) {
     .pnav-grid {
       padding: 0 1rem;
-      grid-template-columns: auto 1fr;
-      grid-template-areas: "back right" "logo logo";
-      row-gap: 0.75rem;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "back logo right";
     }
     .pnav-back { grid-area: back; }
     .pnav-right { grid-area: right; }
@@ -128,6 +127,9 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
       justify-self: center;
       font-size: 0.8rem;
       letter-spacing: 0.35em;
+      word-spacing: 100vw;
+      text-align: center;
+      line-height: 1.4;
     }
     .pnav-back span { display: none; }
     .pnav-back svg { margin-right: 0; width: 20px; height: 20px; }
