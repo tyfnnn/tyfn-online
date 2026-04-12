@@ -139,10 +139,20 @@ const steps = [
     .process-hover {
       grid-template-columns: 1fr;
       gap: 2rem;
-      padding: 2rem 1.75rem;
+      padding: 2rem 1.25rem;
     }
     .process-hover_divider {
       display: none;
+    }
+    .process-hover_title {
+      font-size: clamp(1.1rem, 4.5vw, 1.75rem);
+    }
+    .process-hover_title-row-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0.5rem !important;
+    }
+    .process-hover_panel-body {
+      font-size: 0.95rem;
     }
   }
 
