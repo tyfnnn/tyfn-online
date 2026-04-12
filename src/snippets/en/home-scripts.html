@@ -6,39 +6,50 @@
         this.amount = opts.amount || 0;
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
-        this.canvas.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;";
-        img.parentNode.style.position = "relative";
-        img.parentNode.appendChild(this.canvas);
-        img.style.visibility = "hidden";
+        this.off = document.createElement("canvas");
+        this.offCtx = this.off.getContext("2d");
+        var wrap = img.parentNode;
+        wrap.style.position = "relative";
+        this.canvas.style.cssText =
+          "position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;";
+        wrap.appendChild(this.canvas);
+        this.wrap = wrap;
         this._resize();
         this.render();
       }
       _resize() {
+        var w = this.wrap.clientWidth;
+        var h = this.wrap.clientHeight;
         var r = window.devicePixelRatio || 1;
-        var w = this.img.parentNode.clientWidth;
-        var h = this.img.parentNode.clientHeight;
+        this.canvas.style.width = w + "px";
+        this.canvas.style.height = h + "px";
         this.canvas.width = w * r;
         this.canvas.height = h * r;
-        this.ctx.scale(r, r);
+        this.ctx.setTransform(r, 0, 0, r, 0, 0);
         this.w = w;
         this.h = h;
       }
       setAmount(v) { this.amount = v; return this; }
       setWidth() { this._resize(); return this; }
+      done() {
+        this.canvas.style.display = "none";
+      }
       render() {
         var ctx = this.ctx, w = this.w, h = this.h, a = this.amount;
         ctx.clearRect(0, 0, w, h);
         if (a <= 0) {
-          ctx.drawImage(this.img, 0, 0, w, h);
+          this.done();
           return this;
         }
-        var minBlock = 2, maxBlock = Math.min(w, h) * 0.12;
-        var blockSize = Math.max(minBlock, Math.round(maxBlock * a));
+        var maxBlock = Math.min(w, h) * 0.12;
+        var blockSize = Math.max(2, Math.round(maxBlock * a));
+        var tw = Math.max(1, Math.ceil(w / blockSize));
+        var th = Math.max(1, Math.ceil(h / blockSize));
+        this.off.width = tw;
+        this.off.height = th;
+        this.offCtx.drawImage(this.img, 0, 0, tw, th);
         ctx.imageSmoothingEnabled = false;
-        var sw = Math.max(1, Math.ceil(w / blockSize));
-        var sh = Math.max(1, Math.ceil(h / blockSize));
-        ctx.drawImage(this.img, 0, 0, sw, sh);
-        ctx.drawImage(this.canvas, 0, 0, sw, sh, 0, 0, w, h);
+        ctx.drawImage(this.off, 0, 0, tw, th, 0, 0, w, h);
         return this;
       }
     }
@@ -62,6 +73,7 @@
         });
 
         $(wrapper).on("mouseenter", function () {
+          pixelate.canvas.style.display = "";
           gsap.to(pixel, {
             value: 0,
             duration: 0.6,
@@ -74,6 +86,7 @@
         });
 
         $(wrapper).on("mouseleave", function () {
+          pixelate.canvas.style.display = "";
           gsap.to(pixel, {
             value: 0.85,
             duration: 0.5,
