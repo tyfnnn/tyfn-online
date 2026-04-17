@@ -6,10 +6,9 @@ interface Props {
   lang: Lang;
   pathname: string;
   back: 'home' | 'portfolio';
-  status?: string;
 }
 
-const { lang, pathname, back, status } = Astro.props;
+const { lang, pathname, back } = Astro.props;
 const t = useTranslations(lang);
 
 const backHref = getRelativeLocaleUrl(lang, back === 'home' ? '/' : '/portfolio/');
@@ -29,7 +28,6 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
     </a>
     <a href={homeHref} class="pnav-logo">TAYFUN ILKER</a>
     <div class="pnav-right">
-      {status && <span class="project-status" data-scramble>{status}</span>}
       <a href={otherLocaleHref} class="pnav-lang" aria-label="Switch language" data-lang-switch>EN | DE</a>
     </div>
   </div>
