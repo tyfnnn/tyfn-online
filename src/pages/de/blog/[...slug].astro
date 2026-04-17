@@ -1,0 +1,57 @@
+---
+import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
+import BlogPost from '../../../components/blog/BlogPost.astro';
+import head from '../../../snippets/blog/post-head.html?raw';
+import {
+  getBlogPosts,
+  findTranslationPath,
+  postSlug,
+  postPathname,
+  type BlogEntry,
+} from '../../../lib/blog';
+import { SITE_URL, PERSON_NAME } from '../../../i18n/site';
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts('de');
+  return posts.map((post) => ({
+    params: { slug: postSlug(post) },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: BlogEntry;
+}
+
+const lang = 'de' as const;
+const { post } = Astro.props;
+const translationHref = await findTranslationPath(post, 'en');
+const pathname = postPathname(post);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  ...(post.data.updatedDate && {
+    dateModified: post.data.updatedDate.toISOString(),
+  }),
+  url: `${SITE_URL}/de${pathname}`,
+  ...(post.data.heroImage && { image: post.data.heroImage }),
+  author: { '@type': 'Person', name: PERSON_NAME, url: `${SITE_URL}/` },
+  inLanguage: 'de',
+};
+---
+<PortfolioLayout
+  lang={lang}
+  pathname={pathname}
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.heroImage}
+  imageAlt={post.data.title}
+  jsonLd={jsonLd}
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <BlogPost entry={post} lang={lang} translationHref={translationHref} />
+</PortfolioLayout>

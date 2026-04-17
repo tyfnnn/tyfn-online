@@ -118,11 +118,27 @@
     "step_4_heading": "Testing & Optimization",
     "step_4_body": "Rigorous testing across various devices and systems ensures flawless functionality. I optimize performance and address potential weaknesses. Through continuous monitoring and updates, I maintain optimal app performance and adaptability to evolving requirements."
   },
+  "blog": {
+    "back_to_blog": "Back to blog",
+    "reading_time": "{n} min read",
+    "translation_missing": "This post isn't available in the other language yet.",
+    "published": "Published",
+    "updated": "Updated",
+    "index": {
+      "page_title": "Blog — TAYFUN ILKER",
+      "page_description": "Notes on mobile engineering, design, and building tyfn.online in public.",
+      "title": "Notes & Writing",
+      "subtitle": "Short pieces on mobile engineering, design, and building this site.",
+      "read_more": "Read more",
+      "empty": "Nothing published yet — come back soon."
+    }
+  },
   "fab": {
     "home": "Home",
     "about": "About",
     "projects": "Projects",
     "portfolio": "Portfolio",
+    "blog": "Blog",
     "process": "Process",
     "contact": "Contact"
   },

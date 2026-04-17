@@ -1,0 +1,73 @@
+---
+import PortfolioNav from '../portfolio/PortfolioNav.astro';
+import { useTranslations, type Lang } from '../../i18n/t';
+import {
+  getBlogPosts,
+  postHref,
+  formatDate,
+  formatReadingTime,
+} from '../../lib/blog';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = await getBlogPosts(lang);
+const readMore = t('blog.index.read_more');
+const readingTimeTemplate = t('blog.reading_time');
+---
+<PortfolioNav lang={lang} pathname="/blog/" back="home" />
+
+<section class="portfolio-section">
+  <div class="container">
+    <div class="portfolio-header">
+      <h2 class="portfolio-title" data-scramble>{t('blog.index.title')}</h2>
+      <p class="portfolio-subtitle" data-scramble>
+        {t('blog.index.subtitle')}
+      </p>
+    </div>
+
+    <div class="portfolio-grid">
+      {posts.length === 0 && (
+        <div class="blog-empty" data-scramble>{t('blog.index.empty')}</div>
+      )}
+      {posts.map((post) => {
+        const href = postHref(lang, post);
+        const heroStyle = post.data.heroImage
+          ? `background-image: url('${post.data.heroImage}');`
+          : '';
+        return (
+          <a href={href} class="project-card">
+            <div class="project-image" style={heroStyle}></div>
+            <div class="project-content">
+              <h3 class="project-title" data-scramble>{post.data.title}</h3>
+              <div class="post-meta">
+                <span>{formatDate(post.data.pubDate, lang)}</span>
+                <span class="post-meta-dot" aria-hidden="true">·</span>
+                <span>{formatReadingTime(post.body, readingTimeTemplate)}</span>
+              </div>
+              <p class="project-description" data-scramble>
+                {post.data.description}
+              </p>
+              {post.data.tags.length > 0 && (
+                <div class="project-tags">
+                  {post.data.tags.map((tag) => (
+                    <span class="project-tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <div class="project-link" data-scramble>
+                {readMore}
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
