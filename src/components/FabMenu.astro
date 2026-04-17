@@ -11,6 +11,7 @@ const t = useTranslations(lang);
 
 const homeHref = getRelativeLocaleUrl(lang, '/');
 const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+const blogHref = getRelativeLocaleUrl(lang, '/blog/');
 ---
 
 <div class="fab-menu" id="fab-menu">
@@ -42,6 +43,10 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     <a href={portfolioHref} class="fab-link" data-fab-link>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="6" cy="6" r=".5" fill="currentColor"/><circle cx="9" cy="6" r=".5" fill="currentColor"/></svg>
       <span>{t('fab.portfolio')}</span>
+    </a>
+    <a href={blogHref} class="fab-link" data-fab-link>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 014 4v12H8a4 4 0 01-4-4V4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
+      <span>{t('fab.blog')}</span>
     </a>
     <a href={`${homeHref}#process`} class="fab-link" data-fab-link>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>

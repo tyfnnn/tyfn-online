@@ -118,11 +118,27 @@
     "step_4_heading": "Testing & Optimierung",
     "step_4_body": "Gründliche Tests auf verschiedenen Geräten und Systemen garantieren einwandfreie Funktionalität. Ich optimiere die Performance und beseitige potenzielle Schwachstellen. Durch kontinuierliches Monitoring und Updates bleibt die App langfristig performant und flexibel gegenüber neuen Anforderungen."
   },
+  "blog": {
+    "back_to_blog": "Zurück zum Blog",
+    "reading_time": "{n} Min. Lesezeit",
+    "translation_missing": "Dieser Beitrag ist noch nicht in der anderen Sprache verfügbar.",
+    "published": "Veröffentlicht am",
+    "updated": "Aktualisiert am",
+    "index": {
+      "page_title": "Blog — TAYFUN ILKER",
+      "page_description": "Notizen zu Mobile Engineering, Design und dem öffentlichen Aufbau von tyfn.online.",
+      "title": "Notizen & Geschriebenes",
+      "subtitle": "Kurze Texte zu Mobile Engineering, Design und dieser Seite.",
+      "read_more": "Weiterlesen",
+      "empty": "Noch nichts veröffentlicht — bald wieder vorbeischauen."
+    }
+  },
   "fab": {
     "home": "Startseite",
     "about": "Über mich",
     "projects": "Projekte",
     "portfolio": "Portfolio",
+    "blog": "Blog",
     "process": "Prozess",
     "contact": "Kontakt"
   },

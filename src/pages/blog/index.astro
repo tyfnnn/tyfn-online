@@ -1,0 +1,18 @@
+---
+import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+import BlogIndex from '../../components/blog/BlogIndex.astro';
+import head from '../../snippets/blog/index-head.html?raw';
+import { useTranslations } from '../../i18n/t';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+<PortfolioLayout
+  lang={lang}
+  pathname="/blog/"
+  title={t('blog.index.page_title')}
+  description={t('blog.index.page_description')}
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <BlogIndex lang={lang} />
+</PortfolioLayout>

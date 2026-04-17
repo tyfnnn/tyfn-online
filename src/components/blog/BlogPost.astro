@@ -1,0 +1,79 @@
+---
+import { render } from 'astro:content';
+import PortfolioNav from '../portfolio/PortfolioNav.astro';
+import { useTranslations, type Lang } from '../../i18n/t';
+import {
+  type BlogEntry,
+  formatDate,
+  formatReadingTime,
+  postPathname,
+} from '../../lib/blog';
+
+interface Props {
+  entry: BlogEntry;
+  lang: Lang;
+  translationHref: string | null;
+}
+
+const { entry, lang, translationHref } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(entry);
+
+const publishedLabel = t('blog.published');
+const updatedLabel = t('blog.updated');
+const readingTime = formatReadingTime(entry.body, t('blog.reading_time'));
+const pathname = postPathname(entry);
+---
+<PortfolioNav lang={lang} pathname={pathname} back="portfolio" />
+
+<section class="blog-post-section">
+  <article class="blog-post">
+    <header class="blog-post-header">
+      <div class="blog-post-meta">
+        <span>{publishedLabel} {formatDate(entry.data.pubDate, lang)}</span>
+        <span class="post-meta-dot" aria-hidden="true">·</span>
+        <span>{readingTime}</span>
+        {entry.data.updatedDate && (
+          <>
+            <span class="post-meta-dot" aria-hidden="true">·</span>
+            <span>{updatedLabel} {formatDate(entry.data.updatedDate, lang)}</span>
+          </>
+        )}
+      </div>
+      <h1 class="blog-post-title" data-scramble>{entry.data.title}</h1>
+      <p class="blog-post-description" data-scramble>{entry.data.description}</p>
+      {entry.data.tags.length > 0 && (
+        <div class="blog-post-tags">
+          {entry.data.tags.map((tag) => (
+            <span class="blog-post-tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    {entry.data.heroImage && (
+      <img
+        class="blog-hero-image"
+        src={entry.data.heroImage}
+        alt={entry.data.title}
+        loading="lazy"
+      />
+    )}
+
+    <div class="blog-prose">
+      <Content />
+    </div>
+
+    <footer class="blog-post-footer">
+      <a href="../">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span>{t('blog.back_to_blog')}</span>
+      </a>
+      {entry.data.translationKey && !translationHref && (
+        <span class="translation-missing">{t('blog.translation_missing')}</span>
+      )}
+    </footer>
+  </article>
+</section>

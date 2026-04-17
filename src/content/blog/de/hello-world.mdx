@@ -1,0 +1,42 @@
+---
+title: Hallo, Welt — tyfn.online öffentlich bauen
+description: Ein kurzer Hinweis, warum das Portfolio jetzt eine MDX-getriebene Astro-Seite ist und worüber ich hier schreiben möchte.
+pubDate: 2026-04-17
+lang: de
+tags:
+  - meta
+  - astro
+  - mdx
+translationKey: hello-world
+heroImage: https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png
+---
+
+Willkommen im neuen Blog. Die Seite läuft schon eine Weile auf Astro,
+aber erst heute habe ich eine richtige MDX-Schreibfläche ergänzt, damit
+ich Notizen direkt neben dem Code veröffentlichen kann.
+
+## Warum MDX
+
+Mit MDX schreibe ich ganz normales Markdown für den Fließtext und kann
+bei Bedarf Astro-Komponenten einstreuen — ein Code-Sample, ein Embed
+oder ein kleines Diagramm — ohne die Datei zu wechseln.
+
+```ts
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', (e) => e.data.lang === 'de');
+```
+
+## Was kommt als Nächstes
+
+Drei Themen werden hier laufen:
+
+- **Mobile Engineering** — Swift, Kotlin und die Teile von Kotlin
+  Multiplatform, die ich in Produktion tatsächlich benutze.
+- **Design & Handwerk** — die kleinen Entscheidungen, die eine App
+  am Ende rund wirken lassen.
+- **Die Seite selbst** — kurze Retros, wenn ich hier etwas
+  Wesentliches verändere.
+
+Wer mitlesen möchte: die Seite gibt's auf Deutsch und Englisch —
+Sprachumschalter findest du im Floating Menu.
