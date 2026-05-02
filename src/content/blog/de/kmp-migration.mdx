@@ -1,0 +1,207 @@
+---
+title: Von Android zu Kotlin Multiplatform — wie ich Zentrik in einem Monat migriert habe
+description: Ein Erfahrungsbericht über die Migration einer nativen Android-Buchhaltungsapp zu KMP mit Compose Multiplatform — und warum geteilte UI für mich die richtige Wahl war.
+pubDate: 2026-03-31
+lang: de
+tags:
+  - kotlin
+  - kmp
+  - compose-multiplatform
+  - android
+  - migration
+  - architecture
+translationKey: kmp-migration
+draft: false
+---
+
+Ein Monat. Genau so lange habe ich gebraucht, um Zentrik von einer nativen
+Android-App zu einem Kotlin-Multiplatform-Projekt umzubauen — also
+genauso lange, wie ich anfangs in das initiale Android-Setup gesteckt
+hatte. Anders gesagt: die Migration hat mich nochmal die Hälfte des
+bisherigen Projekts gekostet. Der Artikel ist mein ehrlicher Rückblick
+darauf, was funktioniert hat, was weh tat und was ich beim nächsten
+Mal anders machen würde.
+
+## Was Zentrik war
+
+Zentrik ist eine Buchhaltungsapp für deutsche NGOs, Vereine und
+Freelancer. Die Android-Variante lief seit Anfang 2025 produktiv: Kotlin
+mit Jetpack Compose, eine Clean-Architecture mit MVVM, Room für die
+lokale Persistenz, Koin als DI-Container, Retrofit plus OkHttp für
+HTTP, und ein Supabase-Backend mit PostgreSQL, Realtime, Storage und
+Edge Functions.
+
+Im Laufe der Zeit war neben Retrofit auch schon ein Ktor-Client
+parallel im Projekt — ein Indiz dafür, dass mich der Java-Stack
+zunehmend gestört hat, ohne dass ich es konsequent ausformuliert hätte.
+
+## Warum überhaupt KMP
+
+Zwei Dinge haben den Ausschlag gegeben. Erstens stand iOS schon länger
+auf der Roadmap, und ich wollte nicht zwei Projekte parallel pflegen,
+die sich am Ende doch nur in der View-Schicht ernsthaft unterscheiden.
+Zweitens hatte ich für Vereine und kleine Organisationen immer wieder
+gehört: "Schön und gut auf dem Handy, aber unsere Schatzmeisterin
+bucht sowieso am Laptop." Eine Desktop-App war also kein Nice-to-have,
+sondern ein zentrales Use-Case-Argument.
+
+Die Frage war nicht mehr *ob* KMP, sondern *wie weit* — nur die
+Geschäftslogik teilen, oder auch die UI?
+
+## Die Entscheidung: shared UI vs. nativ
+
+Ich habe mich für **geteilte UI mit Compose Multiplatform** entschieden,
+und gegen native UIs auf jeder Plattform. Das ist die kontroversere
+der beiden KMP-Varianten, also kurz, warum:
+
+Bei einer Buchhaltungsapp dominieren Tabellen, Formulare, Belege,
+Kontenpläne, Filter, Diagramme. Das ist Software, bei der **Konsistenz
+und Einfachheit** den Nutzwert ausmachen — nicht der letzte Schliff
+in plattformspezifischer Optik. Wenn die Bilanz auf dem iPhone
+anders aussieht als auf dem MacBook, ist das kein Feature, das ist
+ein Bug-Magnet.
+
+Dazu kommt: Compose Multiplatform ist erwachsen geworden. Die
+Material-3-Komponenten, Animationen, Lazy-Layouts, Navigation — all
+das funktioniert auf Android, iOS und Desktop mit demselben Code.
+Klar, ich verliere ein paar Plattform-Idiome (etwa native Sheets in
+iOS-Style), aber die gewinne ich später punktuell zurück, wenn ein
+Screen das wirklich braucht.
+
+Native UI als KMP-Variante mache ich in einem späteren Projekt als
+Case Study. Aber für Zentrik war shared UI offensichtlich die richtige
+Wahl, gerade weil ich allein an dem Projekt sitze.
+
+## Der Migrationsmonat
+
+Was den Monat schmerzhaft gemacht hat, war nicht das Schreiben von
+neuem Code. Es war das **Aussortieren von Java-Bibliotheken**, die ich
+gar nicht als Java-Bibliotheken wahrgenommen hatte. Mir war im
+Tagesgeschäft nie aufgefallen, wie viel JVM-Erbe in einem modernen,
+Kotlin-first Android-Projekt steckt.
+
+Ein Auszug aus dem realen Vorher/Nachher:
+
+| Vorher (Zentrik / Android) | Nachher (easyNGO / KMP) |
+|---|---|
+| Retrofit + Gson-Converter + OkHttp + Logging-Interceptor | Ktor 3 mit Engines `darwin`, `okhttp`, `cio` |
+| Compose BOM (Android) | Compose Multiplatform 1.9 (zum Migrationszeitpunkt Beta, inzwischen stable) |
+| Room 2.7 + KSP | (vorerst entfallen — cloud-first auf Supabase) |
+| Koin Android (`koin-android`, `koin-androidx-compose`) | Koin 4.1 (`koin-compose`, `koin-compose-viewmodel`, `…-navigation`) |
+| `androidx.navigation:navigation-compose` | `org.jetbrains.androidx.navigation:navigation-compose` |
+| `androidx.lifecycle:lifecycle-runtime-ktx` | `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose` |
+| `material-icons-extended` | `org.jetbrains.compose.material:material-icons-core` |
+| Coil 3 mit `coil-network-okhttp` | Coil 3 mit `coil-network-ktor3` |
+| Lottie (Airbnb, Android-only) | compottie |
+| Supabase 2.6 (`gotrue-kt`, `postgrest-kt`, …) | Supabase BOM 3.2 (`auth-kt`, `postgrest-kt`, `storage-kt`, `realtime-kt`, `functions-kt`) |
+| `kotlinx-coroutines-android` | `kotlinx-coroutines-core` (+ `coroutines-swing` für Desktop) |
+| `java.util.UUID` (implizit) | `com.benasher44:uuid` |
+| `java.math.BigDecimal` (implizit) | `com.ionspin.kotlin:bignum` |
+
+Drei Punkte aus dieser Tabelle möchte ich herausgreifen.
+
+**Retrofit war ein Symptom, kein Problem.** Ich hatte schon vor der
+Migration einen Ktor-Client im Projekt, weil mir Ktor an manchen
+Stellen pragmatischer war. In der Migration habe ich einfach Retrofit
+und OkHttp endgültig entfernt und parallel Ktor von 2.x auf 3.x
+gehoben — die Major-Version mit `ktor-client-content-negotiation`,
+`-auth`, `-resources`. Plattform-Engines kommen über expect/actual:
+`OkHttp` für Android, `Darwin` für iOS, `CIO` für Desktop.
+
+```kotlin
+// commonMain
+expect fun httpClientEngine(): HttpClientEngine
+
+fun zentrikHttpClient() = HttpClient(httpClientEngine()) {
+    install(ContentNegotiation) { json() }
+    install(Logging) { level = LogLevel.INFO }
+    install(Auth) { /* Supabase JWT-Refresh */ }
+}
+```
+
+**`BigDecimal` war der dickste Brocken.** Eine Buchhaltungsapp ohne
+exakte Dezimalarithmetik kann man wegwerfen. `java.math.BigDecimal` ist
+JVM-only, also musste der gesamte Domain-Layer auf
+[`ionspin/bignum`](https://github.com/ionspin/kotlin-multiplatform-bignum)
+umgestellt werden. Das betraf Kontenrahmen, Soll/Haben-Buchungen,
+Rundungsregeln und alle Tests. Wer sich beim Refactoring fragt, warum
+KMP-Migrationen so lange dauern: hier ist eine der Antworten.
+
+**Lottie hat einen Community-Port bekommen.** Lottie selbst ist von
+Airbnb und Android-only. Der KMP-Ersatz heißt
+[compottie](https://github.com/alexzhirkevich/compottie) und läuft
+auf allen Compose-Multiplatform-Targets. Das ist ein Muster, das man in
+KMP-Projekten oft sieht: Original-Bibliothek ist plattformgebunden,
+ein Community-Port übernimmt für KMP. Wer Bibliotheken auswählt, sollte
+deshalb nicht nur "ist das KMP?" prüfen, sondern auch
+"wer wartet das, wie lange schon, wie aktiv?".
+
+Was mich überrascht hat: AndroidX, das ich gefühlt als
+plattformneutralen Standard wahrgenommen hatte, ist es nicht. Ich
+musste mental von `androidx.*` auf `org.jetbrains.androidx.*` und
+`org.jetbrains.compose.*` umstellen. Gleiche API, anderer Namespace,
+eigene Versionskanäle. Mehrfach saß ich vor Build-Fehlern, weil ich
+in einem common-Source-Set aus reflexhafter Gewohnheit den falschen
+Import gesetzt hatte.
+
+## Architektur-Learnings
+
+Die Migration hat die Architektur verbessert, fast nebenbei. Drei
+Beobachtungen:
+
+**Common-First erzwingt Disziplin.** Wenn der Default für jeden
+neuen Code "kommt nach commonMain" ist, hört man automatisch auf,
+plattformspezifische Annahmen zu treffen. Date-Handling, IO,
+Logging, ViewModels — alles wird ein bisschen sauberer, weil die
+Quick-and-Dirty-Lösung nicht mehr zur Hand ist.
+
+**expect/actual ist ein Architekturwerkzeug.** Es ersetzt
+Service-Locator und Interface-mit-Plattform-Implementation-Patterns
+durch ein viel direkteres Modell: hier ist das common Interface, hier
+ist die jvm/ios/android Implementierung — fertig. Für KeyStore,
+Datei-Pfade, Push-Tokens, Biometrie war das ein klarer Gewinn.
+
+**Was nicht migriert wurde, ist genauso interessant.** Room ist im
+aktuellen Stand nicht im KMP-Build — die App fährt cloud-first auf
+Supabase. Das ist eine bewusste Entscheidung mit einem Caveat: Ohne
+lokale Persistenz funktioniert die App offline nicht. Für den
+nächsten Iterationsschritt steht Room-KMP oder SQLDelight auf der
+Liste. Ich nenne das hier offen, weil "alles ist migriert" sonst
+schnell nach Marketing klingt, und das war diese Erfahrung nicht.
+
+## Der Desktop-Bonus
+
+Erst nachdem die geteilte UI stand, habe ich mich überhaupt getraut,
+Desktop ernsthaft anzugehen. Mit nativer UI hätte das ein eigenes
+Compose-for-Desktop-Modul mit eigenem Screen-Set bedeutet — bei einer
+App mit ein paar Dutzend Screens schlicht zu viel Arbeit für eine
+Einzelperson. Mit shared UI war Desktop ein neues Source-Set, ein paar
+expect/actual-Implementierungen (Datei-Dialoge, PDF-Export über
+[`openpdf`](https://github.com/LibrePDF/OpenPDF), `coroutines-swing`
+für die UI-Thread-Brücke) und ein Build-Target.
+
+Das ist genau der Punkt, an dem sich die Wette auf shared UI auszahlt:
+Plattform Nummer drei kostet kaum noch.
+
+## Was als Nächstes kommt
+
+KMP mit *nativer* UI mache ich als nächstes Case-Study-Projekt. Da
+gelten andere Regeln: SwiftUI auf iOS, Compose auf Android, eine
+Bridge dazwischen, plattform-spezifische ViewModels, doppelte
+Navigation, doppeltes Theming. Mehr Aufwand, dafür mehr nativer
+Charakter. Für ein produktives Projekt mit klarem
+Plattform-Schwerpunkt kann das die richtige Wahl sein — nur eben
+nicht für eine Buchhaltungs-Solo-App.
+
+## Fazit
+
+Ein Monat Migrationsarbeit, hauptsächlich für Bibliotheks-Ersatz und
+Architektur-Aufräumen, kaum für neue Features. Im Gegenzug: eine
+Codebasis für Android, iOS und Desktop, sauberere Layer-Grenzen, und
+ein Projekt, das ich als Einzelner langfristig pflegen kann.
+
+Das Projekt lebt jetzt als
+[easyNGO](https://github.com/tyfnnn/easyNGO) weiter. Wenn Du selbst
+vor einer KMP-Migration stehst: rechne nicht damit, dass es schnell
+geht — und nimm Dir bewusst Zeit, Deinen Stack auf Java-Altlasten zu
+prüfen, bevor Du den ersten Build anfasst.
