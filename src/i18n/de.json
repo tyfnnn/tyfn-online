@@ -78,7 +78,11 @@
       "page_description": "Eine Auswahl meiner Projekte in UX/UI-Design, App-Entwicklung und kreativer Gestaltung.",
       "title": "Meine Projekte",
       "subtitle": "Eine Auswahl meiner besten Arbeiten in UX/UI Design, App-Entwicklung und kreativer Gestaltung",
-      "view_project": "Projekt ansehen"
+      "view_project": "Projekt ansehen",
+      "cross_link_kicker": "Außerdem im Blog",
+      "cross_link_title": "Notizen & Geschriebenes",
+      "cross_link_body": "Kurze Texte zu Mobile Engineering, Design und dem öffentlichen Bauen dieser Seite.",
+      "cross_link_cta": "Zum Blog"
     },
     "zentrik": {
       "page_title": "Zentrik NGO Management App — TAYFUN ILKER",
@@ -130,7 +134,11 @@
       "title": "Notizen & Geschriebenes",
       "subtitle": "Kurze Texte zu Mobile Engineering, Design und dieser Seite.",
       "read_more": "Weiterlesen",
-      "empty": "Noch nichts veröffentlicht — bald wieder vorbeischauen."
+      "empty": "Noch nichts veröffentlicht — bald wieder vorbeischauen.",
+      "cross_link_kicker": "Außerdem gebaut",
+      "cross_link_title": "Ausgewählte Projekte",
+      "cross_link_body": "Eine Auswahl meiner Arbeiten in UX/UI-Design, App-Entwicklung und kreativer Gestaltung.",
+      "cross_link_cta": "Zum Portfolio"
     }
   },
   "fab": {

@@ -49,7 +49,7 @@
     .poster {
       position: relative;
       width: 1200px;
-      height: 630px;
+      height: 800px;
       background: var(--bg);
       overflow: hidden;
       border-radius: 14px;
@@ -116,14 +116,14 @@
     /* ============== HERO BODY ============== */
     .body {
       position: absolute;
-      top: 110px;
+      top: 130px;
       left: 56px;
       right: 56px;
-      bottom: 76px;
+      bottom: 70px;
       display: grid;
       grid-template-columns: 1.05fr 0.95fr;
       gap: 32px;
-      align-items: center;
+      align-items: stretch;
       z-index: 4;
     }
 
@@ -131,9 +131,10 @@
     .copy {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 24px;
+      justify-content: space-between;
+      gap: 28px;
     }
+    .copy-top { display: flex; flex-direction: column; gap: 22px; }
 
     .headline {
       font-family: var(--sans);
@@ -199,8 +200,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      gap: 28px;
-      transform: translateY(-12px);
+      gap: 22px;
     }
 
     /* ambient glow behind K */
@@ -212,7 +212,7 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(199, 17, 225, 0.30), transparent 65%);
       filter: blur(20px);
-      transform: translate(-50%, calc(-50% - 28px));
+      transform: translate(-50%, -55%);
       z-index: 0;
     }
 
@@ -273,14 +273,16 @@
     <div class="body">
       <!-- LEFT: HEADLINE -->
       <section class="copy">
-        <h1 class="headline">
-          <span class="row">Eine App.</span>
-          <span class="row"><span class="accent">Zwei Plattformen</span><span class="dot">.</span></span>
-        </h1>
+        <div class="copy-top">
+          <h1 class="headline">
+            <span class="row">Eine App.</span>
+            <span class="row"><span class="accent">Zwei Plattformen</span><span class="dot">.</span></span>
+          </h1>
 
-        <p class="sub">
-          Eine native Android-Buchhaltungsapp — in einem Monat zu Kotlin Multiplatform migriert. Geteilte UI mit Compose, UIKit-Interop, wo's zählt.
-        </p>
+          <p class="sub">
+            Eine native Android-Buchhaltungsapp — in einem Monat zu Kotlin Multiplatform migriert. Geteilte UI mit Compose, UIKit-Interop, wo's zählt.
+          </p>
+        </div>
 
         <div class="platforms">
           <span class="chip">
