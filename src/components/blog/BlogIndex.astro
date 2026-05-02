@@ -1,5 +1,7 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import PortfolioNav from '../portfolio/PortfolioNav.astro';
+import CrossLinkCard from '../portfolio/CrossLinkCard.astro';
 import { useTranslations, type Lang } from '../../i18n/t';
 import {
   getBlogPosts,
@@ -17,6 +19,7 @@ const t = useTranslations(lang);
 const posts = await getBlogPosts(lang);
 const readMore = t('blog.index.read_more');
 const readingTimeTemplate = t('blog.reading_time');
+const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
 ---
 <PortfolioNav lang={lang} pathname="/blog/" back="home" />
 
@@ -69,5 +72,13 @@ const readingTimeTemplate = t('blog.reading_time');
         );
       })}
     </div>
+
+    <CrossLinkCard
+      href={portfolioHref}
+      kicker={t('blog.index.cross_link_kicker')}
+      title={t('blog.index.cross_link_title')}
+      body={t('blog.index.cross_link_body')}
+      cta={t('blog.index.cross_link_cta')}
+    />
   </div>
 </section>

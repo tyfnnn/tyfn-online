@@ -5,14 +5,19 @@ import { useTranslations, type Lang } from '../../i18n/t';
 interface Props {
   lang: Lang;
   pathname: string;
-  back: 'home' | 'portfolio';
+  back: 'home' | 'portfolio' | 'blog';
 }
 
 const { lang, pathname, back } = Astro.props;
 const t = useTranslations(lang);
 
-const backHref = getRelativeLocaleUrl(lang, back === 'home' ? '/' : '/portfolio/');
-const backLabel = back === 'home' ? t('portfolio.back_to_home') : t('portfolio.back_to_portfolio');
+const backTargets = {
+  home: { path: '/', label: t('portfolio.back_to_home') },
+  portfolio: { path: '/portfolio/', label: t('portfolio.back_to_portfolio') },
+  blog: { path: '/blog/', label: t('blog.back_to_blog') },
+} as const;
+const backHref = getRelativeLocaleUrl(lang, backTargets[back].path);
+const backLabel = backTargets[back].label;
 const homeHref = getRelativeLocaleUrl(lang, '/');
 
 const otherLocale: Lang = lang === 'en' ? 'de' : 'en';

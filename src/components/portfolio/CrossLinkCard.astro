@@ -1,0 +1,107 @@
+---
+interface Props {
+  href: string;
+  kicker: string;
+  title: string;
+  body: string;
+  cta: string;
+}
+
+const { href, kicker, title, body, cta } = Astro.props;
+---
+<a class="cross-link" href={href}>
+  <div class="cross-link__inner">
+    <div class="cross-link__text">
+      <span class="cross-link__kicker" data-scramble>{kicker}</span>
+      <h3 class="cross-link__title" data-scramble>{title}</h3>
+      <p class="cross-link__body" data-scramble>{body}</p>
+    </div>
+    <div class="cross-link__cta">
+      <span data-scramble>{cta}</span>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </div>
+  </div>
+</a>
+
+<style>
+  .cross-link {
+    display: block;
+    margin: 4rem auto 0;
+    max-width: 1200px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--border-color, #4a4a4a);
+    background:
+      radial-gradient(120% 180% at 100% 0%, rgba(219, 74, 43, 0.10), transparent 55%),
+      var(--card-bg, #1f1f23);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .cross-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color, #db4a2b);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+  .cross-link__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 2.25rem;
+  }
+  .cross-link__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .cross-link__kicker {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: var(--accent-color, #db4a2b);
+    font-weight: 500;
+  }
+  .cross-link__title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--text-light, #e6e6dd);
+    margin: 0;
+  }
+  .cross-link__body {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-dim, #b5b5b8);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .cross-link__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--accent-color, #db4a2b);
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .cross-link__cta svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+  }
+  .cross-link:hover .cross-link__cta svg {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 720px) {
+    .cross-link__inner {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+    .cross-link__title { font-size: 1.25rem; }
+  }
+</style>

@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useTranslations, type Lang } from '../../i18n/t';
 import PortfolioNav from './PortfolioNav.astro';
+import CrossLinkCard from './CrossLinkCard.astro';
 
 interface Props {
   lang: Lang;
@@ -11,6 +12,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const zentrikHref = getRelativeLocaleUrl(lang, '/portfolio/zentrik/');
 const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
+const blogHref = getRelativeLocaleUrl(lang, '/blog/');
 ---
 <PortfolioNav lang={lang} pathname="/portfolio/" back="home" />
 
@@ -77,5 +79,13 @@ const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
         </div>
       </a>
     </div>
+
+    <CrossLinkCard
+      href={blogHref}
+      kicker={t('portfolio.index.cross_link_kicker')}
+      title={t('portfolio.index.cross_link_title')}
+      body={t('portfolio.index.cross_link_body')}
+      cta={t('portfolio.index.cross_link_cta')}
+    />
   </div>
 </section>

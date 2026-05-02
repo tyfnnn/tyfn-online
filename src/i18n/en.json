@@ -78,7 +78,11 @@
       "page_description": "Selected projects by Tayfun Ilker in UX/UI design, app development, and creative design.",
       "title": "My Projects",
       "subtitle": "A selection of my best work in UX/UI design, app development, and creative design",
-      "view_project": "View project"
+      "view_project": "View project",
+      "cross_link_kicker": "Also writing",
+      "cross_link_title": "Notes & Writing",
+      "cross_link_body": "Short pieces on mobile engineering, design, and building this site in public.",
+      "cross_link_cta": "Read the blog"
     },
     "zentrik": {
       "page_title": "Zentrik NGO Management App — TAYFUN ILKER",
@@ -130,7 +134,11 @@
       "title": "Notes & Writing",
       "subtitle": "Short pieces on mobile engineering, design, and building this site.",
       "read_more": "Read more",
-      "empty": "Nothing published yet — come back soon."
+      "empty": "Nothing published yet — come back soon.",
+      "cross_link_kicker": "Also building",
+      "cross_link_title": "Selected projects",
+      "cross_link_body": "A selection of my best work in UX/UI design, app development, and creative design.",
+      "cross_link_cta": "See the portfolio"
     }
   },
   "fab": {
