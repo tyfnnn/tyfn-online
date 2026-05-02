@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>KMP Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #19191C;
+      --bg-tint: #222227;
+      --ink: #FFFFFF;
+      --ink-dim: #B5B5B8;
+      --ink-faint: #6B6B70;
+      --rule: #2E2E33;
+
+      --kot-a: #E44857;
+      --kot-b: #C711E1;
+      --kot-c: #7F52FF;
+
+      --jb-pink: #FE2857;
+      --jb-yellow: #FDB60D;
+      --jb-green: #21D789;
+
+      --android: #3DDC84;
+
+      --sans: 'Manrope', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Menlo', monospace;
+    }
+
+    html, body {
+      background: #0E0E10;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    /* Export mode: ?export renders the poster pixel-exact for screenshot */
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      background: var(--bg);
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    /* gradient mesh — very JetBrains marketing */
+    .mesh {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 700px at 88% 18%, rgba(228, 72, 87, 0.22), transparent 55%),
+        radial-gradient(800px 700px at 70% 80%, rgba(199, 17, 225, 0.20), transparent 55%),
+        radial-gradient(700px 600px at 100% 50%, rgba(127, 82, 255, 0.18), transparent 55%),
+        radial-gradient(600px 500px at 0% 100%, rgba(61, 220, 132, 0.06), transparent 60%);
+      pointer-events: none;
+    }
+
+    /* subtle dot grid */
+    .grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%);
+    }
+
+    /* ============== TOP BAR ============== */
+    .top {
+      position: absolute;
+      top: 44px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .top-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+    }
+
+    .top-tag {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--ink-dim);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+    }
+    .top-tag .live {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--jb-green);
+      box-shadow: 0 0 12px var(--jb-green);
+    }
+
+    /* ============== HERO BODY ============== */
+    .body {
+      position: absolute;
+      top: 110px;
+      left: 56px;
+      right: 56px;
+      bottom: 76px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: center;
+      z-index: 4;
+    }
+
+    /* ---- LEFT: HEADLINE + PLATFORMS ---- */
+    .copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .headline {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 92px;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .headline .row { display: block; }
+    .headline .accent {
+      background: linear-gradient(96deg, var(--kot-a) 0%, var(--kot-b) 50%, var(--kot-c) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .headline .dot { color: var(--kot-b); }
+
+    .sub {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-dim);
+      max-width: 520px;
+      line-height: 1.55;
+    }
+
+    /* platform row: Android → iOS as a clean horizontal flow */
+    .platforms {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-top: 4px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px 10px 12px;
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+    }
+    .chip .icon { width: 22px; height: 22px; flex: none; }
+    .chip-arrow {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--ink-faint);
+      font-weight: 400;
+    }
+
+    /* ---- RIGHT: KOTLIN K ---- */
+    .stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 28px;
+      transform: translateY(-12px);
+    }
+
+    /* ambient glow behind K */
+    .stage::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 460px; height: 460px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(199, 17, 225, 0.30), transparent 65%);
+      filter: blur(20px);
+      transform: translate(-50%, calc(-50% - 28px));
+      z-index: 0;
+    }
+
+    .k-mark {
+      position: relative;
+      z-index: 2;
+      width: 340px;
+      height: 340px;
+      filter: drop-shadow(0 24px 60px rgba(228, 72, 87, 0.30));
+    }
+    .k-mark svg { display: block; width: 100%; height: 100%; }
+
+    /* "Kotlin" wordmark below K */
+    .k-wordmark {
+      position: relative;
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.20em;
+      color: var(--ink);
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    /* ============== BOTTOM ============== */
+    .bottom {
+      position: absolute;
+      bottom: 36px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+      z-index: 5;
+    }
+    .bottom .left { color: var(--ink-dim); }
+    .bottom .left .slash { color: var(--kot-b); }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="mesh"></div>
+    <div class="grid"></div>
+
+    <!-- ============== TOP BAR ============== -->
+    <header class="top">
+      <span class="top-eyebrow">/blog/kmp-migration</span>
+      <div class="top-tag">
+        <span class="live"></span>
+        <span>Compose Multiplatform</span>
+      </div>
+    </header>
+
+    <!-- ============== BODY ============== -->
+    <div class="body">
+      <!-- LEFT: HEADLINE -->
+      <section class="copy">
+        <h1 class="headline">
+          <span class="row">Eine App.</span>
+          <span class="row"><span class="accent">Zwei Plattformen</span><span class="dot">.</span></span>
+        </h1>
+
+        <p class="sub">
+          Eine native Android-Buchhaltungsapp — in einem Monat zu Kotlin Multiplatform migriert. Geteilte UI mit Compose, UIKit-Interop, wo's zählt.
+        </p>
+
+        <div class="platforms">
+          <span class="chip">
+            <svg class="icon" viewBox="-65 -85 130 130" xmlns="http://www.w3.org/2000/svg">
+              <line x1="-22" y1="-72" x2="-12" y2="-50" stroke="#3DDC84" stroke-width="6" stroke-linecap="round"/>
+              <line x1="22" y1="-72" x2="12" y2="-50" stroke="#3DDC84" stroke-width="6" stroke-linecap="round"/>
+              <path d="M -55 -25 A 55 40 0 0 1 55 -25 L 55 35 L -55 35 Z" fill="#3DDC84"/>
+              <circle cx="-22" cy="-15" r="6" fill="#19191C"/>
+              <circle cx="22" cy="-15" r="6" fill="#19191C"/>
+            </svg>
+            Android
+          </span>
+          <span class="chip-arrow">→</span>
+          <span class="chip">
+            <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FFFFFF" d="M19.665 16.811a10.316 10.316 0 0 1-1.021 1.837c-.537.767-.978 1.297-1.316 1.592-.525.482-1.089.73-1.692.744-.432 0-.954-.123-1.562-.373-.61-.249-1.17-.371-1.683-.371-.537 0-1.113.122-1.73.371-.616.25-1.114.381-1.495.393-.577.025-1.154-.229-1.729-.764-.367-.32-.826-.87-1.377-1.648-.59-.829-1.075-1.794-1.455-2.891-.407-1.187-.611-2.335-.611-3.447 0-1.273.275-2.372.826-3.292a4.857 4.857 0 0 1 1.73-1.751 4.65 4.65 0 0 1 2.34-.66c.46 0 1.063.142 1.81.422s1.227.422 1.436.422c.158 0 .689-.167 1.593-.498.853-.307 1.573-.434 2.163-.384 1.6.129 2.801.759 3.6 1.895-1.43.867-2.137 2.08-2.123 3.637.012 1.213.453 2.222 1.317 3.023a4.33 4.33 0 0 0 1.315.863c-.106.307-.218.6-.336.882zM15.998 2.38c0 .95-.348 1.838-1.039 2.659-.836.976-1.846 1.541-2.941 1.452a2.955 2.955 0 0 1-.022-.36c0-.913.396-1.889 1.103-2.688.352-.404.8-.741 1.343-1.009.542-.264 1.054-.41 1.536-.435.014.121.02.243.02.381z"/>
+            </svg>
+            iOS
+          </span>
+        </div>
+      </section>
+
+      <!-- RIGHT: KOTLIN K -->
+      <section class="stage">
+        <div class="k-mark">
+          <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="kgrad" x1="500.003" x2="-.097" y1="579.106" y2="1079.206" gradientTransform="translate(15.534 -96.774) scale(.1939)" gradientUnits="userSpaceOnUse">
+                <stop offset=".003" stop-color="#e44857"/>
+                <stop offset=".469" stop-color="#c711e1"/>
+                <stop offset="1" stop-color="#7f52ff"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#kgrad)" d="M112.484 112.484H15.516V15.516h96.968L64 64Z"/>
+          </svg>
+        </div>
+        <div class="k-wordmark">Kotlin</div>
+      </section>
+    </div>
+
+    <!-- ============== BOTTOM ============== -->
+    <footer class="bottom">
+      <span class="left">tyfn.online</span>
+      <span>Tayfun Ilker · 2026</span>
+    </footer>
+  </article>
+</body>
+</html>
