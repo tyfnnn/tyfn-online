@@ -143,11 +143,8 @@
   },
   "fab": {
     "home": "Startseite",
-    "about": "Über mich",
-    "projects": "Projekte",
     "portfolio": "Portfolio",
     "blog": "Blog",
-    "process": "Prozess",
     "contact": "Kontakt"
   },
   "footer": {
