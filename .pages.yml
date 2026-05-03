@@ -1,0 +1,541 @@
+# PagesCMS configuration — https://pagescms.org/docs/configuration/
+
+media:
+  input: public/assets
+  output: /assets
+
+content:
+  # ----- Blog (English) -----
+  - name: blog_en
+    label: Blog (English)
+    path: src/content/blog/en
+    filename: '{primary}.mdx'
+    type: collection
+    format: yaml-frontmatter
+    view:
+      fields: [title, pubDate, tags, draft]
+      primary: title
+      sort: [pubDate, title]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+        options:
+          rows: 3
+      - name: pubDate
+        label: Published
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+          time: false
+      - name: updatedDate
+        label: Last updated
+        type: date
+        options:
+          format: yyyy-MM-dd
+          time: false
+      - name: lang
+        label: Language
+        type: select
+        required: true
+        default: en
+        options:
+          values: [en]
+        description: 'Set automatically — leave on "en".'
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: heroImage
+        label: Hero image
+        type: image
+        description: 'Uploaded to public/assets/. Reference as /assets/<file>.'
+      - name: translationKey
+        label: Translation key
+        type: string
+        description: 'Use the same value on the German version of this post — that pairs them for the language switcher.'
+      - name: body
+        label: Body
+        type: rich-text
+
+  # ----- Blog (Deutsch) -----
+  - name: blog_de
+    label: Blog (Deutsch)
+    path: src/content/blog/de
+    filename: '{primary}.mdx'
+    type: collection
+    format: yaml-frontmatter
+    view:
+      fields: [title, pubDate, tags, draft]
+      primary: title
+      sort: [pubDate, title]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Titel
+        type: string
+        required: true
+      - name: description
+        label: Beschreibung
+        type: text
+        required: true
+        options:
+          rows: 3
+      - name: pubDate
+        label: Veröffentlicht
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+          time: false
+      - name: updatedDate
+        label: Aktualisiert
+        type: date
+        options:
+          format: yyyy-MM-dd
+          time: false
+      - name: lang
+        label: Sprache
+        type: select
+        required: true
+        default: de
+        options:
+          values: [de]
+        description: 'Wird automatisch gesetzt — auf "de" lassen.'
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: draft
+        label: Entwurf
+        type: boolean
+        default: false
+      - name: heroImage
+        label: Titelbild
+        type: image
+        description: 'Wird unter public/assets/ abgelegt. Referenz als /assets/<datei>.'
+      - name: translationKey
+        label: Übersetzungs-Key
+        type: string
+        description: 'Identisch zum englischen Pendant, damit der Sprachumschalter die Posts paaren kann.'
+      - name: body
+        label: Inhalt
+        type: rich-text
+
+  # ----- UI-Texte (English) -----
+  - name: i18n_en
+    label: UI texts (English)
+    path: src/i18n/en.json
+    type: file
+    format: json
+    fields:
+      - name: common
+        type: object
+        fields:
+          - { name: email, label: Email, type: string }
+      - name: nav
+        label: Navigation
+        type: object
+        fields:
+          - { name: status_prefix,  label: Status prefix,        type: string }
+          - { name: status_mobile,  label: Status (mobile),      type: string }
+          - { name: status_desktop, label: Status (desktop),     type: text, description: 'HTML allowed (e.g. <br />).' }
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - { name: email_label, label: Email label, type: string }
+          - { name: tagline,     label: Tagline,     type: text, description: 'HTML allowed (e.g. <br />).' }
+      - name: about
+        label: About
+        type: object
+        fields:
+          - { name: title, label: Title, type: string }
+      - name: projects
+        label: Projects section
+        type: object
+        fields:
+          - { name: scroll_text, label: Marquee text, type: string }
+          - name: scene
+            label: Scenes
+            type: object
+            fields:
+              - name: mirror
+                type: object
+                fields:
+                  - name: swift
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+                  - name: kotlin
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+                  - name: same_idea
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string, description: 'Inline HTML allowed (e.g. <em>).' }
+                      - { name: body, type: text }
+                  - name: two_homes
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+              - name: kmp
+                type: object
+                fields:
+                  - name: one_logic
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string, description: 'Inline HTML allowed (e.g. <em>).' }
+                      - { name: body, type: text }
+                  - name: result
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+              - name: outro
+                type: object
+                fields:
+                  - { name: eye,  type: string }
+                  - { name: head, type: string }
+                  - { name: cta,  type: string }
+      - name: cto
+        label: CTO card
+        type: object
+        fields:
+          - { name: badge,       type: string }
+          - { name: title,       type: string }
+          - { name: subtitle,    type: string }
+          - { name: description, type: text }
+          - { name: skill_1,     type: string }
+          - { name: skill_2,     type: string }
+          - { name: skill_3,     type: string }
+          - { name: skill_4,     type: string }
+          - { name: skill_5,     type: string }
+          - { name: action,      type: string }
+      - name: portfolio
+        label: Portfolio
+        type: object
+        fields:
+          - { name: back_to_home,      type: string }
+          - { name: back_to_portfolio, type: string }
+          - name: index
+            label: Portfolio index
+            type: object
+            fields:
+              - { name: page_title,         type: string }
+              - { name: page_description,   type: text }
+              - { name: title,              type: string }
+              - { name: subtitle,           type: text }
+              - { name: view_project,       type: string }
+              - { name: cross_link_kicker,  type: string }
+              - { name: cross_link_title,   type: string }
+              - { name: cross_link_body,    type: text }
+              - { name: cross_link_cta,     type: string }
+          - name: zentrik
+            label: Zentrik
+            type: object
+            fields:
+              - { name: page_title,       type: string }
+              - { name: page_description, type: text }
+              - { name: card_title,       type: string }
+              - { name: card_description, type: text }
+              - { name: tag_1,            type: string }
+              - { name: tag_2,            type: string }
+              - { name: tag_3,            type: string }
+              - { name: tag_4,            type: string }
+              - { name: tag_5,            type: string }
+              - { name: status,           type: string }
+          - name: stellar
+            label: Stellar Horizon
+            type: object
+            fields:
+              - { name: page_title,       type: string }
+              - { name: page_description, type: text }
+              - { name: card_title,       type: string }
+              - { name: card_description, type: text }
+              - { name: tag_1,            type: string }
+              - { name: tag_2,            type: string }
+              - { name: tag_3,            type: string }
+              - { name: tag_4,            type: string }
+              - { name: tag_5,            type: string }
+              - { name: tag_6,            type: string }
+              - { name: status,           type: string }
+      - name: process
+        label: Process
+        type: object
+        fields:
+          - { name: title,          type: string }
+          - { name: subtitle,       type: string }
+          - { name: step_1_heading, type: string }
+          - { name: step_1_body,    type: text }
+          - { name: step_2_heading, type: string }
+          - { name: step_2_body,    type: text }
+          - { name: step_3_heading, type: string }
+          - { name: step_3_body,    type: text }
+          - { name: step_4_heading, type: string }
+          - { name: step_4_body,    type: text }
+      - name: blog
+        label: Blog UI
+        type: object
+        fields:
+          - { name: back_to_blog,        type: string }
+          - { name: reading_time,        type: string, description: 'Use {n} as the placeholder for the minute count.' }
+          - { name: translation_missing, type: text }
+          - { name: published,           type: string }
+          - { name: updated,             type: string }
+          - name: index
+            label: Blog index
+            type: object
+            fields:
+              - { name: page_title,        type: string }
+              - { name: page_description,  type: text }
+              - { name: title,             type: string }
+              - { name: subtitle,          type: text }
+              - { name: read_more,         type: string }
+              - { name: empty,             type: string }
+              - { name: cross_link_kicker, type: string }
+              - { name: cross_link_title,  type: string }
+              - { name: cross_link_body,   type: text }
+              - { name: cross_link_cta,    type: string }
+      - name: fab
+        label: Floating action menu
+        type: object
+        fields:
+          - { name: home,      type: string }
+          - { name: portfolio, type: string }
+          - { name: blog,      type: string }
+          - { name: contact,   type: string }
+      - name: footer
+        label: Footer
+        type: object
+        fields:
+          - { name: cta_heading, type: string }
+          - { name: email_label, type: string }
+          - { name: magic_line,  type: string }
+
+  # ----- UI-Texte (Deutsch) -----
+  # Strukturell identisch zu en.json — neue Keys IMMER in beiden Files anlegen.
+  - name: i18n_de
+    label: UI-Texte (Deutsch)
+    path: src/i18n/de.json
+    type: file
+    format: json
+    fields:
+      - name: common
+        type: object
+        fields:
+          - { name: email, label: E-Mail, type: string }
+      - name: nav
+        label: Navigation
+        type: object
+        fields:
+          - { name: status_prefix,  label: Status-Präfix,        type: string }
+          - { name: status_mobile,  label: Status (mobil),       type: string }
+          - { name: status_desktop, label: Status (Desktop),     type: text, description: 'HTML erlaubt (z. B. <br />).' }
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - { name: email_label, label: E-Mail-Label, type: string }
+          - { name: tagline,     label: Tagline,      type: text, description: 'HTML erlaubt (z. B. <br />).' }
+      - name: about
+        label: Über mich
+        type: object
+        fields:
+          - { name: title, label: Titel, type: string }
+      - name: projects
+        label: Projekte-Section
+        type: object
+        fields:
+          - { name: scroll_text, label: Marquee-Text, type: string }
+          - name: scene
+            label: Szenen
+            type: object
+            fields:
+              - name: mirror
+                type: object
+                fields:
+                  - name: swift
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+                  - name: kotlin
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+                  - name: same_idea
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string, description: 'Inline-HTML erlaubt (z. B. <em>).' }
+                      - { name: body, type: text }
+                  - name: two_homes
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+              - name: kmp
+                type: object
+                fields:
+                  - name: one_logic
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string, description: 'Inline-HTML erlaubt (z. B. <em>).' }
+                      - { name: body, type: text }
+                  - name: result
+                    type: object
+                    fields:
+                      - { name: eye,  type: string }
+                      - { name: head, type: string }
+                      - { name: body, type: text }
+              - name: outro
+                type: object
+                fields:
+                  - { name: eye,  type: string }
+                  - { name: head, type: string }
+                  - { name: cta,  type: string }
+      - name: cto
+        label: CTO-Karte
+        type: object
+        fields:
+          - { name: badge,       type: string }
+          - { name: title,       type: string }
+          - { name: subtitle,    type: string }
+          - { name: description, type: text }
+          - { name: skill_1,     type: string }
+          - { name: skill_2,     type: string }
+          - { name: skill_3,     type: string }
+          - { name: skill_4,     type: string }
+          - { name: skill_5,     type: string }
+          - { name: action,      type: string }
+      - name: portfolio
+        label: Portfolio
+        type: object
+        fields:
+          - { name: back_to_home,      type: string }
+          - { name: back_to_portfolio, type: string }
+          - name: index
+            label: Portfolio-Index
+            type: object
+            fields:
+              - { name: page_title,         type: string }
+              - { name: page_description,   type: text }
+              - { name: title,              type: string }
+              - { name: subtitle,           type: text }
+              - { name: view_project,       type: string }
+              - { name: cross_link_kicker,  type: string }
+              - { name: cross_link_title,   type: string }
+              - { name: cross_link_body,    type: text }
+              - { name: cross_link_cta,     type: string }
+          - name: zentrik
+            label: Zentrik
+            type: object
+            fields:
+              - { name: page_title,       type: string }
+              - { name: page_description, type: text }
+              - { name: card_title,       type: string }
+              - { name: card_description, type: text }
+              - { name: tag_1,            type: string }
+              - { name: tag_2,            type: string }
+              - { name: tag_3,            type: string }
+              - { name: tag_4,            type: string }
+              - { name: tag_5,            type: string }
+              - { name: status,           type: string }
+          - name: stellar
+            label: Stellar Horizon
+            type: object
+            fields:
+              - { name: page_title,       type: string }
+              - { name: page_description, type: text }
+              - { name: card_title,       type: string }
+              - { name: card_description, type: text }
+              - { name: tag_1,            type: string }
+              - { name: tag_2,            type: string }
+              - { name: tag_3,            type: string }
+              - { name: tag_4,            type: string }
+              - { name: tag_5,            type: string }
+              - { name: tag_6,            type: string }
+              - { name: status,           type: string }
+      - name: process
+        label: Prozess
+        type: object
+        fields:
+          - { name: title,          type: string }
+          - { name: subtitle,       type: string }
+          - { name: step_1_heading, type: string }
+          - { name: step_1_body,    type: text }
+          - { name: step_2_heading, type: string }
+          - { name: step_2_body,    type: text }
+          - { name: step_3_heading, type: string }
+          - { name: step_3_body,    type: text }
+          - { name: step_4_heading, type: string }
+          - { name: step_4_body,    type: text }
+      - name: blog
+        label: Blog-UI
+        type: object
+        fields:
+          - { name: back_to_blog,        type: string }
+          - { name: reading_time,        type: string, description: 'Platzhalter {n} für die Minutenzahl.' }
+          - { name: translation_missing, type: text }
+          - { name: published,           type: string }
+          - { name: updated,             type: string }
+          - name: index
+            label: Blog-Index
+            type: object
+            fields:
+              - { name: page_title,        type: string }
+              - { name: page_description,  type: text }
+              - { name: title,             type: string }
+              - { name: subtitle,          type: text }
+              - { name: read_more,         type: string }
+              - { name: empty,             type: string }
+              - { name: cross_link_kicker, type: string }
+              - { name: cross_link_title,  type: string }
+              - { name: cross_link_body,   type: text }
+              - { name: cross_link_cta,    type: string }
+      - name: fab
+        label: Floating-Menü
+        type: object
+        fields:
+          - { name: home,      type: string }
+          - { name: portfolio, type: string }
+          - { name: blog,      type: string }
+          - { name: contact,   type: string }
+      - name: footer
+        label: Footer
+        type: object
+        fields:
+          - { name: cta_heading, type: string }
+          - { name: email_label, type: string }
+          - { name: magic_line,  type: string }
