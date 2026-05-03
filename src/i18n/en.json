@@ -143,11 +143,8 @@
   },
   "fab": {
     "home": "Home",
-    "about": "About",
-    "projects": "Projects",
     "portfolio": "Portfolio",
     "blog": "Blog",
-    "process": "Process",
     "contact": "Contact"
   },
   "footer": {
