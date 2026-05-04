@@ -1,0 +1,123 @@
+---
+title: A 404 page that's actually fun to land on
+description: Why I built a CSS-only animated 404 with tilting digits, an orbiting astronaut, and a few dad jokes — and what it taught me about Astro's static 404 conventions.
+pubDate: 2026-05-04
+lang: en
+tags:
+  - astro
+  - css
+  - animation
+  - design
+  - i18n
+translationKey: lost-in-space-404
+---
+
+I shipped a proper 404 page this weekend. Not because anyone asked
+for one — analytics suggest exactly nobody hits dead links on a
+five-page portfolio — but because the default "Page not found" felt
+like a missed opportunity to make someone smile.
+
+## Why bother
+
+A 404 is the one page on your site where the user is, by definition,
+already mildly disappointed. They typed something wrong, followed a
+stale link, or got redirected by an AI summary that hallucinated a
+path. You have one job there: don't make it worse, and ideally,
+help them back out.
+
+Most "fun" 404s I've seen lean too hard into either side of the
+spectrum. Either they're a wall of corporate apology, or they're a
+single oversized illustration with no way to actually get home.
+I wanted both: a small joke, then two clear exits.
+
+## The copy
+
+The voice has to match the rest of the site. The portfolio is
+direct and a bit playful — it isn't a bank — so the 404 leans into
+that:
+
+- Eyebrow: **TRANSMISSION LOST · ERROR 404**
+- Headline: **This page got abducted by aliens.**
+- Body: *We searched every route. Even peeked at `/api/secret-cookies`.*
+- Closer: *Either the URL never existed, or you just discovered a
+  wormhole. Honestly, pretty cool either way.*
+
+The German version had to keep the same energy without translating
+verbatim. `Diese Seite wurde von Aliens entführt.` works. The fake
+endpoint became `/api/geheime-kekse`, and "Beam me home" turned into
+`Zurück zur Erde` — slightly less Star-Trek, slightly more grounded.
+
+Both copies sit under `notfound.*` in `en.json` / `de.json`, same as
+every other string on the site. The language switcher at the top
+scrambles between them with the same `data-scramble` runtime that
+powers the rest of the navigation.
+
+## The animation
+
+Pure CSS, no JS, no GSAP. The page already lives under
+`PortfolioLayout`, which deliberately doesn't load the Webflow IX2
+runtime — and I wanted to keep it that way. Adding a heavy animation
+library for a page most users will never see felt like the wrong
+trade.
+
+The composition is:
+
+- A big `404` in `Archivo Black`. The two `4`s tilt opposite
+  directions and breathe up-down on a five-second loop.
+- The `0` is hue-rotated through a radial gradient so it pulses
+  through orange/red/black like a tiny planet.
+- A 2px ring sits on top of the zero at -18°, slightly squashed —
+  cheap Saturn impression.
+- An SVG astronaut (helmet, visor reflection, NASA-style chest patch,
+  tiny suit details) orbits the whole composition. The orbit
+  container rotates clockwise; the astronaut counter-rotates so its
+  head always stays "up". A separate bob animation gives it the
+  zero-G float.
+- Two layered `radial-gradient` starfields with offset twinkle
+  timings (4s and 7s) make the background feel alive without
+  shipping any extra assets.
+
+```css
+@keyframes nf-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes nf-counter-spin {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to   { transform: translateX(-50%) rotate(-360deg); }
+}
+```
+
+The whole composition is wrapped in a `prefers-reduced-motion`
+guard. Anyone who's asked their OS for less motion gets the same
+layout, just frozen — same readability, no vestibular surprises.
+
+## Astro and the 404 quirk
+
+Astro static builds have one specific convention worth knowing:
+`src/pages/404.astro` is emitted as `dist/404.html` (flat), even
+when `build.format` is set to `directory` for the rest of the site.
+Most static hosts — Cloudflare Pages, Netlify, Vercel — pick that
+file up automatically as the site-wide 404.
+
+I also added `src/pages/de/404.astro`, but here Astro applies the
+directory rule and emits `dist/de/404/index.html` instead of
+`dist/de/404.html`. Hosting platforms differ in how they pick up
+per-directory 404s, so on Cloudflare Pages I'll wire the German
+fallback through a `_redirects` rule later. For now, an unknown
+URL anywhere on the site lands on the English 404 — acceptable
+trade-off for a v1.
+
+## Lessons
+
+- A small CSS-only scene reads as more "considered" than a giant
+  Lottie, and ships in roughly 4 KB of style. Use the constraint.
+- Keep the joke short. One headline, one body line, one closer.
+  Anything more starts feeling like the user is being held hostage.
+- Always ship the two exits. On this page: *Beam me home* and
+  *Browse the portfolio*. Without them, the joke stops being charming
+  and starts being annoying.
+
+If you want to test it, the easiest way is to make up a path. Try
+`/abducted-by-aliens` — that's exactly what it's there for.
