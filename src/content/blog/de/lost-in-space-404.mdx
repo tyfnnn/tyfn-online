@@ -1,0 +1,131 @@
+---
+title: Eine 404-Seite, die wirklich Spaß macht
+description: Warum ich eine animierte 404 nur mit CSS gebaut habe — kippelnde Ziffern, ein umkreisender Astronaut, ein paar Dad-Jokes — und was mir das über Astros statische 404-Konventionen beigebracht hat.
+pubDate: 2026-05-04
+lang: de
+tags:
+  - astro
+  - css
+  - animation
+  - design
+  - i18n
+translationKey: lost-in-space-404
+---
+
+Am Wochenende habe ich eine richtige 404-Seite ausgeliefert. Nicht
+weil jemand danach gefragt hätte — die Analytics zeigen, dass auf
+einem fünfseitigen Portfolio quasi niemand auf tote Links klickt —
+sondern weil das Standard-"Seite nicht gefunden" sich wie eine
+verpasste Chance anfühlte, jemanden zum Schmunzeln zu bringen.
+
+## Warum überhaupt
+
+Eine 404 ist die eine Seite, auf der der Nutzer per Definition
+schon leicht enttäuscht ist. Vertippt, einem alten Link gefolgt,
+oder von einer KI-Zusammenfassung auf einen halluzinierten Pfad
+geschickt. Dort hat man genau einen Job: es nicht schlimmer machen,
+und idealerweise helfen, wieder herauszufinden.
+
+Die meisten "lustigen" 404-Seiten, die ich gesehen habe, kippen in
+eines von zwei Extremen. Entweder eine Wand aus konzernigen
+Entschuldigungen, oder eine einzige überdimensionierte Illustration
+ohne Weg zurück. Ich wollte beides: einen kleinen Witz, dann zwei
+klare Ausgänge.
+
+## Der Text
+
+Die Tonalität muss zum Rest der Seite passen. Das Portfolio ist
+direkt und etwas verspielt — keine Bank — also lehnt sich die 404
+genau dort hinein:
+
+- Augenbraue: **VERBINDUNG VERLOREN · FEHLER 404**
+- Headline: **Diese Seite wurde von Aliens entführt.**
+- Body: *Wir haben jede Route durchsucht. Sogar bei `/api/geheime-kekse` nachgesehen.*
+- Abschluss: *Entweder gab es diese URL nie, oder du hast gerade ein
+  Wurmloch entdeckt. Beides irgendwie cool, ehrlich gesagt.*
+
+Die englische Variante musste die gleiche Energie tragen, ohne
+wörtlich übersetzt zu sein. `This page got abducted by aliens.`
+funktioniert. Der Fake-Endpoint heißt dort `/api/secret-cookies`,
+und `Zurück zur Erde` wurde zu **Beam me home** — etwas mehr
+Star Trek, etwas weniger bodenständig.
+
+Beide Texte liegen unter `notfound.*` in `en.json` / `de.json`,
+genauso wie jeder andere String auf der Seite. Der Sprachumschalter
+oben scramblet zwischen ihnen über die gleiche `data-scramble`
+Runtime, die auch den Rest der Navigation antreibt.
+
+## Die Animation
+
+Reines CSS, kein JS, kein GSAP. Die Seite läuft schon unter
+`PortfolioLayout`, das die Webflow-IX2-Runtime bewusst nicht lädt —
+und ich wollte das so lassen. Eine schwere Animationsbibliothek
+für eine Seite zu laden, die die meisten Besucher nie sehen, fühlte
+sich nach dem falschen Trade an.
+
+Die Komposition besteht aus:
+
+- Ein großes `404` in `Archivo Black`. Die beiden `4`er kippen in
+  entgegengesetzte Richtungen und atmen in einem Fünf-Sekunden-Loop
+  hoch und runter.
+- Die `0` läuft über einen Radial-Gradient mit `hue-rotate`, sodass
+  sie wie ein kleiner Planet zwischen Orange/Rot/Schwarz pulsiert.
+- Ein 2px-Ring liegt bei -18° auf der Null und ist leicht gestaucht
+  — ein günstiger Saturn-Eindruck.
+- Ein SVG-Astronaut (Helm, Visier-Reflexion, NASA-Brustpatch, kleine
+  Anzug-Details) umkreist die ganze Komposition. Der Orbit-Container
+  dreht sich im Uhrzeigersinn, der Astronaut counter-rotiert, damit
+  sein Kopf immer "oben" bleibt. Eine separate Bob-Animation gibt
+  ihm das Zero-G-Schweben.
+- Zwei gestaffelte Sternenfelder über `radial-gradient` mit
+  versetzten Funkel-Timings (4s und 7s) lassen den Hintergrund
+  lebendig wirken, ohne ein einziges Asset zu laden.
+
+```css
+@keyframes nf-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes nf-counter-spin {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to   { transform: translateX(-50%) rotate(-360deg); }
+}
+```
+
+Die gesamte Komposition liegt hinter einem
+`prefers-reduced-motion`-Guard. Wer sein OS auf weniger Bewegung
+gestellt hat, bekommt das gleiche Layout, einfach eingefroren —
+gleiche Lesbarkeit, keine Vestibulär-Überraschungen.
+
+## Astro und die 404-Eigenheit
+
+Statische Astro-Builds haben eine spezifische Konvention, die man
+kennen sollte: `src/pages/404.astro` wird als `dist/404.html` (flach)
+ausgegeben, selbst wenn `build.format` für den Rest der Seite auf
+`directory` steht. Die meisten statischen Hosts — Cloudflare Pages,
+Netlify, Vercel — picken diese Datei automatisch als seitenweite 404.
+
+Ich habe zusätzlich `src/pages/de/404.astro` angelegt, aber hier
+greift die Directory-Regel und Astro schreibt
+`dist/de/404/index.html` statt `dist/de/404.html`. Wie Hosting-
+Plattformen verschachtelte 404s aufgreifen, unterscheidet sich, also
+verdrahte ich den deutschen Fallback bei Cloudflare Pages später
+über eine `_redirects`-Regel. Im Moment landet eine unbekannte URL
+irgendwo auf der Seite auf der englischen 404 — akzeptabler Trade
+für eine v1.
+
+## Lessons
+
+- Eine kleine CSS-Szene wirkt "durchdachter" als ein riesiges
+  Lottie und kostet ungefähr 4 KB Stylesheet. Die Constraint nutzen.
+- Den Witz kurz halten. Eine Headline, ein Body-Satz, ein Abschluss.
+  Alles darüber hinaus fühlt sich an, als würde man dem Nutzer
+  Geiselhaft drohen.
+- Immer die zwei Ausgänge mitliefern. Auf dieser Seite: *Zurück zur
+  Erde* und *Lieber Projekte ansehen*. Ohne sie hört der Witz auf,
+  charmant zu sein, und fängt an zu nerven.
+
+Wenn du es testen willst: am einfachsten geht das, indem du dir
+einen Pfad ausdenkst. Probier `/von-aliens-entfuehrt` — genau dafür
+ist sie da.
