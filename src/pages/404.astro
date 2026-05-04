@@ -1,0 +1,18 @@
+---
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import NotFound from '../components/NotFound.astro';
+import head from '../snippets/portfolio/index-head.html?raw';
+import { useTranslations } from '../i18n/t';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+<PortfolioLayout
+  lang={lang}
+  pathname="/404/"
+  title={t('notfound.page_title')}
+  description={t('notfound.page_description')}
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <NotFound lang={lang} />
+</PortfolioLayout>
