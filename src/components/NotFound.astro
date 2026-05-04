@@ -1,0 +1,391 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../i18n/t';
+import PortfolioNav from './portfolio/PortfolioNav.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const homeHref = getRelativeLocaleUrl(lang, '/');
+const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+---
+<PortfolioNav lang={lang} pathname="/" back="home" />
+
+<section class="nf">
+  <div class="nf-stars" aria-hidden="true"></div>
+  <div class="nf-stars nf-stars--slow" aria-hidden="true"></div>
+
+  <div class="nf-inner">
+    <p class="nf-eyebrow" data-scramble>{t('notfound.eyebrow')}</p>
+
+    <div class="nf-display" aria-hidden="true">
+      <span class="nf-digit nf-digit--four-l">4</span>
+      <span class="nf-digit nf-digit--zero">
+        <span class="nf-zero-glyph">0</span>
+        <span class="nf-ring"></span>
+      </span>
+      <span class="nf-digit nf-digit--four-r">4</span>
+
+      <div class="nf-orbit">
+        <div class="nf-astronaut">
+          <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="visor" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#9fd9ff" stop-opacity="0.95" />
+                <stop offset="55%" stop-color="#3a6ea5" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#0d1a2b" stop-opacity="1" />
+              </radialGradient>
+              <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f4f1ea" />
+                <stop offset="100%" stop-color="#c9c5ba" />
+              </linearGradient>
+            </defs>
+
+            <ellipse cx="60" cy="132" rx="32" ry="4" fill="#000" opacity="0.25" />
+
+            <rect x="40" y="78" width="40" height="38" rx="14" fill="url(#suit)" />
+            <rect x="20" y="84" width="22" height="12" rx="6" fill="url(#suit)" />
+            <rect x="78" y="84" width="22" height="12" rx="6" fill="url(#suit)" />
+            <rect x="46" y="112" width="12" height="20" rx="5" fill="url(#suit)" />
+            <rect x="62" y="112" width="12" height="20" rx="5" fill="url(#suit)" />
+
+            <rect x="52" y="92" width="16" height="14" rx="3" fill="#DB4A2B" />
+            <rect x="55" y="95" width="10" height="2" fill="#fff" opacity="0.9" />
+            <rect x="55" y="99" width="7" height="2" fill="#fff" opacity="0.7" />
+            <rect x="55" y="103" width="9" height="2" fill="#fff" opacity="0.5" />
+
+            <circle cx="60" cy="50" r="32" fill="#e6e6dd" stroke="#b8b8b0" stroke-width="2" />
+            <circle cx="60" cy="50" r="26" fill="url(#visor)" />
+            <ellipse cx="50" cy="40" rx="8" ry="5" fill="#fff" opacity="0.5" />
+            <ellipse cx="68" cy="58" rx="3" ry="2" fill="#fff" opacity="0.7" />
+
+            <rect x="36" y="46" width="6" height="8" rx="2" fill="#a8a59a" />
+            <rect x="78" y="46" width="6" height="8" rx="2" fill="#a8a59a" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="nf-title" data-scramble set:html={t('notfound.title')}></h1>
+    <p class="nf-subtitle" data-scramble set:html={t('notfound.subtitle')}></p>
+    <p class="nf-joke" data-scramble>{t('notfound.joke')}</p>
+
+    <div class="nf-actions">
+      <a href={homeHref} class="nf-btn nf-btn--primary">
+        <span data-scramble>{t('notfound.cta_home')}</span>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+      <a href={portfolioHref} class="nf-btn">
+        <span data-scramble>{t('notfound.cta_portfolio')}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nf {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    padding: 4rem 1.5rem 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(219, 74, 43, 0.08), transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(74, 107, 102, 0.12), transparent 60%),
+      var(--bg-primary, #2B2B2B);
+  }
+
+  .nf-stars,
+  .nf-stars--slow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 27% 64%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 41% 22%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 58% 81%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 71% 32%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 84% 70%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 92% 12%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 9% 88%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 50% 50%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 33% 8%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 65% 95%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 19% 47%, #fff, transparent 60%);
+    opacity: 0.55;
+    animation: nf-twinkle 4s ease-in-out infinite alternate;
+  }
+
+  .nf-stars--slow {
+    background-image:
+      radial-gradient(1px 1px at 4% 30%, #ffd9c8, transparent 60%),
+      radial-gradient(1.5px 1.5px at 22% 92%, #c8e2ff, transparent 60%),
+      radial-gradient(1px 1px at 47% 14%, #fff, transparent 60%),
+      radial-gradient(2px 2px at 76% 56%, #ffd9c8, transparent 60%),
+      radial-gradient(1px 1px at 88% 84%, #c8e2ff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 14% 72%, #fff, transparent 60%);
+    opacity: 0.7;
+    animation-duration: 7s;
+    animation-delay: -2s;
+  }
+
+  @keyframes nf-twinkle {
+    0% { opacity: 0.25; }
+    100% { opacity: 0.85; }
+  }
+
+  .nf-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .nf-eyebrow {
+    font-family: 'Inter', sans-serif;
+    color: var(--accent-color, #DB4A2B);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: nf-flicker 3.4s ease-in-out infinite;
+  }
+
+  @keyframes nf-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 12px rgba(219, 74, 43, 0.6);
+    }
+    20%, 24%, 55% { opacity: 0.35; text-shadow: none; }
+  }
+
+  .nf-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 2vw, 1.25rem);
+    margin: 1.5rem 0 2.5rem;
+    line-height: 1;
+  }
+
+  .nf-digit {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(7rem, 22vw, 14rem);
+    color: var(--text-light, #E6E6DD);
+    display: inline-block;
+    transform-origin: center bottom;
+  }
+
+  .nf-digit--four-l { animation: nf-tilt-l 5s ease-in-out infinite; }
+  .nf-digit--four-r { animation: nf-tilt-r 5s ease-in-out infinite; }
+
+  @keyframes nf-tilt-l {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    50% { transform: rotate(-1deg) translateY(-6px); }
+  }
+  @keyframes nf-tilt-r {
+    0%, 100% { transform: rotate(4deg) translateY(0); }
+    50% { transform: rotate(1deg) translateY(-6px); }
+  }
+
+  .nf-digit--zero {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nf-zero-glyph {
+    position: relative;
+    display: inline-block;
+    background: radial-gradient(circle at 35% 30%, #ffb38c 0%, #DB4A2B 35%, #6b1f10 75%, #1a0a06 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: nf-spin-slow 14s linear infinite;
+  }
+
+  .nf-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 28%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    border: 2px solid rgba(230, 230, 221, 0.35);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(219, 74, 43, 0.25);
+    pointer-events: none;
+    animation: nf-ring-tilt 8s ease-in-out infinite;
+  }
+
+  @keyframes nf-spin-slow {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
+  }
+
+  @keyframes nf-ring-tilt {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-18deg) scaleX(1); }
+    50% { transform: translate(-50%, -50%) rotate(-12deg) scaleX(0.92); }
+  }
+
+  .nf-orbit {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    animation: nf-orbit 12s linear infinite;
+  }
+
+  @keyframes nf-orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .nf-astronaut {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    width: clamp(72px, 12vw, 110px);
+    transform: translateX(-50%);
+    animation: nf-counter-spin 12s linear infinite, nf-bob 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4));
+  }
+
+  .nf-astronaut svg { width: 100%; height: auto; display: block; }
+
+  @keyframes nf-counter-spin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(-360deg); }
+  }
+
+  @keyframes nf-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -8px; }
+  }
+
+  .nf-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-light, #E6E6DD);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+  }
+
+  .nf-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    color: var(--text-secondary, #B8B8B0);
+    max-width: 520px;
+    margin: 0 auto 0.75rem;
+    line-height: 1.55;
+  }
+
+  .nf-subtitle :global(em) {
+    font-style: normal;
+    color: var(--accent-color, #DB4A2B);
+    font-weight: 600;
+  }
+
+  .nf-subtitle :global(code) {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.92em;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.1em 0.45em;
+    border-radius: 6px;
+    color: var(--text-light, #E6E6DD);
+  }
+
+  .nf-joke {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-secondary, #B8B8B0);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.55;
+    opacity: 0.85;
+  }
+
+  .nf-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border-color, #4A4A4A);
+    color: var(--text-light, #E6E6DD);
+    background: var(--card-bg, #363636);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .nf-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color, #DB4A2B);
+    color: var(--accent-color, #DB4A2B);
+  }
+
+  .nf-btn--primary {
+    background: var(--accent-color, #DB4A2B);
+    border-color: var(--accent-color, #DB4A2B);
+    color: #fff;
+  }
+
+  .nf-btn--primary:hover {
+    background: #b9381e;
+    border-color: #b9381e;
+    color: #fff;
+  }
+
+  .nf-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.25s ease;
+  }
+
+  .nf-btn:hover svg { transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nf-stars,
+    .nf-stars--slow,
+    .nf-eyebrow,
+    .nf-digit--four-l,
+    .nf-digit--four-r,
+    .nf-zero-glyph,
+    .nf-ring,
+    .nf-orbit,
+    .nf-astronaut {
+      animation: none !important;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .nf { padding: 3rem 1rem 5rem; }
+    .nf-actions { flex-direction: column; align-items: stretch; }
+    .nf-btn { justify-content: center; }
+  }
+</style>
