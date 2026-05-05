@@ -97,24 +97,6 @@ const initialMessage = t('chat.initial_message');
     --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
-  /* Reveal/hide wrapper. Hidden by default — JS toggles .is-revealed.
-     When the chat panel is open (.chat-window child exists) we force-show. */
-  .chat-host {
-    opacity: 0;
-    transform: translateY(20px) scale(0.85);
-    pointer-events: none;
-    transition:
-      opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform-origin: bottom left;
-  }
-  .chat-host.is-revealed,
-  .chat-host:has(.chat-window) {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-  }
-
   /* Cursor handling under the global cursor:none rule */
   #n8n-chat,
   #n8n-chat * { cursor: auto !important; }
@@ -124,14 +106,31 @@ const initialMessage = t('chat.initial_message');
   #n8n-chat input,
   #n8n-chat textarea { cursor: text !important; }
 
-  /* The wrapper holds toggle + (optionally) chat-window. Library positions it
-     fixed bottom-right by default — we move it bottom-left and left-align children. */
+  /* The wrapper is the only fixed-positioned element — drive both the
+     positioning AND the reveal animation here. NEVER apply transform to the
+     #n8n-chat host: that turns the host into the containing block for fixed
+     descendants and the wrapper would anchor to it (at the document end)
+     instead of the viewport. */
   #n8n-chat .chat-window-wrapper {
-    bottom: 1.5rem !important;
+    bottom: 4rem !important;
     left: 1.25rem !important;
     right: auto !important;
     align-items: flex-start !important;
     z-index: 9998;
+
+    opacity: 0;
+    transform: translateY(20px) scale(0.85);
+    transform-origin: bottom left;
+    pointer-events: none;
+    transition:
+      opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  #n8n-chat.is-revealed .chat-window-wrapper,
+  #n8n-chat:has(.chat-window) .chat-window-wrapper {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
   }
 
   /* Toggle bubble — match FabMenu glass material */
@@ -295,7 +294,7 @@ const initialMessage = t('chat.initial_message');
 
   @media (max-width: 479px) {
     #n8n-chat .chat-window-wrapper {
-      bottom: 1rem !important;
+      bottom: 4.5rem !important;
       left: 0.75rem !important;
     }
     #n8n-chat {
