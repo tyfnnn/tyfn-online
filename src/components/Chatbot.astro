@@ -27,43 +27,291 @@ const initialMessage = t('chat.initial_message');
 />
 
 <style is:inline>
-  :root {
-    --chat--toggle--bottom: 1.25rem;
-    --chat--toggle--right: auto;
-    --chat--toggle--left: 1.25rem;
-    --chat--window--bottom: 5rem;
-    --chat--window--right: auto;
-    --chat--window--left: 1.25rem;
-    --chat--toggle--size: 56px;
-    --chat--toggle--background: rgba(20, 20, 20, 0.85);
-    --chat--toggle--hover--background: rgba(40, 40, 40, 0.95);
-    --chat--toggle--color: rgba(255, 255, 255, 0.95);
-    --chat--header--background: rgba(20, 20, 20, 0.95);
-    --chat--header--color: rgba(255, 255, 255, 0.95);
+  /* n8n-chat library variables — colors only; positioning we override directly */
+  #n8n-chat {
     --chat--color-primary: rgba(255, 255, 255, 0.95);
     --chat--color-primary-shade-50: rgba(220, 220, 220, 0.95);
-    --chat--message--bot--background: rgba(40, 40, 40, 0.9);
+    --chat--color-primary-shade-100: rgba(200, 200, 200, 0.95);
+    --chat--color-secondary: rgba(255, 255, 255, 0.7);
+    --chat--color-secondary-shade-50: rgba(255, 255, 255, 0.6);
+    --chat--color-white: rgba(255, 255, 255, 0.95);
+    --chat--color-light: rgba(255, 255, 255, 0.06);
+    --chat--color-light-shade-50: rgba(255, 255, 255, 0.1);
+    --chat--color-light-shade-100: rgba(255, 255, 255, 0.14);
+    --chat--color-medium: rgba(255, 255, 255, 0.4);
+    --chat--color-dark: rgba(20, 20, 20, 0.95);
+    --chat--color-disabled: rgba(255, 255, 255, 0.3);
+    --chat--color-typing: rgba(255, 255, 255, 0.6);
+
+    --chat--toggle--width: 56px;
+    --chat--toggle--height: 56px;
+    --chat--toggle--background: transparent;
+    --chat--toggle--hover--background: transparent;
+    --chat--toggle--active--background: transparent;
+    --chat--toggle--color: rgba(255, 255, 255, 0.9);
+
+    --chat--window--width: 380px;
+    --chat--window--height: 580px;
+    --chat--window--bottom: 1.5rem;
+    --chat--window--right: auto;
+
+    --chat--header--padding: 1.25rem 1.25rem 1rem;
+    --chat--header--background: transparent;
+    --chat--header--color: rgba(255, 255, 255, 0.95);
+    --chat--header--border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    --chat--heading--font-size: 1rem;
+    --chat--subtitle--font-size: 0.8125rem;
+    --chat--subtitle--line-height: 1.45;
+
+    --chat--body--background: transparent;
+    --chat--footer--background: transparent;
+    --chat--footer--color: rgba(255, 255, 255, 0.7);
+
+    --chat--input--background: rgba(255, 255, 255, 0.06);
+    --chat--input--text-color: rgba(255, 255, 255, 0.95);
+    --chat--input--border: 1px solid rgba(255, 255, 255, 0.12);
+    --chat--input--border-active: 1px solid rgba(255, 255, 255, 0.25);
+    --chat--input--border-radius: 12px;
+    --chat--input--padding: 0.625rem 0.875rem;
+    --chat--input--font-size: 0.875rem;
+    --chat--input--placeholder--font-color: rgba(255, 255, 255, 0.4);
+    --chat--input--send--button--background: rgba(255, 255, 255, 0.95);
+    --chat--input--send--button--color: rgba(20, 20, 20, 0.95);
+    --chat--input--send--button--background-hover: rgba(255, 255, 255, 1);
+    --chat--input--send--button--color-hover: rgba(20, 20, 20, 1);
+    --chat--textarea--height: 44px;
+
+    --chat--message--font-size: 0.875rem;
+    --chat--message--padding: 0.75rem 1rem;
+    --chat--message--border-radius: 14px;
+    --chat--message-line-height: 1.5;
+    --chat--message--bot--background: rgba(255, 255, 255, 0.08);
     --chat--message--bot--color: rgba(255, 255, 255, 0.95);
+    --chat--message--bot--border: 1px solid rgba(255, 255, 255, 0.1);
     --chat--message--user--background: rgba(255, 255, 255, 0.95);
     --chat--message--user--color: rgba(20, 20, 20, 0.95);
+    --chat--message--user--border: none;
+    --chat--message--margin-bottom: 0.5rem;
+    --chat--spacing: 0.75rem;
+
+    --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
-  #n8n-chat,
-  #n8n-chat * {
-    cursor: auto !important;
+  /* Reveal/hide wrapper. Hidden by default — JS toggles .is-revealed.
+     When the chat panel is open (.chat-window child exists) we force-show. */
+  .chat-host {
+    opacity: 0;
+    transform: translateY(20px) scale(0.85);
+    pointer-events: none;
+    transition:
+      opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: bottom left;
   }
+  .chat-host.is-revealed,
+  .chat-host:has(.chat-window) {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* Cursor handling under the global cursor:none rule */
+  #n8n-chat,
+  #n8n-chat * { cursor: auto !important; }
   #n8n-chat button,
   #n8n-chat a,
-  #n8n-chat [role="button"] {
-    cursor: pointer !important;
-  }
+  #n8n-chat [role="button"] { cursor: pointer !important; }
   #n8n-chat input,
-  #n8n-chat textarea {
-    cursor: text !important;
+  #n8n-chat textarea { cursor: text !important; }
+
+  /* The wrapper holds toggle + (optionally) chat-window. Library positions it
+     fixed bottom-right by default — we move it bottom-left and left-align children. */
+  #n8n-chat .chat-window-wrapper {
+    bottom: 1.5rem !important;
+    left: 1.25rem !important;
+    right: auto !important;
+    align-items: flex-start !important;
+    z-index: 9998;
+  }
+
+  /* Toggle bubble — match FabMenu glass material */
+  #n8n-chat .chat-window-wrapper .chat-window-toggle {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.04) 100%
+    ) !important;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9) !important;
+    overflow: hidden;
+    position: relative;
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      border-color 0.3s ease,
+      background 0.3s ease !important;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 1px;
+    pointer-events: none;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window-toggle:hover {
+    transform: scale(1.08) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.08) 100%
+    ) !important;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window-toggle:active {
+    transform: scale(0.95) !important;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window-toggle svg {
+    width: 22px;
+    height: 22px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Open chat panel — same glass material, larger surface */
+  #n8n-chat .chat-window-wrapper .chat-window {
+    transform-origin: bottom left !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 18px !important;
+    background: linear-gradient(
+      160deg,
+      rgba(20, 20, 20, 0.85) 0%,
+      rgba(10, 10, 10, 0.92) 100%
+    ) !important;
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05) !important;
+    overflow: hidden;
+    position: relative;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header — title + close button */
+  #n8n-chat .chat-layout .chat-header h1,
+  #n8n-chat .chat-heading > * {
+    font-family: var(--chat--font-family) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    margin: 0 !important;
+  }
+  #n8n-chat .chat-layout .chat-header p {
+    color: rgba(255, 255, 255, 0.65) !important;
+    margin: 0.25rem 0 0 !important;
+  }
+  #n8n-chat .chat-close-button {
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 0.2s ease, transform 0.2s ease !important;
+  }
+  #n8n-chat .chat-close-button:hover {
+    color: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.1) !important;
+  }
+
+  /* Footer + input field */
+  #n8n-chat .chat-footer {
+    padding: 0.875rem 1rem !important;
+  }
+  #n8n-chat .chat-inputs textarea {
+    border-radius: var(--chat--input--border-radius) !important;
+    transition: border-color 0.2s ease, background 0.2s ease !important;
+  }
+  #n8n-chat .chat-inputs textarea:focus,
+  #n8n-chat .chat-inputs textarea:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    outline: none !important;
+  }
+  #n8n-chat .chat-input-send-button {
+    border-radius: 10px !important;
+    margin-left: 0.5rem !important;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease !important;
+  }
+  #n8n-chat .chat-input-send-button:not([disabled]):hover {
+    transform: scale(1.05) !important;
+  }
+
+  /* Welcome / get-started screen (currently hidden via showWelcomeScreen: false,
+     but style anyway in case it's enabled later) */
+  #n8n-chat .chat-get-started button {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: rgba(20, 20, 20, 0.95) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.25rem !important;
+    font-weight: 600 !important;
+    transition: transform 0.2s ease !important;
+  }
+  #n8n-chat .chat-get-started button:hover {
+    transform: scale(1.04) !important;
+  }
+
+  @media (max-width: 479px) {
+    #n8n-chat .chat-window-wrapper {
+      bottom: 1rem !important;
+      left: 0.75rem !important;
+    }
+    #n8n-chat {
+      --chat--toggle--width: 48px;
+      --chat--toggle--height: 48px;
+      --chat--window--width: calc(100vw - 1.5rem);
+      --chat--window--height: min(560px, calc(100vh - 8rem));
+    }
+    #n8n-chat .chat-window-wrapper .chat-window-toggle svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 </style>
 
-<div id="n8n-chat"></div>
+<div id="n8n-chat" class="chat-host"></div>
 
 <script type="module" define:vars={{ webhookUrl, i18nStrings, initialMessage }}>
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat@0.45/dist/chat.bundle.es.js';
@@ -77,4 +325,60 @@ const initialMessage = t('chat.initial_message');
     initialMessages: [initialMessage],
     i18n: { en: i18nStrings },
   });
+</script>
+
+<script is:inline>
+  (function () {
+    var host = document.getElementById('n8n-chat');
+    if (!host) return;
+
+    var fallbackThreshold = 320;
+
+    function getThreshold() {
+      var about = document.getElementById('about');
+      if (about) {
+        var rect = about.getBoundingClientRect();
+        return rect.top + window.scrollY - 120;
+      }
+      return fallbackThreshold;
+    }
+
+    var lastY = window.scrollY;
+    var revealed = false;
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      var y = window.scrollY;
+      var threshold = getThreshold();
+      var dy = y - lastY;
+      var direction = dy > 0 ? 'down' : dy < 0 ? 'up' : null;
+
+      var next = revealed;
+      if (y < threshold) {
+        next = false;
+      } else if (direction === 'down') {
+        next = true;
+      } else if (direction === 'up') {
+        next = false;
+      }
+
+      if (next !== revealed) {
+        revealed = next;
+        host.classList.toggle('is-revealed', revealed);
+      }
+      lastY = y;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  })();
 </script>
