@@ -161,5 +161,14 @@
     "cta_heading": "Eine Idee?",
     "email_label": "Hinterlasse eine E-Mail:",
     "magic_line": "LET'S CREATE MAGIC!"
+  },
+  "chat": {
+    "title": "Hi 👋",
+    "subtitle": "Frag mich alles zu Tayfuns Arbeit — Projekte, Prozess, Verfügbarkeit.",
+    "footer": "",
+    "get_started": "Chat starten",
+    "input_placeholder": "Stelle deine Frage…",
+    "close_button_tooltip": "Chat schließen",
+    "initial_message": "Hi! 👋 Ich bin Tayfuns Assistent. Wie kann ich helfen?"
   }
 }
