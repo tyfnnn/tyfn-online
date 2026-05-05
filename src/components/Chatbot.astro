@@ -88,10 +88,13 @@ const initialMessage = t('chat.initial_message');
        so bubbles touch the panel edges if we don't set this. */
     --chat--messages-list--padding: 1rem;
 
-    /* Fixed panel size — prevents the auto-grow behavior that made the
-       panel resize after every send. */
+    /* Fixed panel width; height clamped against the viewport so the
+       wrapper stack (window + toggle + margin + bottom-anchor) always
+       fits. Without the clamp, on viewports below ~716px the window's
+       top edge ends up above the viewport — header invisible, input
+       seemingly mid-screen. */
     --chat--window--width: 380px;
-    --chat--window--height: 580px;
+    --chat--window--height: min(580px, calc(100vh - 9rem));
 
     --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
@@ -117,6 +120,7 @@ const initialMessage = t('chat.initial_message');
     right: auto !important;
     align-items: flex-start !important;
     z-index: 9998;
+    max-height: none !important;
 
     opacity: 0;
     transform: translateY(20px) scale(0.85);
@@ -211,14 +215,15 @@ const initialMessage = t('chat.initial_message');
       inset 0 -1px 0 rgba(255, 255, 255, 0.05) !important;
     overflow: hidden;
     position: relative;
+    /* Library default is `bottom right` (toggle is bottom-right). Our
+       toggle is bottom-left, so the open/close scale animation should
+       originate there. */
+    transform-origin: bottom left !important;
   }
   #n8n-chat .chat-window-wrapper .chat-window::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    inset: 0;
     background: radial-gradient(
       ellipse at 30% 20%,
       rgba(255, 255, 255, 0.06) 0%,
@@ -232,23 +237,40 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
-  /* Layout pinning — the bare minimum to keep n8n's scroll mechanics
-     contained inside .chat-body, so the header and input stay put.
-       - layout: overflow:hidden so it can never scroll itself
-       - body: min-height:0 so flex lets it shrink below content size,
-         which is what allows overflow-y:auto to actually scroll within
-         the body instead of spilling into the layout
-       - header/footer: flex-shrink:0 so flex can't squeeze them
-     This is the "child can scroll its own overflow" flex pattern. */
-  #n8n-chat .chat-layout {
+  /* Window / layout sizing — Grid replaces the library's three-level flex
+     stretch chain (wrapper → window → layout → body), which was failing
+     to propagate full height down to the body. With grid on chat-layout
+     and a hard-pinned chat-window height, the body's row is arithmetic:
+     window height − header auto − footer auto. No flex algorithm to
+     misbehave, no min-height: 100px floor, no scroll-the-layout bug. */
+  #n8n-chat .chat-window-wrapper .chat-window {
+    /* No `display` override — Vue's v-show toggles inline `display: none`
+       to close the panel; `!important` here would block that. */
+    height: var(--chat--window--height) !important;
+    min-height: var(--chat--window--height) !important;
+    max-height: var(--chat--window--height) !important;
+  }
+  #n8n-chat .chat-window-wrapper .chat-window .chat-layout {
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important;
+    width: 100% !important;
+    height: 100% !important;
     overflow: hidden !important;
+    overscroll-behavior: contain;
   }
   #n8n-chat .chat-layout .chat-header,
   #n8n-chat .chat-layout .chat-footer {
-    flex-shrink: 0 !important;
+    min-height: 0 !important;
   }
   #n8n-chat .chat-layout .chat-body {
     min-height: 0 !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+  /* Footer breathing room — the library's default sits the textarea flush
+     against the panel edges. */
+  #n8n-chat .chat-layout .chat-footer {
+    padding: 0.75rem 1rem 1rem !important;
   }
 
   /* Top-anchor the messages list. The library default is `margin-top: auto`
@@ -353,6 +375,26 @@ const initialMessage = t('chat.initial_message');
     initialMessages: [initialMessage],
     i18n: { en: i18nStrings },
   });
+
+  /* Keep .chat-layout pinned at scrollTop=0 even if the library
+     programmatically scrolls it. CSS `overflow: hidden` should already
+     prevent this, but on some browsers `el.scrollTop = N` still works
+     during the brief moment between message-DOM insertion and our CSS
+     applying. A MutationObserver on the layout subtree resets it after
+     every DOM mutation. */
+  const host = document.getElementById('n8n-chat');
+  if (host) {
+    const pinScrollContainers = () => {
+      const layout = host.querySelector('.chat-layout');
+      const window_ = host.querySelector('.chat-window');
+      if (layout && layout.scrollTop !== 0) layout.scrollTop = 0;
+      if (window_ && window_.scrollTop !== 0) window_.scrollTop = 0;
+    };
+    const mo = new MutationObserver(pinScrollContainers);
+    mo.observe(host, { childList: true, subtree: true });
+    host.addEventListener('scroll', pinScrollContainers, true);
+    host.addEventListener('focusin', pinScrollContainers, true);
+  }
 </script>
 
 <script is:inline>
