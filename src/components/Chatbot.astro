@@ -88,6 +88,11 @@ const initialMessage = t('chat.initial_message');
        so bubbles touch the panel edges if we don't set this. */
     --chat--messages-list--padding: 1rem;
 
+    /* Fixed panel size — prevents the auto-grow behavior that made the
+       panel resize after every send. */
+    --chat--window--width: 380px;
+    --chat--window--height: 580px;
+
     --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
@@ -227,6 +232,35 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
+  /* Layout pinning — the bare minimum to keep n8n's scroll mechanics
+     contained inside .chat-body, so the header and input stay put.
+       - layout: overflow:hidden so it can never scroll itself
+       - body: min-height:0 so flex lets it shrink below content size,
+         which is what allows overflow-y:auto to actually scroll within
+         the body instead of spilling into the layout
+       - header/footer: flex-shrink:0 so flex can't squeeze them
+     This is the "child can scroll its own overflow" flex pattern. */
+  #n8n-chat .chat-layout {
+    overflow: hidden !important;
+  }
+  #n8n-chat .chat-layout .chat-header,
+  #n8n-chat .chat-layout .chat-footer {
+    flex-shrink: 0 !important;
+  }
+  #n8n-chat .chat-layout .chat-body {
+    min-height: 0 !important;
+  }
+
+  /* Top-anchor the messages list. The library default is `margin-top: auto`
+     (bottom-anchor), which makes the greeting move up by one bubble each
+     time a message arrives — exactly the "shift" the user keeps seeing.
+     Top-anchor pins the greeting at the top of the body permanently;
+     new messages append below; the body's overflow-y handles the scroll
+     once the conversation overflows. Same flow as Intercom / HubSpot. */
+  #n8n-chat .chat-messages-list {
+    margin-top: 0 !important;
+  }
+
   /* Scrollbar styling on the body — pure cosmetic, no layout effect.
      Reserve gutter so the column doesn't jump left when the scrollbar
      first appears. */
@@ -295,6 +329,8 @@ const initialMessage = t('chat.initial_message');
     #n8n-chat {
       --chat--toggle--width: 48px;
       --chat--toggle--height: 48px;
+      --chat--window--width: calc(100vw - 1.5rem);
+      --chat--window--height: min(560px, calc(100vh - 9rem));
     }
     #n8n-chat .chat-window-wrapper .chat-window-toggle svg {
       width: 20px;
