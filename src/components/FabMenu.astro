@@ -272,16 +272,27 @@ const blogHref = getRelativeLocaleUrl(lang, '/blog/');
 <script is:inline>
   (function () {
     // Sichtbarkeit der FABs an Scrollposition koppeln:
-    // versteckt am Seitenanfang, taucht beim Runterscrollen auf,
-    // verschwindet wieder, wenn der Top erreicht ist.
-    var threshold = 80;
+    // versteckt am Seitenanfang und am Seitenende,
+    // sichtbar im mittleren Bereich.
+    var topThreshold = 80;
+    var bottomThreshold = 120;
     var body = document.body;
     function syncFabs() {
-      var scrolled = (window.scrollY || window.pageYOffset || 0) > threshold;
-      body.classList.toggle('fabs-visible', scrolled);
+      var y = window.scrollY || window.pageYOffset || 0;
+      var viewport = window.innerHeight || document.documentElement.clientHeight;
+      var docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight
+      );
+      var distanceToBottom = docHeight - (y + viewport);
+      var visible = y > topThreshold && distanceToBottom > bottomThreshold;
+      body.classList.toggle('fabs-visible', visible);
     }
     syncFabs();
     window.addEventListener('scroll', syncFabs, { passive: true });
+    window.addEventListener('resize', syncFabs, { passive: true });
 
     var menu = document.getElementById('fab-menu');
     var trigger = document.getElementById('fab-trigger');
