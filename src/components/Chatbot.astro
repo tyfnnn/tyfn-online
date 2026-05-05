@@ -237,6 +237,26 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
+  /* The library puts `overflow-y: auto` on BOTH .chat-layout AND .chat-body.
+     If .chat-body's content overflows even slightly, the spillover can also
+     trigger .chat-layout's scrollbar — and the scrollToBottom call (which
+     only targets the body) will scroll the layout too via the parent
+     scroll-chain, hiding the header. Clamp the layout to overflow: hidden
+     so only the body is ever scrollable, and pin the header/footer with
+     flex-shrink: 0 so the layout can't redistribute their space under
+     pressure. */
+  #n8n-chat .chat-layout {
+    overflow: hidden !important;
+  }
+  #n8n-chat .chat-layout .chat-header,
+  #n8n-chat .chat-layout .chat-footer {
+    flex-shrink: 0 !important;
+  }
+  #n8n-chat .chat-layout .chat-body {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+  }
+
   /* Keep n8n's default bottom-anchoring (`margin-top: auto`) so the
      conversation behaves like WhatsApp/iMessage: the latest message always
      sits just above the input, and older messages stack upward as the
