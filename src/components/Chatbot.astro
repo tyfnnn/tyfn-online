@@ -130,8 +130,7 @@ const initialMessage = t('chat.initial_message');
       opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  #n8n-chat.is-revealed .chat-window-wrapper,
-  #n8n-chat:has(.chat-window) .chat-window-wrapper {
+  body.fabs-visible #n8n-chat .chat-window-wrapper {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -397,58 +396,3 @@ const initialMessage = t('chat.initial_message');
   }
 </script>
 
-<script is:inline>
-  (function () {
-    var host = document.getElementById('n8n-chat');
-    if (!host) return;
-
-    var fallbackThreshold = 320;
-
-    function getThreshold() {
-      var about = document.getElementById('about');
-      if (about) {
-        var rect = about.getBoundingClientRect();
-        return rect.top + window.scrollY - 120;
-      }
-      return fallbackThreshold;
-    }
-
-    var lastY = window.scrollY;
-    var revealed = false;
-    var ticking = false;
-
-    function update() {
-      ticking = false;
-      var y = window.scrollY;
-      var threshold = getThreshold();
-      var dy = y - lastY;
-      var direction = dy > 0 ? 'down' : dy < 0 ? 'up' : null;
-
-      var next = revealed;
-      if (y < threshold) {
-        next = false;
-      } else if (direction === 'down') {
-        next = true;
-      } else if (direction === 'up') {
-        next = false;
-      }
-
-      if (next !== revealed) {
-        revealed = next;
-        host.classList.toggle('is-revealed', revealed);
-      }
-      lastY = y;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    update();
-  })();
-</script>
