@@ -1,0 +1,80 @@
+---
+import { useTranslations, type Lang } from '../i18n/t';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const webhookUrl = 'https://n8n.tyfn.online/webhook/tyfn-website-chatbot/chat';
+
+const i18nStrings = {
+  title: t('chat.title'),
+  subtitle: t('chat.subtitle'),
+  footer: t('chat.footer'),
+  getStarted: t('chat.get_started'),
+  inputPlaceholder: t('chat.input_placeholder'),
+  closeButtonTooltip: t('chat.close_button_tooltip'),
+};
+
+const initialMessage = t('chat.initial_message');
+---
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@n8n/chat@0.45/dist/style.css"
+/>
+
+<style is:inline>
+  :root {
+    --chat--toggle--bottom: 1.25rem;
+    --chat--toggle--right: auto;
+    --chat--toggle--left: 1.25rem;
+    --chat--window--bottom: 5rem;
+    --chat--window--right: auto;
+    --chat--window--left: 1.25rem;
+    --chat--toggle--size: 56px;
+    --chat--toggle--background: rgba(20, 20, 20, 0.85);
+    --chat--toggle--hover--background: rgba(40, 40, 40, 0.95);
+    --chat--toggle--color: rgba(255, 255, 255, 0.95);
+    --chat--header--background: rgba(20, 20, 20, 0.95);
+    --chat--header--color: rgba(255, 255, 255, 0.95);
+    --chat--color-primary: rgba(255, 255, 255, 0.95);
+    --chat--color-primary-shade-50: rgba(220, 220, 220, 0.95);
+    --chat--message--bot--background: rgba(40, 40, 40, 0.9);
+    --chat--message--bot--color: rgba(255, 255, 255, 0.95);
+    --chat--message--user--background: rgba(255, 255, 255, 0.95);
+    --chat--message--user--color: rgba(20, 20, 20, 0.95);
+  }
+
+  #n8n-chat,
+  #n8n-chat * {
+    cursor: auto !important;
+  }
+  #n8n-chat button,
+  #n8n-chat a,
+  #n8n-chat [role="button"] {
+    cursor: pointer !important;
+  }
+  #n8n-chat input,
+  #n8n-chat textarea {
+    cursor: text !important;
+  }
+</style>
+
+<div id="n8n-chat"></div>
+
+<script type="module" define:vars={{ webhookUrl, i18nStrings, initialMessage }}>
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat@0.45/dist/chat.bundle.es.js';
+
+  createChat({
+    webhookUrl,
+    target: '#n8n-chat',
+    mode: 'window',
+    showWelcomeScreen: false,
+    defaultLanguage: 'en',
+    initialMessages: [initialMessage],
+    i18n: { en: i18nStrings },
+  });
+</script>

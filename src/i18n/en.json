@@ -161,5 +161,14 @@
     "cta_heading": "HAVE AN IDEA?",
     "email_label": "Drop me an email:",
     "magic_line": "LET'S CREATE MAGIC!"
+  },
+  "chat": {
+    "title": "Hi there 👋",
+    "subtitle": "Ask me anything about Tayfun's work — projects, process, availability.",
+    "footer": "",
+    "get_started": "Start a chat",
+    "input_placeholder": "Type your question…",
+    "close_button_tooltip": "Close chat",
+    "initial_message": "Hi! 👋 I'm Tayfun's assistant. How can I help?"
   }
 }
