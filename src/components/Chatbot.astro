@@ -27,7 +27,11 @@ const initialMessage = t('chat.initial_message');
 />
 
 <style is:inline>
-  /* n8n-chat library variables — colors only; positioning we override directly */
+  /* Cosmetic-only customization. Library defaults handle all layout, flex,
+     overflow, anchoring and scrolling. The only library-internal value we
+     set explicitly is --chat--messages-list--padding (the library's own
+     `padding: var(...)` rule has no fallback, so without this the bubbles
+     flush to the panel edges). */
   #n8n-chat {
     --chat--color-primary: rgba(255, 255, 255, 0.95);
     --chat--color-primary-shade-50: rgba(220, 220, 220, 0.95);
@@ -50,12 +54,6 @@ const initialMessage = t('chat.initial_message');
     --chat--toggle--active--background: transparent;
     --chat--toggle--color: rgba(255, 255, 255, 0.9);
 
-    --chat--window--width: 380px;
-    --chat--window--height: 580px;
-    --chat--window--bottom: 1.5rem;
-    --chat--window--right: auto;
-
-    --chat--header--padding: 1.25rem 1.25rem 1rem;
     --chat--header--background: transparent;
     --chat--header--color: rgba(255, 255, 255, 0.95);
     --chat--header--border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -72,32 +70,23 @@ const initialMessage = t('chat.initial_message');
     --chat--input--border: 1px solid rgba(255, 255, 255, 0.12);
     --chat--input--border-active: 1px solid rgba(255, 255, 255, 0.25);
     --chat--input--border-radius: 12px;
-    --chat--input--padding: 0.625rem 0.875rem;
-    --chat--input--font-size: 0.875rem;
     --chat--input--placeholder--font-color: rgba(255, 255, 255, 0.4);
     --chat--input--send--button--background: rgba(255, 255, 255, 0.95);
     --chat--input--send--button--color: rgba(20, 20, 20, 0.95);
     --chat--input--send--button--background-hover: rgba(255, 255, 255, 1);
     --chat--input--send--button--color-hover: rgba(20, 20, 20, 1);
-    --chat--textarea--height: 44px;
 
-    --chat--message--font-size: 0.875rem;
-    --chat--message--padding: 0.75rem 1rem;
-    --chat--message--border-radius: 14px;
-    --chat--message-line-height: 1.5;
     --chat--message--bot--background: rgba(255, 255, 255, 0.08);
     --chat--message--bot--color: rgba(255, 255, 255, 0.95);
     --chat--message--bot--border: 1px solid rgba(255, 255, 255, 0.1);
     --chat--message--user--background: rgba(255, 255, 255, 0.95);
     --chat--message--user--color: rgba(20, 20, 20, 0.95);
     --chat--message--user--border: none;
-    --chat--message--margin-bottom: 0.5rem;
-    --chat--spacing: 0.75rem;
 
-    /* n8n's CSS uses var() with no fallback for these; set them explicitly
-       so the library's own padding rule resolves to a real value. */
-    --chat--messages-list--padding: 1rem 1rem 0.5rem;
-    --chat--header-height: auto;
+    /* The one layout var that's required: the library writes
+       `padding: var(--chat--messages-list--padding)` with no fallback,
+       so bubbles touch the panel edges if we don't set this. */
+    --chat--messages-list--padding: 1rem;
 
     --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
@@ -111,11 +100,12 @@ const initialMessage = t('chat.initial_message');
   #n8n-chat input,
   #n8n-chat textarea { cursor: text !important; }
 
-  /* The wrapper is the only fixed-positioned element — drive both the
-     positioning AND the reveal animation here. NEVER apply transform to the
-     #n8n-chat host: that turns the host into the containing block for fixed
-     descendants and the wrapper would anchor to it (at the document end)
-     instead of the viewport. */
+  /* Wrapper position: bottom-left instead of bottom-right (FabMenu owns the
+     right side). align-items: flex-start left-aligns the toggle and window
+     inside the wrapper. The reveal animation lives here too — applying
+     transform to the wrapper itself keeps `position: fixed` resolving to
+     the viewport (transform on .chat-host would re-anchor the wrapper to
+     the document end). */
   #n8n-chat .chat-window-wrapper {
     bottom: 4rem !important;
     left: 1.25rem !important;
@@ -198,16 +188,9 @@ const initialMessage = t('chat.initial_message');
     color: rgba(255, 255, 255, 0.9);
   }
 
-  /* Open chat panel — same glass material, larger surface.
-     Auto height + max-height: the panel grows from the bottom up to fit its
-     content, capped at a sensible maximum. With few messages it's compact
-     (no empty band, no overflow elsewhere to scroll). With many messages
-     it hits max-height and the body's overflow-y: auto takes over for the
-     scroll, all without ever shifting the header. */
+  /* Open chat panel — same glass material as the toggle. NO height /
+     max-height / flex overrides: the library's own dimensions handle that. */
   #n8n-chat .chat-window-wrapper .chat-window {
-    transform-origin: bottom left !important;
-    height: auto !important;
-    max-height: min(580px, calc(100vh - 12rem)) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 18px !important;
     background: linear-gradient(
@@ -244,66 +227,16 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
-  /* The library puts `overflow-y: auto` on BOTH .chat-layout AND .chat-body.
-     If .chat-body's content overflows even slightly, the spillover can also
-     trigger .chat-layout's scrollbar — and the scrollToBottom call (which
-     only targets the body) will scroll the layout too via the parent
-     scroll-chain, hiding the header. Clamp the layout to overflow: hidden
-     so only the body is ever scrollable, and pin the header/footer with
-     flex-shrink: 0 so the layout can't redistribute their space under
-     pressure. */
-  #n8n-chat .chat-layout {
-    overflow: hidden !important;
-  }
-  #n8n-chat .chat-layout .chat-header,
-  #n8n-chat .chat-layout .chat-footer {
-    flex-shrink: 0 !important;
-  }
-  #n8n-chat .chat-layout .chat-body {
-    flex: 0 1 auto !important;     /* size to content; can shrink when max-height kicks in */
-    min-height: 0 !important;       /* let it shrink below content size so overflow-y:auto works */
-    max-height: 100% !important;
-  }
-
-  /* Keep n8n's default bottom-anchoring (`margin-top: auto`) so the
-     conversation behaves like WhatsApp/iMessage: the latest message always
-     sits just above the input, and older messages stack upward as the
-     conversation grows. Top-anchoring instead leaves a huge empty band
-     between the messages and the input on a tall panel, and the auto-scroll
-     can clip the greeting against the panel's top edge. We only override
-     the missing horizontal padding here. */
-  #n8n-chat .chat-messages-list {
-    padding: 0.5rem 1rem 1rem !important;
-    box-sizing: border-box;
-  }
-  /* Belt-and-suspenders: even if the list padding gets clobbered by anything
-     downstream, give every bubble its own horizontal breathing room.
-     Bot side: left margin + clamp width. User side: right margin + auto-left. */
-  #n8n-chat .chat-message {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    max-width: calc(100% - 2rem);
-  }
-  #n8n-chat .chat-message.chat-message-from-user {
-    margin-left: auto !important;
-    margin-right: 1rem !important;
-  }
-  #n8n-chat .chat-message + .chat-message {
-    margin-top: 0.5rem;
-  }
-
-  /* Reserve scrollbar space so the message column doesn't jump left when the
-     scrollbar first appears (typically after the first user input + bot reply
-     pushes the list past the visible height). */
+  /* Scrollbar styling on the body — pure cosmetic, no layout effect.
+     Reserve gutter so the column doesn't jump left when the scrollbar
+     first appears. */
   #n8n-chat .chat-body {
     scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   }
-  #n8n-chat .chat-body::-webkit-scrollbar {
-    width: 6px;
-  }
-  #n8n-chat .chat-body::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  #n8n-chat .chat-body::-webkit-scrollbar { width: 6px; }
+  #n8n-chat .chat-body::-webkit-scrollbar-track { background: transparent; }
   #n8n-chat .chat-body::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 3px;
@@ -311,12 +244,8 @@ const initialMessage = t('chat.initial_message');
   #n8n-chat .chat-body::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
   }
-  #n8n-chat .chat-body {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-  }
 
-  /* Header — title + close button */
+  /* Header polish — title + subtitle + close button */
   #n8n-chat .chat-layout .chat-header h1,
   #n8n-chat .chat-heading > * {
     font-family: var(--chat--font-family) !important;
@@ -338,12 +267,9 @@ const initialMessage = t('chat.initial_message');
     transform: scale(1.1) !important;
   }
 
-  /* Footer + input field */
-  #n8n-chat .chat-footer {
-    padding: 0.875rem 1rem !important;
-  }
+  /* Input field + send button polish */
   #n8n-chat .chat-inputs textarea {
-    border-radius: var(--chat--input--border-radius) !important;
+    border-radius: 12px !important;
     transition: border-color 0.2s ease, background 0.2s ease !important;
   }
   #n8n-chat .chat-inputs textarea:focus,
@@ -361,21 +287,6 @@ const initialMessage = t('chat.initial_message');
     transform: scale(1.05) !important;
   }
 
-  /* Welcome / get-started screen (currently hidden via showWelcomeScreen: false,
-     but style anyway in case it's enabled later) */
-  #n8n-chat .chat-get-started button {
-    background: rgba(255, 255, 255, 0.95) !important;
-    color: rgba(20, 20, 20, 0.95) !important;
-    border: none !important;
-    border-radius: 12px !important;
-    padding: 0.75rem 1.25rem !important;
-    font-weight: 600 !important;
-    transition: transform 0.2s ease !important;
-  }
-  #n8n-chat .chat-get-started button:hover {
-    transform: scale(1.04) !important;
-  }
-
   @media (max-width: 479px) {
     #n8n-chat .chat-window-wrapper {
       bottom: 4.5rem !important;
@@ -384,10 +295,6 @@ const initialMessage = t('chat.initial_message');
     #n8n-chat {
       --chat--toggle--width: 48px;
       --chat--toggle--height: 48px;
-      --chat--window--width: calc(100vw - 1.5rem);
-    }
-    #n8n-chat .chat-window-wrapper .chat-window {
-      max-height: min(560px, calc(100vh - 9rem)) !important;
     }
     #n8n-chat .chat-window-wrapper .chat-window-toggle svg {
       width: 20px;
