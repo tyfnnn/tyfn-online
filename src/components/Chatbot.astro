@@ -232,6 +232,30 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
+  /* Reserve scrollbar space so the message column doesn't jump left when the
+     scrollbar first appears (typically after the first user input + bot reply
+     pushes the list past the visible height). */
+  #n8n-chat .chat-body {
+    scrollbar-gutter: stable;
+  }
+  #n8n-chat .chat-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  #n8n-chat .chat-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  #n8n-chat .chat-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+  #n8n-chat .chat-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  #n8n-chat .chat-body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  }
+
   /* Header — title + close button */
   #n8n-chat .chat-layout .chat-header h1,
   #n8n-chat .chat-heading > * {
