@@ -94,6 +94,11 @@ const initialMessage = t('chat.initial_message');
     --chat--message--margin-bottom: 0.5rem;
     --chat--spacing: 0.75rem;
 
+    /* n8n's CSS uses var() with no fallback for these; set them explicitly
+       so the library's own padding rule resolves to a real value. */
+    --chat--messages-list--padding: 1rem 1rem 0.5rem;
+    --chat--header-height: auto;
+
     --chat--font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
@@ -243,6 +248,22 @@ const initialMessage = t('chat.initial_message');
   #n8n-chat .chat-messages-list {
     margin-top: 0 !important;
     padding: 1rem 1rem 0.5rem !important;
+    box-sizing: border-box;
+  }
+  /* Belt-and-suspenders: even if the list padding gets clobbered by anything
+     downstream, give every bubble its own horizontal breathing room.
+     Bot side: left margin + clamp width. User side: right margin + auto-left. */
+  #n8n-chat .chat-message {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  #n8n-chat .chat-message.chat-message-from-user {
+    margin-left: auto !important;
+    margin-right: 1rem !important;
+  }
+  #n8n-chat .chat-message + .chat-message {
+    margin-top: 0.5rem;
   }
 
   /* Reserve scrollbar space so the message column doesn't jump left when the
