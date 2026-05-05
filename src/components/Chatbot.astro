@@ -237,17 +237,15 @@ const initialMessage = t('chat.initial_message');
     z-index: 1;
   }
 
-  /* By default n8n pins .chat-messages-list to the bottom of .chat-body via
-     `margin-top: auto`, so a single greeting hugs the bottom and EVERY new
-     message pushes older messages up — that's the visible "shift" after the
-     first reply. Anchor the list to the top instead (WhatsApp/Slack flow:
-     old at top, new at bottom, scroll handled by overflow). Also give the
-     list real horizontal padding — the library's `--chat--messages-list--
-     padding` has no built-in default, so without this, bubbles flush to the
-     panel edge. */
+  /* Keep n8n's default bottom-anchoring (`margin-top: auto`) so the
+     conversation behaves like WhatsApp/iMessage: the latest message always
+     sits just above the input, and older messages stack upward as the
+     conversation grows. Top-anchoring instead leaves a huge empty band
+     between the messages and the input on a tall panel, and the auto-scroll
+     can clip the greeting against the panel's top edge. We only override
+     the missing horizontal padding here. */
   #n8n-chat .chat-messages-list {
-    margin-top: 0 !important;
-    padding: 1rem 1rem 0.5rem !important;
+    padding: 0.5rem 1rem 1rem !important;
     box-sizing: border-box;
   }
   /* Belt-and-suspenders: even if the list padding gets clobbered by anything
