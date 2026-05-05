@@ -198,9 +198,16 @@ const initialMessage = t('chat.initial_message');
     color: rgba(255, 255, 255, 0.9);
   }
 
-  /* Open chat panel — same glass material, larger surface */
+  /* Open chat panel — same glass material, larger surface.
+     Auto height + max-height: the panel grows from the bottom up to fit its
+     content, capped at a sensible maximum. With few messages it's compact
+     (no empty band, no overflow elsewhere to scroll). With many messages
+     it hits max-height and the body's overflow-y: auto takes over for the
+     scroll, all without ever shifting the header. */
   #n8n-chat .chat-window-wrapper .chat-window {
     transform-origin: bottom left !important;
+    height: auto !important;
+    max-height: min(580px, calc(100vh - 12rem)) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 18px !important;
     background: linear-gradient(
@@ -253,8 +260,9 @@ const initialMessage = t('chat.initial_message');
     flex-shrink: 0 !important;
   }
   #n8n-chat .chat-layout .chat-body {
-    flex: 1 1 0 !important;
-    min-height: 0 !important;
+    flex: 0 1 auto !important;     /* size to content; can shrink when max-height kicks in */
+    min-height: 0 !important;       /* let it shrink below content size so overflow-y:auto works */
+    max-height: 100% !important;
   }
 
   /* Keep n8n's default bottom-anchoring (`margin-top: auto`) so the
@@ -377,7 +385,9 @@ const initialMessage = t('chat.initial_message');
       --chat--toggle--width: 48px;
       --chat--toggle--height: 48px;
       --chat--window--width: calc(100vw - 1.5rem);
-      --chat--window--height: min(560px, calc(100vh - 8rem));
+    }
+    #n8n-chat .chat-window-wrapper .chat-window {
+      max-height: min(560px, calc(100vh - 9rem)) !important;
     }
     #n8n-chat .chat-window-wrapper .chat-window-toggle svg {
       width: 20px;
