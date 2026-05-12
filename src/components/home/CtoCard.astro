@@ -3115,9 +3115,9 @@ const accents = [
     }
 
     // ---------- Live clock & date ----------
-    function initClock(app) {
-      var timeEl = app.querySelector('[data-clock-time]');
-      var dateEl = app.querySelector('[data-clock-date]');
+    function initClock(stage) {
+      var timeEl = stage.querySelector('[data-clock-time]');
+      var dateEl = stage.querySelector('[data-clock-date]');
       if (!timeEl || !dateEl) return;
       var dateOpts = { weekday: 'short', day: '2-digit', month: 'short' };
       var locale = lang === 'de' ? 'de-DE' : 'en-US';
@@ -3516,9 +3516,9 @@ const accents = [
     }
 
     // ---------- Battery indicator ----------
-    function initBattery(app) {
-      var level = app.querySelector('[data-battery-level]');
-      var pct = app.querySelector('[data-battery-pct]');
+    function initBattery(stage) {
+      var level = stage.querySelector('[data-battery-level]');
+      var pct = stage.querySelector('[data-battery-pct]');
       if (!level || !pct) return;
       function paint(value, charging) {
         var v = Math.max(0.04, Math.min(1, value));
@@ -3770,8 +3770,8 @@ const accents = [
       if (frame && header) initScroll(stage, frame, header);
       if (frame) initHandCursor(stage, frame);
       if (app) {
-        initClock(app);
-        initBattery(app);
+        initClock(stage);
+        initBattery(stage);
         initTabs(app);
         initSearch(app);
         initSort(app);
