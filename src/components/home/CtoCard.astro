@@ -72,44 +72,6 @@ const accents = [
         <div class="ipad-frame_inner">
           <div class="ipad-screen" data-ipad-screen>
 
-            <!-- LOCK SCREEN -->
-            <div class="ipad-lock" data-ipad-lock>
-              <div class="ipad-lock_statusbar">
-                <span class="ipad-time" data-clock-time-lock>9:41</span>
-                <span class="ipad-icons" aria-hidden="true">
-                  <span class="ipad-signal"></span>
-                  <span class="ipad-wifi"></span>
-                  <span class="ipad-battery"><span class="ipad-battery_level"></span></span>
-                </span>
-              </div>
-              <div class="ipad-lock_clock">
-                <div class="ipad-lock_date" data-clock-fullday>{t('cto.lock_today')}</div>
-                <div class="ipad-lock_time" data-clock-big>9:41</div>
-              </div>
-              <div class="ipad-lock_notifs">
-                <div class="ipad-lock_notif">
-                  <span class="ipad-lock_notif_icon" style="background:linear-gradient(135deg,#5af07f,#0bbf3c);">✉</span>
-                  <div>
-                    <div class="ipad-lock_notif_title">{t('cto.notif_hire_title')}</div>
-                    <div class="ipad-lock_notif_body">{t('cto.notif_hire_body')}</div>
-                  </div>
-                  <span class="ipad-lock_notif_time">{t('cto.notif_now')}</span>
-                </div>
-                <div class="ipad-lock_notif">
-                  <span class="ipad-lock_notif_icon" style="background:linear-gradient(135deg,#86d9ff,#1f7af0);">◴</span>
-                  <div>
-                    <div class="ipad-lock_notif_title">{t('cto.notif_calendar_title')}</div>
-                    <div class="ipad-lock_notif_body">{t('cto.notif_calendar_body')}</div>
-                  </div>
-                  <span class="ipad-lock_notif_time">2m</span>
-                </div>
-              </div>
-              <div class="ipad-lock_hint">
-                <span class="ipad-lock_arrow" aria-hidden="true">⌃</span>
-                <span>{t('cto.lock_hint')}</span>
-              </div>
-            </div>
-
             <!-- NOTIFICATION CENTER -->
             <div class="ipad-notif" data-ipad-notif aria-hidden="true">
               <div class="ipad-notif_head">
@@ -1944,136 +1906,6 @@ const accents = [
   .ob-graph_legend { text-align: center; }
   .ob-graph_svg { width: 100%; height: 100%; max-height: 200px; }
 
-  /* ============== LOCK SCREEN ============== */
-  .ipad-lock {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    padding: 0;
-    transition: transform 0.65s cubic-bezier(0.32, 0.72, 0.24, 1.06), opacity 0.45s ease;
-    overflow: hidden;
-  }
-  .ipad-lock::before {
-    /* extra dim so the clock pops */
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.42) 100%);
-    pointer-events: none;
-  }
-  .ipad-screen.is-unlocked .ipad-lock {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .ipad-lock_statusbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 26px 4px;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.95);
-    position: relative;
-    z-index: 1;
-  }
-  .ipad-lock_clock {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: clamp(12px, 2vw, 24px);
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-  .ipad-lock_date {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: clamp(10px, 1vw, 12px);
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: rgba(255, 255, 255, 0.78);
-    margin-bottom: 6px;
-  }
-  .ipad-lock_time {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 300;
-    font-size: clamp(72px, 14vw, 168px);
-    line-height: 0.95;
-    color: #fff;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-    font-feature-settings: 'tnum';
-  }
-  .ipad-lock_notifs {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 0 clamp(16px, 3vw, 36px);
-    margin-bottom: clamp(20px, 3vw, 36px);
-    position: relative;
-    z-index: 1;
-  }
-  .ipad-lock_notif {
-    display: grid;
-    grid-template-columns: 28px 1fr auto;
-    gap: 10px;
-    align-items: center;
-    padding: 10px 14px;
-    border-radius: 14px;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  }
-  .ipad-lock_notif_icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-size: 14px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  }
-  .ipad-lock_notif_title { font-size: 12px; font-weight: 600; color: #fff; }
-  .ipad-lock_notif_body { font-size: 11px; color: rgba(255, 255, 255, 0.75); }
-  .ipad-lock_notif_time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    color: rgba(255, 255, 255, 0.6);
-  }
-  .ipad-lock_hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 0 clamp(14px, 2vw, 22px);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.7);
-    position: relative;
-    z-index: 1;
-  }
-  .ipad-lock_arrow {
-    display: inline-block;
-    animation: lockBob 1.6s ease-in-out infinite;
-  }
-  @keyframes lockBob {
-    0%, 100% { transform: translateY(0); opacity: 0.5; }
-    50%      { transform: translateY(-4px); opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .ipad-lock_arrow { animation: none; }
-  }
-
   /* ============== NOTIFICATION CENTER ============== */
   .ipad-notif {
     position: absolute;
@@ -2429,9 +2261,6 @@ const accents = [
     .ipad-app[data-open-window] .ipad-win .ob-body,
     .ipad-app[data-open-window] .ipad-win .msg-body { grid-template-columns: 1fr; }
     .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph, .msg-sidebar { display: none; }
-    .ipad-lock_time { font-size: clamp(56px, 14vw, 96px); }
-    .ipad-lock_notif { padding: 8px 10px; }
-    .ipad-lock_notif_body { font-size: 10.5px; }
     .ipad-notif_card { padding: 10px 12px; }
     .msg-bubble { max-width: 82%; font-size: 12.5px; }
     .msg-meta { font-size: 11.5px; padding: 8px 10px; }
@@ -3082,64 +2911,19 @@ const accents = [
     function initClock(app) {
       var timeEl = app.querySelector('[data-clock-time]');
       var dateEl = app.querySelector('[data-clock-date]');
-      var timeLockEl = app.querySelector('[data-clock-time-lock]');
-      var bigEl = app.querySelector('[data-clock-big]');
-      var fullDayEl = app.querySelector('[data-clock-fullday]');
       if (!timeEl || !dateEl) return;
       var dateOpts = { weekday: 'short', day: '2-digit', month: 'short' };
-      var fullOpts = { weekday: 'long', day: 'numeric', month: 'long' };
       var locale = lang === 'de' ? 'de-DE' : 'en-US';
       function tick() {
         var now = new Date();
         var hh = String(now.getHours()).padStart(2, '0');
         var mm = String(now.getMinutes()).padStart(2, '0');
-        var hm = hh + ':' + mm;
-        timeEl.textContent = hm;
-        if (timeLockEl) timeLockEl.textContent = hm;
-        if (bigEl) bigEl.textContent = hm;
+        timeEl.textContent = hh + ':' + mm;
         dateEl.textContent = now.toLocaleDateString(locale, dateOpts);
-        if (fullDayEl) fullDayEl.textContent = now.toLocaleDateString(locale, fullOpts);
       }
       tick();
       var msToNextMin = (60 - new Date().getSeconds()) * 1000;
       setTimeout(function () { tick(); setInterval(tick, 60000); }, msToNextMin);
-    }
-
-    // ---------- Lock screen ----------
-    function initLock(app, frame) {
-      var screen = app.querySelector('[data-ipad-screen]');
-      var lock = app.querySelector('[data-ipad-lock]');
-      if (!screen || !lock) return;
-
-      function unlock() {
-        screen.classList.add('is-unlocked');
-        try { sessionStorage.setItem('tyfn-ipad-unlocked', '1'); } catch (e) {}
-      }
-      // Click anywhere on the lock area
-      lock.addEventListener('click', unlock);
-
-      // Skip lock if we've already unlocked this session
-      try {
-        if (sessionStorage.getItem('tyfn-ipad-unlocked') === '1') {
-          screen.classList.add('is-unlocked');
-          return;
-        }
-      } catch (e) {}
-
-      // Auto-unlock once the iPad has scrolled fully into view
-      if (window.IntersectionObserver && frame) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.intersectionRatio >= 0.75) {
-              setTimeout(unlock, 900);
-              io.disconnect();
-            }
-          });
-        }, { threshold: [0, 0.5, 0.75, 1] });
-        io.observe(frame);
-      } else {
-        setTimeout(unlock, 1500);
-      }
     }
 
     // ---------- Notification center ----------
@@ -3448,7 +3232,6 @@ const accents = [
         initSearch(app);
         initSort(app);
         initWindows(app);
-        initLock(app, frame);
         initNotif(app);
         initMessagesBridge(app);
       }
