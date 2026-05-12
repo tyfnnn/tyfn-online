@@ -13,6 +13,13 @@ const t = useTranslations(lang);
   title={t('notfound.page_title')}
   description={t('notfound.page_description')}
 >
-  <Fragment slot="head-extra" set:html={head} />
+  <Fragment slot="head-extra">
+    <script is:inline>
+      if (location.pathname.startsWith('/de/') && location.pathname !== '/de/404/') {
+        location.replace('/de/404/');
+      }
+    </script>
+    <Fragment set:html={head} />
+  </Fragment>
   <NotFound lang={lang} />
 </PortfolioLayout>
