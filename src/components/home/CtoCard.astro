@@ -2098,6 +2098,9 @@ const accents = [
 
   /* ============== TABLET / SMALL DESKTOP ============== */
   @media (max-width: 768px) {
+    /* Only show the most recent 2 of each list on phones */
+    .ipad-list > li:nth-child(n+3) { display: none; }
+
     /* Hide editorial framing — no room on phones */
     .ipad-margin { display: none; }
 
@@ -2344,11 +2347,20 @@ const accents = [
       var input = app.querySelector('[data-search]');
       if (!input) return;
       var cols = app.querySelectorAll('.ipad-col');
+      var mobileMQ = window.matchMedia('(max-width: 768px)');
+
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
 
       function apply() {
         var q = input.value.trim().toLowerCase();
+        var isMobile = mobileMQ.matches;
         cols.forEach(function (col) {
-          var items = col.querySelectorAll('.ipad-list > li');
+          var allItems = Array.prototype.slice.call(col.querySelectorAll('.ipad-list > li'));
+          var items = isMobile ? allItems.slice(0, 2) : allItems;
+          // hide items beyond the mobile limit from search interactions
+          allItems.slice(items.length).forEach(function (li) {
+            li.classList.remove('is-hidden');
+          });
           var visible = 0;
           items.forEach(function (li) {
             var hay = li.getAttribute('data-search') || '';
@@ -2360,11 +2372,15 @@ const accents = [
           var count = col.querySelector('[data-count]');
           if (count) {
             var total = items.length;
-            count.textContent = (q ? visible : total) + '/0' + total;
+            count.textContent = (q ? visible : total) + '/' + pad(total);
           }
         });
       }
       input.addEventListener('input', apply);
+      mobileMQ.addEventListener
+        ? mobileMQ.addEventListener('change', apply)
+        : mobileMQ.addListener(apply);
+      apply();
 
       // ⌘K / Ctrl+K to focus
       window.addEventListener('keydown', function (e) {
