@@ -62,6 +62,8 @@
   }
 
   .cursor.is-hidden { opacity: 0; }
+  .cursor.is-off { opacity: 0; }
+  [data-cursor="off"], [data-cursor="off"] * { cursor: auto !important; }
 
   @media (pointer: coarse), (hover: none) {
     .cursor { display: none; }
@@ -118,6 +120,12 @@
 
     document.addEventListener('mouseover', (e) => {
       const target = e.target;
+      if (target instanceof Element && target.closest('[data-cursor="off"]')) {
+        cursor.classList.add('is-off');
+        cursor.classList.remove('is-hover');
+        return;
+      }
+      cursor.classList.remove('is-off');
       if (target instanceof Element && target.closest(interactiveSelector)) {
         cursor.classList.add('is-hover');
       }

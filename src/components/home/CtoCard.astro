@@ -61,12 +61,11 @@ const accents = [
         <span class="ipad-marker ipad-marker--right">live · runtime · v{(new Date()).getFullYear()}</span>
       </div>
 
-      <div class="ipad-frame" data-ipad-frame>
+      <div class="ipad-frame" data-ipad-frame data-cursor="off">
         <span class="ipad-corner ipad-corner--tl" aria-hidden="true"></span>
         <span class="ipad-corner ipad-corner--tr" aria-hidden="true"></span>
         <span class="ipad-corner ipad-corner--bl" aria-hidden="true"></span>
         <span class="ipad-corner ipad-corner--br" aria-hidden="true"></span>
-        <span class="ipad-sidelabel" aria-hidden="true">M · 11" · WiFi — staged from /home</span>
 
         <span class="ipad-camera" aria-hidden="true"></span>
 
@@ -717,23 +716,8 @@ const accents = [
   .ipad-corner--br::before { bottom: 0; right: 0; }
   .ipad-corner--br::after  { bottom: 0; right: 0; }
 
-  .ipad-sidelabel {
-    position: absolute;
-    top: 50%;
-    right: -42px;
-    transform: translateY(-50%) rotate(90deg);
-    transform-origin: left center;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 10px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: rgba(240, 237, 230, 0.38);
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 4;
-  }
   @media (max-width: 991px) {
-    .ipad-sidelabel, .ipad-corner { display: none; }
+    .ipad-corner { display: none; }
   }
 
   /* iPad shell — thin aluminum bezel */
