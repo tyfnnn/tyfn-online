@@ -2536,6 +2536,12 @@ const accents = [
       0 12px 32px rgba(0, 0, 0, 0.32);
     position: relative;
     overflow: hidden;
+    /* Force each column onto its own compositor layer so an item
+       hover in one column can't trigger a backdrop-filter repaint
+       artefact along the inner edge of the other column. */
+    transform: translateZ(0);
+    will-change: backdrop-filter;
+    contain: layout paint;
   }
   .ipad-col::before {
     /* top specular sheen */
