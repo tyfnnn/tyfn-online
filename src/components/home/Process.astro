@@ -137,7 +137,8 @@ const steps = [
   }
 
   .process-flow_panel {
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
@@ -285,35 +286,21 @@ const steps = [
     const panels = Array.from(root.querySelectorAll<HTMLElement>('.process-flow_panel'));
 
     panels.forEach((panel, i) => {
-      gsap.set(panel, { zIndex: i + 1 });
       const inner = panel.querySelector<HTMLElement>('.process-flow_inner');
-      if (!inner) return;
+      if (!inner || prefersReduced) return;
+      if (i === 0) return;
 
-      if (!prefersReduced) {
-        gsap.set(inner, { rotation: 30, transformOrigin: 'bottom left' });
-        gsap.to(inner, {
-          rotation: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: panel,
-            start: 'top bottom',
-            end: 'top 25%',
-            scrub: true,
-          },
-        });
-      }
-
-      if (i < panels.length - 1) {
-        ScrollTrigger.create({
+      gsap.set(inner, { rotation: 30, transformOrigin: 'bottom left' });
+      gsap.to(inner, {
+        rotation: 0,
+        ease: 'none',
+        scrollTrigger: {
           trigger: panel,
-          start: 'bottom bottom',
-          end: 'bottom top',
-          pin: true,
-          pinSpacing: false,
-          pinType: 'transform',
-          anticipatePin: 1,
-        });
-      }
+          start: 'top bottom',
+          end: 'top top',
+          scrub: true,
+        },
+      });
     });
 
     ScrollTrigger.refresh();
