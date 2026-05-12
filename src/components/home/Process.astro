@@ -9,16 +9,44 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const steps = [
-  { num: '01', heading: t('process.step_1_heading'), body: t('process.step_1_body') },
-  { num: '02', heading: t('process.step_2_heading'), body: t('process.step_2_body') },
-  { num: '03', heading: t('process.step_3_heading'), body: t('process.step_3_body') },
-  { num: '04', heading: t('process.step_4_heading'), body: t('process.step_4_body') },
+  {
+    num: '01',
+    heading: t('process.step_1_heading'),
+    body: t('process.step_1_body'),
+    bg: '#c96442',
+    fg: '#f4efe6',
+    accent: '#1a1a1a',
+  },
+  {
+    num: '02',
+    heading: t('process.step_2_heading'),
+    body: t('process.step_2_body'),
+    bg: '#2b2b2b',
+    fg: '#e6e6dd',
+    accent: '#c96442',
+  },
+  {
+    num: '03',
+    heading: t('process.step_3_heading'),
+    body: t('process.step_3_body'),
+    bg: '#e6e6dd',
+    fg: '#1a1a1a',
+    accent: '#c96442',
+  },
+  {
+    num: '04',
+    heading: t('process.step_4_heading'),
+    body: t('process.step_4_body'),
+    bg: '#161616',
+    fg: '#e6e6dd',
+    accent: '#c96442',
+  },
 ];
 ---
 <section id="process" class="section_home-process">
-  <div class="spacer-xhuge process-hover_spacer"></div>
+  <div class="spacer-xhuge process-flow_spacer"></div>
   <div class="padding-global-5">
-    <div class="process_grid-title process-hover_title-row-grid">
+    <div class="process_grid-title process-flow_title-row-grid">
       <h2
         letters-slide-up=""
         text-split=""
@@ -39,288 +67,248 @@ const steps = [
       </div>
     </div>
     <div class="line-divider"></div>
+  </div>
 
-    <div class="process-hover" data-process-hover>
-      <ul class="process-hover_list" role="list">
-        {steps.map((step, i) => (
-          <li
-            class:list={['process-hover_item', i === 0 && 'is-active']}
-            data-index={i}
-            tabindex="0"
-          >
-            <span class="process-hover_num">{step.num}</span>
-            <span class="process-hover_title" aria-label={step.heading}>
-              <span class="process-hover_title-row" aria-hidden="true">
-                {[...step.heading].map((ch, j) => (
-                  <span class="process-hover_letter" style={`--i:${j}`}>{ch === ' ' ? '\u00a0' : ch}</span>
-                ))}
-              </span>
-              <span class="process-hover_title-row process-hover_title-row--ghost" aria-hidden="true">
-                {[...step.heading].map((ch, j) => (
-                  <span class="process-hover_letter" style={`--i:${j}`}>{ch === ' ' ? '\u00a0' : ch}</span>
-                ))}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      <div class="process-hover_divider" aria-hidden="true"></div>
-
-      <div class="process-hover_panels">
-        {steps.map((step, i) => (
-          <div class:list={['process-hover_panel', i === 0 && 'is-active']} data-index={i}>
-            <div class="process-hover_panel-num">/ {step.num}</div>
-            <p class="process-hover_panel-body">
-              {step.body.split(' ').map((word, j) => (
-                <span class="process-hover_word">
-                  <span class="process-hover_word-inner" style={`--i:${j}`}>{word}</span>
-                </span>
-              ))}
-            </p>
+  <div class="process-flow" data-process-flow>
+    {steps.map((step, i) => (
+      <article
+        class="process-flow_panel"
+        data-flow-section
+        data-index={i}
+        style={`--card-bg:${step.bg};--card-fg:${step.fg};--card-accent:${step.accent};`}
+      >
+        <div class="process-flow_inner" data-flow-inner>
+          <div class="process-flow_top">
+            <span class="process-flow_kicker">/ Step {step.num}</span>
+            <span class="process-flow_count">{step.num} &mdash; 04</span>
           </div>
-        ))}
-      </div>
-    </div>
+
+          <div class="process-flow_body">
+            <h3 class="process-flow_title">{step.heading}</h3>
+            <p class="process-flow_copy">{step.body}</p>
+          </div>
+
+          <div class="process-flow_bottom">
+            <div class="process-flow_bignum" aria-hidden="true">{step.num}</div>
+            <div class="process-flow_progress" aria-hidden="true">
+              {steps.map((_, j) => (
+                <span class:list={['process-flow_dot', j <= i && 'is-on']}></span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </article>
+    ))}
   </div>
 </section>
 
 <style>
-  .process-hover_spacer {
+  .process-flow_spacer {
     padding-top: 5rem !important;
   }
 
-  .process-hover_title-row-grid {
+  .process-flow_title-row-grid {
     grid-template-columns: auto 1fr !important;
     align-items: baseline !important;
     column-gap: 1.5rem !important;
     margin-bottom: 1rem !important;
   }
-  .process-hover_title-row-grid .process_text-wrapper {
+  .process-flow_title-row-grid .process_text-wrapper {
     place-self: baseline start !important;
   }
-  .process-hover_title-row-grid .text-size-medium-2 {
+  .process-flow_title-row-grid .text-size-medium-2 {
     font-size: 0.95rem !important;
     opacity: 0.55 !important;
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     letter-spacing: 0.04em;
     text-transform: lowercase;
   }
-
-  .process-hover {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) 1px minmax(0, 1fr);
-    column-gap: 2.5rem;
-    row-gap: 0;
-    align-items: stretch;
-    margin-top: 2.5rem;
-    padding: 2.75rem 0;
-  }
-  .process-hover_divider {
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.04) 100%
-    );
-    width: 1px;
-    align-self: stretch;
-  }
   .section_home-process .line-divider {
-    display: none;
-  }
-  @media (max-width: 900px) {
-    .section_home-process .line-divider {
-      display: block;
-      background-color: rgba(255, 255, 255, 0.08);
-      height: 1px;
-      margin-bottom: 0.5rem;
-    }
-    .process-hover {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      padding: 2rem 0;
-    }
-    .process-hover_divider {
-      display: none;
-    }
-    .process-hover_title {
-      font-size: clamp(0.95rem, 4.2vw, 1.75rem);
-    }
-    .process-hover_item {
-      gap: 0.75rem;
-    }
-    .process-hover_title-row-grid {
-      grid-template-columns: 1fr !important;
-      gap: 0.5rem !important;
-    }
-    .process-hover_panel-body {
-      font-size: 0.95rem;
-    }
-  }
-  @media (max-width: 480px) {
-    .process-hover {
-      padding: 1.75rem 0;
-    }
-    .process-hover_title {
-      font-size: clamp(1rem, 5vw, 1.4rem);
-    }
-    .process-hover_num {
-      display: none;
-    }
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 1px;
+    margin-top: 1.25rem;
   }
 
-  .process-hover_list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .process-flow {
+    position: relative;
+    width: 100%;
+    margin-top: 2rem;
+    overflow-x: clip;
+  }
+
+  .process-flow_panel {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: transparent;
+  }
+
+  .process-flow_inner {
+    min-height: 100vh;
+    width: 100%;
+    padding: clamp(2rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    justify-content: center;
+    justify-content: space-between;
+    gap: clamp(2rem, 5vw, 4rem);
+    background-color: var(--card-bg, #2b2b2b);
+    color: var(--card-fg, #e6e6dd);
+    transform-origin: bottom left;
+    will-change: transform;
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.18), 0 -24px 60px -24px rgba(0, 0, 0, 0.35);
   }
 
-  .process-hover_item {
+  .process-flow_top {
     display: flex;
+    justify-content: space-between;
     align-items: baseline;
-    gap: 1.25rem;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.32);
-    transition: color 0.4s ease;
-    outline: none;
-  }
-  .process-hover_item:hover,
-  .process-hover_item:focus-visible,
-  .process-hover_item.is-active {
-    color: #ffffff;
-  }
-
-  .process-hover_num {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    color: rgba(255, 255, 255, 0.3);
-    flex-shrink: 0;
-    transition: color 0.4s ease;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--card-fg, #e6e6dd) 65%, transparent);
   }
-  .process-hover_item.is-active .process-hover_num,
-  .process-hover_item:hover .process-hover_num {
-    color: var(--tyfnorange, #c96442);
+  .process-flow_kicker {
+    color: var(--card-accent, #c96442);
   }
 
-  .process-hover_title {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-    font-size: clamp(1.75rem, 3.8vw, 3.25rem);
+  .process-flow_body {
+    max-width: 64rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .process-flow_title {
+    font-size: clamp(2.25rem, 6.5vw, 5.5rem);
+    line-height: 0.95;
     font-weight: 700;
-    line-height: 1;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--card-fg, #e6e6dd);
   }
 
-  .process-hover_title-row {
-    display: inline-flex;
-    will-change: transform;
-  }
-  .process-hover_title-row--ghost {
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
-
-  .process-hover_letter {
-    display: inline-block;
-    transform: translateY(0);
-    transition: transform 0.55s cubic-bezier(0.6, 0.05, 0.1, 1);
-    transition-delay: calc(var(--i) * 22ms);
-  }
-  .process-hover_item:hover .process-hover_letter,
-  .process-hover_item:focus-visible .process-hover_letter,
-  .process-hover_item.is-active .process-hover_letter {
-    transform: translateY(-100%);
-  }
-
-  .process-hover_panels {
-    display: grid;
-    position: relative;
-    align-self: center;
-  }
-  .process-hover_panel {
-    grid-area: 1 / 1;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease;
-    align-self: center;
-  }
-  .process-hover_panel.is-active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .process-hover_panel-num {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    color: var(--tyfnorange, #c96442);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-  }
-
-  .process-hover_panel-body {
-    font-size: 1.05rem;
+  .process-flow_copy {
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: none;
+    color: color-mix(in srgb, var(--card-fg, #e6e6dd) 82%, transparent);
+    max-width: 48rem;
     margin: 0;
   }
 
-  .process-hover_word {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: bottom;
-    line-height: 1.55;
-    margin-right: 0.3em;
+  .process-flow_bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
   }
-  .process-hover_word-inner {
-    display: inline-block;
-    transform: translateY(110%);
-    opacity: 0;
+
+  .process-flow_bignum {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: clamp(6rem, 18vw, 16rem);
+    line-height: 0.8;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--card-fg, #e6e6dd) 28%, transparent);
+    letter-spacing: -0.05em;
+    user-select: none;
   }
-  .process-hover_panel.is-active .process-hover_word-inner {
-    transform: translateY(0);
-    opacity: 1;
-    transition:
-      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-      opacity 0.5s ease;
-    transition-delay: calc(var(--i) * 18ms);
+
+  .process-flow_progress {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .process-flow_dot {
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: color-mix(in srgb, var(--card-fg, #e6e6dd) 22%, transparent);
+    transition: background 0.4s ease;
+  }
+  .process-flow_dot.is-on {
+    background: var(--card-accent, #c96442);
+  }
+
+  @media (max-width: 720px) {
+    .process-flow_inner {
+      padding: clamp(1.5rem, 6vw, 3rem) clamp(1.25rem, 4vw, 2rem);
+    }
+    .process-flow_top {
+      font-size: 0.72rem;
+    }
+    .process-flow_title {
+      font-size: clamp(2rem, 9vw, 3.5rem);
+    }
+    .process-flow_copy {
+      font-size: 0.98rem;
+    }
+    .process-flow_bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .process-hover_letter,
-    .process-hover_panel,
-    .process-hover_panel.is-active .process-hover_word-inner {
-      transition: none !important;
-    }
-    .process-hover_word-inner {
-      transform: none;
-      opacity: 1;
+    .process-flow_inner {
+      transform: none !important;
     }
   }
 </style>
 
 <script>
-  const root = document.querySelector('[data-process-hover]');
-  if (root) {
-    const items = root.querySelectorAll<HTMLElement>('.process-hover_item');
-    const panels = root.querySelectorAll<HTMLElement>('.process-hover_panel');
-    const setActive = (idx: number) => {
-      items.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.index) === idx));
-      panels.forEach((el) => el.classList.toggle('is-active', Number(el.dataset.index) === idx));
-    };
-    items.forEach((item) => {
-      const idx = Number(item.dataset.index);
-      item.addEventListener('mouseenter', () => setActive(idx));
-      item.addEventListener('focus', () => setActive(idx));
+  type GsapLike = {
+    set: (target: unknown, vars: Record<string, unknown>) => void;
+    to: (target: unknown, vars: Record<string, unknown>) => void;
+    registerPlugin: (...plugins: unknown[]) => void;
+  };
+  type ScrollTriggerLike = {
+    create: (vars: Record<string, unknown>) => unknown;
+    refresh: () => void;
+  };
+  const w = window as unknown as { gsap?: GsapLike; ScrollTrigger?: ScrollTriggerLike };
+  const gsap = w.gsap;
+  const ScrollTrigger = w.ScrollTrigger;
+  const root = document.querySelector<HTMLElement>('[data-process-flow]');
+
+  if (root && gsap && ScrollTrigger) {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('.process-flow_panel'));
+
+    panels.forEach((panel, i) => {
+      gsap.set(panel, { zIndex: i + 1 });
+      const inner = panel.querySelector<HTMLElement>('.process-flow_inner');
+      if (!inner) return;
+
+      if (!prefersReduced) {
+        gsap.set(inner, { rotation: 30, transformOrigin: 'bottom left' });
+        gsap.to(inner, {
+          rotation: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: panel,
+            start: 'top bottom',
+            end: 'top 25%',
+            scrub: true,
+          },
+        });
+      }
+
+      if (i < panels.length - 1) {
+        ScrollTrigger.create({
+          trigger: panel,
+          start: 'bottom bottom',
+          end: 'bottom top',
+          pin: true,
+          pinSpacing: false,
+        });
+      }
     });
+
+    ScrollTrigger.refresh();
   }
 </script>
