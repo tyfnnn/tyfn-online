@@ -8,6 +8,17 @@
 <style is:global>
   @media (pointer: fine) {
     html, body, *, *::before, *::after { cursor: none !important; }
+    /* Opt-out zones: restore the native cursor */
+    [data-cursor="off"],
+    [data-cursor="off"] *,
+    [data-cursor="off"] *::before,
+    [data-cursor="off"] *::after { cursor: auto !important; }
+    [data-cursor="off"] a,
+    [data-cursor="off"] button,
+    [data-cursor="off"] [role="button"],
+    [data-cursor="off"] label { cursor: pointer !important; }
+    [data-cursor="off"] input,
+    [data-cursor="off"] textarea { cursor: text !important; }
   }
 </style>
 
@@ -63,7 +74,6 @@
 
   .cursor.is-hidden { opacity: 0; }
   .cursor.is-off { opacity: 0; }
-  [data-cursor="off"], [data-cursor="off"] * { cursor: auto !important; }
 
   @media (pointer: coarse), (hover: none) {
     .cursor { display: none; }
