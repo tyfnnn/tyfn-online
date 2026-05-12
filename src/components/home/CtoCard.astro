@@ -211,7 +211,7 @@ const accents = [
                 <button type="button" class="ipad-dock_app" data-open="figma" data-tooltip="Figma"><img src="/assets/figma.svg" alt="" loading="lazy" /></button>
                 <button type="button" class="ipad-dock_app" data-open="obsidian" data-tooltip="Obsidian"><img src="/assets/obsidian.svg" alt="" loading="lazy" /></button>
                 <a class="ipad-dock_app ipad-dock_app--badge" href={`mailto:${t('common.email')}`} data-tooltip={`Mail — ${t('cto.inbox_label')}`} data-badge="1"><img src="/assets/mail.svg" alt="" loading="lazy" /></a>
-                <a class="ipad-dock_app" href="https://open.spotify.com" target="_blank" rel="noopener" data-tooltip="Spotify"><img src="/assets/spotify.svg" alt="" loading="lazy" /></a>
+                <button type="button" class="ipad-dock_app" data-open="spotify" data-tooltip="Spotify"><img src="/assets/spotify.svg" alt="" loading="lazy" /></button>
               </div>
 
               <!-- App windows (mock IDE / app overlays inside the iPad) -->
@@ -623,6 +623,81 @@ const accents = [
                       </svg>
                       <div class="ob-graph_legend">7 notes · 8 links</div>
                     </aside>
+                  </div>
+                </section>
+
+                <!-- ========== SPOTIFY ========== -->
+                <section class="ipad-win ipad-win--spotify" data-window="spotify" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--spotify">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="sp-toolbar">
+                      <img class="sp-icon" src="/assets/spotify.svg" alt="" />
+                      <span class="sp-brand">Spotify</span>
+                      <span class="sp-divider"></span>
+                      <span class="sp-crumb">▾ tyfn's coding mix</span>
+                    </div>
+                  </header>
+
+                  <div class="sp-body">
+                    <!-- Left: big cover + now playing -->
+                    <section class="sp-stage">
+                      <div class="sp-cover" data-sp-cover>
+                        <div class="sp-cover_art" data-sp-cover-art></div>
+                        <div class="sp-cover_vinyl" aria-hidden="true">
+                          <span class="sp-cover_groove"></span>
+                          <span class="sp-cover_groove sp-cover_groove--2"></span>
+                          <span class="sp-cover_groove sp-cover_groove--3"></span>
+                          <span class="sp-cover_label"></span>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Right: track info + queue -->
+                    <section class="sp-panel">
+                      <div class="sp-eyebrow">
+                        <span class="sp-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                        <span>{t('cto.win_spotify_now')}</span>
+                      </div>
+
+                      <h3 class="sp-track" data-sp-track>—</h3>
+                      <p class="sp-artist" data-sp-artist>—</p>
+
+                      <div class="sp-progress">
+                        <span class="sp-progress_fill" data-sp-progress></span>
+                      </div>
+                      <div class="sp-times">
+                        <span data-sp-elapsed>0:00</span>
+                        <span data-sp-duration>0:00</span>
+                      </div>
+
+                      <div class="sp-controls" aria-hidden="true">
+                        <button type="button" class="sp-btn" aria-label="Shuffle">⇆</button>
+                        <button type="button" class="sp-btn" aria-label="Previous">⏮</button>
+                        <button type="button" class="sp-btn sp-btn--play" aria-label="Play">▶</button>
+                        <button type="button" class="sp-btn" aria-label="Next">⏭</button>
+                        <button type="button" class="sp-btn" aria-label="Repeat">↻</button>
+                      </div>
+
+                      <div class="sp-meta">
+                        <strong>{t('cto.win_spotify_lede')}</strong>
+                        <p>{t('cto.win_spotify_body')}</p>
+                      </div>
+
+                      <div class="sp-queue">
+                        <div class="sp-queue_head">{t('cto.win_spotify_queue')}</div>
+                        <ul class="sp-queue_list" data-sp-queue></ul>
+                      </div>
+
+                      <a class="sp-open" href="https://open.spotify.com/playlist/37i9dQZF1DX0SuV2A2sNFw" target="_blank" rel="noopener">
+                        <img src="/assets/spotify.svg" alt="" />
+                        <span>{t('cto.win_spotify_open')}</span>
+                        <span class="sp-open_arrow" aria-hidden="true">↗</span>
+                      </a>
+                    </section>
                   </div>
                 </section>
               </div>
@@ -1216,7 +1291,8 @@ const accents = [
   .ipad-app[data-open-window="android-studio"] .ipad-win--android,
   .ipad-app[data-open-window="webstorm"]       .ipad-win--webstorm,
   .ipad-app[data-open-window="figma"]          .ipad-win--figma,
-  .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian {
+  .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian,
+  .ipad-app[data-open-window="spotify"]        .ipad-win--spotify {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -1788,6 +1864,334 @@ const accents = [
   .ob-graph_legend { text-align: center; }
   .ob-graph_svg { width: 100%; height: 100%; max-height: 200px; }
 
+  /* ============== SPOTIFY ============== */
+  .ipad-win--spotify {
+    background:
+      radial-gradient(120% 60% at 0% 0%, rgba(30, 215, 96, 0.12) 0%, transparent 55%),
+      linear-gradient(180deg, #181818 0%, #0a0a0a 100%);
+    color: #e6e6e6;
+    --sp-accent: #1ED760;
+  }
+  .ipad-win_chrome--spotify {
+    background: linear-gradient(180deg, #1f1f1f 0%, #161616 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .sp-toolbar { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; color: #d6d6d6; }
+  .sp-icon { width: 16px; height: 16px; border-radius: 50%; }
+  .sp-brand { font-weight: 600; letter-spacing: 0.02em; }
+  .sp-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.10); }
+  .sp-crumb {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(230, 230, 230, 0.78);
+  }
+
+  .sp-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(14px, 1.6vw, 22px);
+    padding: clamp(16px, 2vw, 26px);
+    min-height: 0;
+  }
+
+  /* Stage — album cover & vinyl */
+  .sp-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    position: relative;
+  }
+  .sp-cover {
+    position: relative;
+    width: min(100%, 360px);
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: visible;
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.55),
+      0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .sp-cover_art {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: var(--cover-bg, linear-gradient(135deg, #1ED760, #0d6e2c));
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  .sp-cover_art::before,
+  .sp-cover_art::after {
+    /* abstract artwork shapes per cover */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cover-overlay, none);
+    mix-blend-mode: overlay;
+  }
+  .sp-cover_art::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 40%, rgba(0, 0, 0, 0.25) 100%);
+    mix-blend-mode: normal;
+  }
+  /* Vinyl peeking out behind the cover */
+  .sp-cover_vinyl {
+    position: absolute;
+    top: 5%;
+    right: -22%;
+    width: 88%;
+    height: 88%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, #1a1a1a 30%, #0a0a0a 70%);
+    box-shadow:
+      0 16px 40px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 1;
+    animation: spVinyl 12s linear infinite;
+  }
+  .sp-cover_groove,
+  .sp-cover_groove--2,
+  .sp-cover_groove--3 {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .sp-cover_groove--2 { inset: 12%; }
+  .sp-cover_groove--3 { inset: 24%; }
+  .sp-cover_label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 38%;
+    height: 38%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, var(--sp-accent) 0%, #0d6e2c 70%);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+  }
+  .sp-cover_label::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14%; height: 14%;
+    border-radius: 50%;
+    background: #0a0a0a;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  @keyframes spVinyl { to { transform: rotate(360deg); } }
+
+  /* Right panel */
+  .sp-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .sp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sp-accent);
+  }
+  .sp-eq { display: inline-flex; align-items: flex-end; gap: 2px; width: 16px; height: 14px; }
+  .sp-eq i {
+    width: 3px;
+    background: var(--sp-accent);
+    border-radius: 1px;
+    animation: spEq 0.9s ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+  .sp-eq i:nth-child(1) { height: 50%; animation-delay: 0s; }
+  .sp-eq i:nth-child(2) { height: 100%; animation-delay: 0.15s; }
+  .sp-eq i:nth-child(3) { height: 70%;  animation-delay: 0.30s; }
+  .sp-eq i:nth-child(4) { height: 90%;  animation-delay: 0.45s; }
+  @keyframes spEq {
+    0%   { transform: scaleY(0.30); }
+    100% { transform: scaleY(1); }
+  }
+
+  .sp-track {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    line-height: 1.05;
+    color: #fff;
+    margin: 4px 0 2px;
+    transition: opacity 0.3s ease;
+  }
+  .sp-artist {
+    font-size: 0.95rem;
+    color: rgba(230, 230, 230, 0.72);
+    margin: 0 0 6px;
+    transition: opacity 0.3s ease;
+  }
+
+  .sp-progress {
+    position: relative;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .sp-progress_fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--sp-accent), #6ae89c);
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(30, 215, 96, 0.4);
+    transition: width 0.18s linear;
+  }
+  .sp-times {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: rgba(230, 230, 230, 0.55);
+    margin-top: 4px;
+  }
+
+  .sp-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 10px 0 4px;
+  }
+  .sp-btn {
+    background: transparent;
+    border: 0;
+    color: rgba(230, 230, 230, 0.75);
+    font-size: 14px;
+    line-height: 1;
+    padding: 6px;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .sp-btn:hover { color: #fff; transform: scale(1.1); }
+  .sp-btn--play {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    color: #0a0a0a;
+    font-size: 14px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  }
+  .sp-btn--play:hover { color: #0a0a0a; transform: scale(1.06); }
+
+  .sp-meta {
+    background: rgba(30, 215, 96, 0.07);
+    border: 1px solid rgba(30, 215, 96, 0.18);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #d6d6d6;
+  }
+  .sp-meta strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sp-accent);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .sp-meta p { margin: 0; }
+
+  .sp-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .sp-queue_head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(230, 230, 230, 0.50);
+  }
+  .sp-queue_list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+  .sp-queue_list li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: rgba(230, 230, 230, 0.75);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .sp-queue_list li:hover { background: rgba(255, 255, 255, 0.04); color: #fff; }
+  .sp-queue_list li b {
+    font-weight: 500;
+    color: #e6e6e6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sp-queue_list li span:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(230, 230, 230, 0.40);
+    min-width: 16px;
+    text-align: right;
+  }
+  .sp-queue_list li time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: rgba(230, 230, 230, 0.50);
+  }
+
+  .sp-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--sp-accent);
+    color: #0a0a0a;
+    font-weight: 600;
+    font-size: 12px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 4px 14px rgba(30, 215, 96, 0.32);
+  }
+  .sp-open img { width: 14px; height: 14px; border-radius: 50%; filter: invert(1) brightness(0); }
+  .sp-open:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 8px 22px rgba(30, 215, 96, 0.45); }
+  .sp-open_arrow { transition: transform 0.2s ease; }
+  .sp-open:hover .sp-open_arrow { transform: translate(2px, -2px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sp-cover_vinyl { animation: none; }
+    .sp-eq i { animation: none; }
+  }
+
   /* Hide windows on mobile — too cramped to be useful */
   @media (max-width: 768px) {
     .ipad-win { inset: 30px 8px 70px; }
@@ -1795,8 +2199,14 @@ const accents = [
     .ipad-app[data-open-window] .ipad-win .as-body,
     .ipad-app[data-open-window] .ipad-win .ws-body,
     .ipad-app[data-open-window] .ipad-win .fg-body,
-    .ipad-app[data-open-window] .ipad-win .ob-body { grid-template-columns: 1fr; }
+    .ipad-app[data-open-window] .ipad-win .ob-body,
+    .ipad-app[data-open-window] .ipad-win .sp-body { grid-template-columns: 1fr; }
     .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph { display: none; }
+    .sp-cover { max-width: 200px; margin: 0 auto; }
+    .sp-cover_vinyl { display: none; }
+    .sp-track { font-size: 1.5rem; }
+    .sp-meta { font-size: 11.5px; padding: 8px 10px; }
+    .sp-queue_list li { font-size: 11px; }
   }
   .ipad-app_title {
     display: inline-flex;
@@ -2600,6 +3010,126 @@ const accents = [
       });
     }
 
+    // ---------- Spotify mock player ----------
+    function initSpotify(app) {
+      var win = app.querySelector('.ipad-win--spotify');
+      if (!win) return;
+      var coverArt = win.querySelector('[data-sp-cover-art]');
+      var trackEl = win.querySelector('[data-sp-track]');
+      var artistEl = win.querySelector('[data-sp-artist]');
+      var elapsedEl = win.querySelector('[data-sp-elapsed]');
+      var durationEl = win.querySelector('[data-sp-duration]');
+      var progressEl = win.querySelector('[data-sp-progress]');
+      var queueEl = win.querySelector('[data-sp-queue]');
+
+      var tracks = [
+        { title: 'Linked',         artist: 'Bonobo',           duration: 248,
+          cover: 'linear-gradient(135deg, #5db5ff 0%, #1a4dff 60%, #0a1b66 100%)',
+          overlay: 'radial-gradient(60% 60% at 30% 30%, rgba(255,255,255,0.30) 0%, transparent 60%)' },
+        { title: 'Awake',          artist: 'Tycho',            duration: 305,
+          cover: 'linear-gradient(135deg, #ffd56b 0%, #ff7a59 50%, #d63a6e 100%)',
+          overlay: 'radial-gradient(70% 60% at 70% 30%, rgba(255,255,255,0.25) 0%, transparent 65%)' },
+        { title: 'Says',           artist: 'Nils Frahm',       duration: 478,
+          cover: 'linear-gradient(180deg, #efece5 0%, #c2bdb0 60%, #6b6660 100%)',
+          overlay: 'linear-gradient(115deg, rgba(0,0,0,0.06) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.12) 100%)' },
+        { title: 'Last Bloom',     artist: 'Floating Points',  duration: 412,
+          cover: 'linear-gradient(135deg, #9d5cff 0%, #ff4c89 60%, #ffb86b 100%)',
+          overlay: 'radial-gradient(80% 60% at 40% 70%, rgba(255,255,255,0.22) 0%, transparent 60%)' },
+        { title: 'White Gloves',   artist: 'Khruangbin',       duration: 326,
+          cover: 'linear-gradient(160deg, #6a7a4a 0%, #d8c074 50%, #b56a3a 100%)',
+          overlay: 'radial-gradient(60% 80% at 60% 40%, rgba(255,255,255,0.18) 0%, transparent 60%)' },
+        { title: 'Home',           artist: 'Caribou',          duration: 339,
+          cover: 'linear-gradient(135deg, #ffe34a 0%, #ff7a59 45%, #c5275e 100%)',
+          overlay: 'radial-gradient(50% 50% at 25% 25%, rgba(255,255,255,0.40) 0%, transparent 55%)' },
+      ];
+
+      function fmt(s) {
+        var m = Math.floor(s / 60);
+        var ss = Math.floor(s % 60);
+        return m + ':' + (ss < 10 ? '0' : '') + ss;
+      }
+
+      var idx = 0;
+      var elapsed = 0;
+      var rafId = null;
+      var lastTs = 0;
+      // Time-compress the track for the UI so people see the progress
+      // bar move; one "track" lasts ~14s in the mock player.
+      var DISPLAY_LENGTH = 14;
+
+      function renderTrack() {
+        var t = tracks[idx];
+        if (trackEl) trackEl.textContent = t.title;
+        if (artistEl) artistEl.textContent = t.artist;
+        if (durationEl) durationEl.textContent = fmt(t.duration);
+        if (coverArt) {
+          coverArt.style.setProperty('--cover-bg', t.cover);
+          coverArt.style.setProperty('--cover-overlay', t.overlay);
+        }
+        // Briefly fade text on change
+        [trackEl, artistEl].forEach(function (el) {
+          if (!el) return;
+          el.style.opacity = '0';
+          setTimeout(function () { el.style.opacity = '1'; }, 50);
+        });
+      }
+
+      function renderQueue() {
+        if (!queueEl) return;
+        var html = '';
+        for (var i = 1; i <= 4; i++) {
+          var t = tracks[(idx + i) % tracks.length];
+          html += '<li><span>' + (i + 1).toString().padStart(2, '0') + '</span>' +
+                  '<b>' + t.title + ' — ' + t.artist + '</b>' +
+                  '<time>' + fmt(t.duration) + '</time></li>';
+        }
+        queueEl.innerHTML = html;
+      }
+
+      function frame(ts) {
+        if (!lastTs) lastTs = ts;
+        var dt = (ts - lastTs) / 1000;
+        lastTs = ts;
+        elapsed += dt;
+        if (elapsed >= DISPLAY_LENGTH) {
+          elapsed = 0;
+          idx = (idx + 1) % tracks.length;
+          renderTrack();
+          renderQueue();
+        }
+        var pct = (elapsed / DISPLAY_LENGTH) * 100;
+        if (progressEl) progressEl.style.width = pct.toFixed(1) + '%';
+        if (elapsedEl) {
+          var t = tracks[idx];
+          var displayed = Math.floor((elapsed / DISPLAY_LENGTH) * t.duration);
+          elapsedEl.textContent = fmt(displayed);
+        }
+        rafId = requestAnimationFrame(frame);
+      }
+
+      function start() {
+        if (rafId) return;
+        lastTs = 0;
+        rafId = requestAnimationFrame(frame);
+      }
+      function stop() {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+
+      // Boot
+      renderTrack();
+      renderQueue();
+
+      // Run only while the Spotify window is visible (saves cycles)
+      var mo = new MutationObserver(function () {
+        var open = app.getAttribute('data-open-window');
+        if (open === 'spotify') start();
+        else stop();
+      });
+      mo.observe(app, { attributes: true, attributeFilter: ['data-open-window'] });
+    }
+
     // ---------- App windows ----------
     function initWindows(app) {
       var openers = app.querySelectorAll('[data-open]');
@@ -2721,6 +3251,7 @@ const accents = [
         initSearch(app);
         initSort(app);
         initWindows(app);
+        initSpotify(app);
       }
     }
 
