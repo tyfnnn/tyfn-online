@@ -285,10 +285,9 @@ const steps = [
 
     const panels = Array.from(root.querySelectorAll<HTMLElement>('.process-flow_panel'));
 
-    panels.forEach((panel, i) => {
+    panels.forEach((panel) => {
       const inner = panel.querySelector<HTMLElement>('.process-flow_inner');
       if (!inner || prefersReduced) return;
-      if (i === 0) return;
 
       gsap.set(inner, { rotation: 30, transformOrigin: 'bottom left' });
       gsap.to(inner, {
