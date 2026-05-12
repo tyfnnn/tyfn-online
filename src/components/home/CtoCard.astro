@@ -814,6 +814,22 @@ const accents = [
     position: relative;
     isolation: isolate;
   }
+  /* gentle dim over the wallpaper so light text stays legible */
+  .ipad-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.32) 100%);
+    z-index: 0;
+  }
+  .ipad-statusbar,
+  .ipad-app,
+  .ipad-home-indicator {
+    position: relative;
+    z-index: 1;
+  }
   /* glossy reflection band */
   .ipad-screen::after {
     content: '';
@@ -823,6 +839,7 @@ const accents = [
     background:
       linear-gradient(115deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 28%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.04) 100%);
     mix-blend-mode: overlay;
+    z-index: 2;
   }
 
   .ipad-statusbar {
@@ -904,14 +921,15 @@ const accents = [
     padding: 8px 12px;
     border-radius: 18px;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 100%),
+      linear-gradient(180deg, rgba(15, 18, 24, 0.55) 0%, rgba(8, 10, 14, 0.62) 100%);
     backdrop-filter: blur(28px) saturate(180%);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.35),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
-      0 4px 24px rgba(0, 0, 0, 0.18);
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.30),
+      0 4px 24px rgba(0, 0, 0, 0.28);
   }
 
   /* Tabs */
@@ -1727,17 +1745,18 @@ const accents = [
     flex-direction: column;
     min-height: 0;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, rgba(255, 255, 255, 0.06) 100%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.02) 100%),
+      linear-gradient(180deg, rgba(12, 14, 20, 0.58) 0%, rgba(6, 8, 12, 0.70) 100%);
     backdrop-filter: blur(36px) saturate(180%);
     -webkit-backdrop-filter: blur(36px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 22px;
     padding: clamp(12px, 1.2vw, 16px);
     gap: clamp(8px, 0.8vw, 12px);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.30),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-      0 12px 32px rgba(0, 0, 0, 0.22);
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+      0 12px 32px rgba(0, 0, 0, 0.32);
     position: relative;
     overflow: hidden;
   }
@@ -1831,16 +1850,17 @@ const accents = [
     padding: 10px 12px 10px 8px;
     border-radius: 16px;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 100%),
+      linear-gradient(180deg, rgba(10, 12, 18, 0.50) 0%, rgba(6, 8, 12, 0.60) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     text-decoration: none;
     color: #F0EDE6;
     overflow: hidden;
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     isolation: isolate;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.18),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
   }
   .ipad-item_index {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -1864,13 +1884,14 @@ const accents = [
   }
   .ipad-item:hover {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
-    border-color: rgba(255, 255, 255, 0.26);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%),
+      linear-gradient(180deg, rgba(10, 12, 18, 0.55) 0%, rgba(6, 8, 12, 0.65) 100%);
+    border-color: rgba(255, 255, 255, 0.22);
     transform: translateX(2px);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.12),
-      0 6px 18px rgba(0, 0, 0, 0.18);
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+      0 6px 22px rgba(0, 0, 0, 0.28);
   }
   .ipad-item:hover::before { opacity: 1; }
 
@@ -1960,19 +1981,19 @@ const accents = [
     padding: 8px clamp(14px, 1.6vw, 22px);
     border-radius: 26px;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%),
+      linear-gradient(180deg, rgba(14, 16, 22, 0.55) 0%, rgba(8, 10, 14, 0.65) 100%);
     backdrop-filter: blur(40px) saturate(200%);
     -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.20);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     margin: 0 auto;
     width: max-content;
     max-width: 100%;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.42),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
-      0 1px 0 rgba(255, 255, 255, 0.12),
-      0 12px 36px rgba(0, 0, 0, 0.32),
-      0 30px 60px rgba(0, 0, 0, 0.18);
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+      0 12px 36px rgba(0, 0, 0, 0.38),
+      0 30px 60px rgba(0, 0, 0, 0.22);
     overflow: hidden;
   }
   .ipad-dock::before {
