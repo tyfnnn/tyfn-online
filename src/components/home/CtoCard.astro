@@ -902,11 +902,16 @@ const accents = [
     align-items: center;
     gap: clamp(8px, 1vw, 14px);
     padding: 8px 12px;
-    border-radius: 14px;
-    background: rgba(20, 20, 20, 0.5);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+      0 4px 24px rgba(0, 0, 0, 0.18);
   }
 
   /* Tabs */
@@ -915,15 +920,18 @@ const accents = [
     display: inline-flex;
     gap: 2px;
     padding: 3px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.35),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.06);
   }
   .ipad-tab {
     position: relative;
     z-index: 1;
-    padding: 5px 12px;
-    border-radius: 7px;
+    padding: 5px 14px;
+    border-radius: 999px;
     background: transparent;
     border: 0;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -941,9 +949,14 @@ const accents = [
     top: 3px;
     left: 3px;
     height: calc(100% - 6px);
-    background: linear-gradient(135deg, #ff7448, #ff4848);
-    border-radius: 7px;
-    box-shadow: 0 4px 12px rgba(255, 116, 72, 0.35);
+    background:
+      linear-gradient(180deg, #ff8e5c 0%, #ff5b50 55%, #ee3b3b 100%);
+    border-radius: 999px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+      0 6px 14px rgba(255, 116, 72, 0.42),
+      0 1px 1px rgba(0, 0, 0, 0.2);
     transition: left 0.32s cubic-bezier(0.45, 0.05, 0.2, 1),
                 width 0.32s cubic-bezier(0.45, 0.05, 0.2, 1);
     pointer-events: none;
@@ -955,16 +968,22 @@ const accents = [
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 10px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
     min-width: 0;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.25),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.06);
   }
   .ipad-searchbar:focus-within {
     border-color: rgba(255, 154, 110, 0.55);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.38);
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.3),
+      0 0 0 3px rgba(255, 154, 110, 0.18);
   }
   .ipad-searchbar_icon { color: rgba(240, 237, 230, 0.55); font-size: 13px; }
   .ipad-searchbar_input {
@@ -997,19 +1016,29 @@ const accents = [
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: rgba(240, 237, 230, 0.75);
+    padding: 6px 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: rgba(240, 237, 230, 0.85);
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.04em;
     cursor: pointer;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
   }
-  .ipad-sort:hover { color: #ff9b6e; border-color: rgba(255, 154, 110, 0.4); }
+  .ipad-sort:hover {
+    color: #ff9b6e;
+    border-color: rgba(255, 154, 110, 0.4);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 0 0 3px rgba(255, 154, 110, 0.12);
+  }
   .ipad-sort_arrow {
     display: inline-block;
     transition: transform 0.3s ease;
@@ -1697,13 +1726,30 @@ const accents = [
     display: flex;
     flex-direction: column;
     min-height: 0;
-    background: rgba(15, 15, 18, 0.55);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 60%, rgba(255, 255, 255, 0.06) 100%);
+    backdrop-filter: blur(36px) saturate(180%);
+    -webkit-backdrop-filter: blur(36px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 22px;
     padding: clamp(12px, 1.2vw, 16px);
     gap: clamp(8px, 0.8vw, 12px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.30),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+      0 12px 32px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+  }
+  .ipad-col::before {
+    /* top specular sheen */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, transparent 100%);
+    pointer-events: none;
+    border-radius: 22px 22px 0 0;
   }
   .ipad-col_head {
     display: grid;
@@ -1783,14 +1829,18 @@ const accents = [
     align-items: center;
     gap: 12px;
     padding: 10px 12px 10px 8px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     text-decoration: none;
     color: #F0EDE6;
     overflow: hidden;
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     isolation: isolate;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.10);
   }
   .ipad-item_index {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -1813,9 +1863,14 @@ const accents = [
     z-index: -1;
   }
   .ipad-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.16);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border-color: rgba(255, 255, 255, 0.26);
     transform: translateX(2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+      0 6px 18px rgba(0, 0, 0, 0.18);
   }
   .ipad-item:hover::before { opacity: 1; }
 
@@ -1879,9 +1934,11 @@ const accents = [
     color: #0a0a0a;
   }
   .ipad-pill--ghost {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(240, 237, 230, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+    color: rgba(240, 237, 230, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   }
   .ipad-item_arrow {
     color: rgba(240, 237, 230, 0.4);
@@ -1895,19 +1952,37 @@ const accents = [
 
   /* Dock at bottom */
   .ipad-dock {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: clamp(8px, 1vw, 14px);
-    padding: 8px clamp(12px, 1.4vw, 20px);
-    border-radius: 22px;
-    background: rgba(15, 15, 18, 0.55);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px clamp(14px, 1.6vw, 22px);
+    border-radius: 26px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.20);
     margin: 0 auto;
     width: max-content;
     max-width: 100%;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.42),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+      0 1px 0 rgba(255, 255, 255, 0.12),
+      0 12px 36px rgba(0, 0, 0, 0.32),
+      0 30px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+  }
+  .ipad-dock::before {
+    /* glossy top sheen */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%);
+    pointer-events: none;
   }
   .ipad-dock_app {
     position: relative;
@@ -1917,11 +1992,13 @@ const accents = [
     overflow: visible;
     display: grid;
     place-items: center;
-    background: #0a0a0a;
+    background: transparent;
     box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-      0 4px 10px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s ease;
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.30),
+      0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.25s ease, filter 0.2s ease;
     flex-shrink: 0;
     /* normalise <button> defaults so they match <a> siblings */
     padding: 0;
@@ -1939,18 +2016,19 @@ const accents = [
     border-radius: 11px;
     overflow: hidden;
   }
-  .ipad-dock_app:hover { transform: translateY(-3px) scale(1.06); }
+  .ipad-dock_app:hover { transform: translateY(-3px) scale(1.06); filter: brightness(1.08); }
   .ipad-dock_app::after {
-    /* tooltip */
+    /* tooltip — glass pill */
     content: attr(data-tooltip);
     position: absolute;
-    bottom: calc(100% + 10px);
+    bottom: calc(100% + 12px);
     left: 50%;
     transform: translate(-50%, 6px);
-    padding: 5px 10px;
-    border-radius: 7px;
-    background: rgba(20, 20, 20, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 5px 12px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(40, 40, 44, 0.65) 0%, rgba(20, 20, 22, 0.55) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     color: #F0EDE6;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 10.5px;
@@ -1960,8 +2038,11 @@ const accents = [
     opacity: 0;
     transition: opacity 0.18s ease, transform 0.18s ease;
     z-index: 5;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 6px 16px rgba(0, 0, 0, 0.32);
   }
   .ipad-dock_app:hover::after,
   .ipad-dock_app:focus-visible::after {
