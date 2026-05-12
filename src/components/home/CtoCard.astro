@@ -262,6 +262,7 @@ const accents = [
                 <button type="button" class="ipad-dock_app" data-open="figma" data-tooltip="Figma"><img src="/assets/figma.svg" alt="" loading="lazy" /></button>
                 <button type="button" class="ipad-dock_app" data-open="obsidian" data-tooltip="Obsidian"><img src="/assets/obsidian.svg" alt="" loading="lazy" /></button>
                 <button type="button" class="ipad-dock_app ipad-dock_app--badge" data-open="messages" data-tooltip="Messages" data-badge="3"><img src="/assets/messages.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app" data-open="snake" data-tooltip={t('cto.win_snake_title')}><img src="/assets/snake.svg" alt="" loading="lazy" /></button>
                 <a class="ipad-dock_app ipad-dock_app--badge" href={`mailto:${t('common.email')}`} data-tooltip={`Mail — ${t('cto.inbox_label')}`} data-badge="1"><img src="/assets/mail.svg" alt="" loading="lazy" /></a>
               </div>
 
@@ -738,6 +739,52 @@ const accents = [
                         <span>{t('cto.win_messages_continue')}</span>
                         <span class="msg-continue_arrow" aria-hidden="true">→</span>
                       </button>
+                    </main>
+                  </div>
+                </section>
+
+                <!-- ========== SNAKE / BUG HUNT ========== -->
+                <section class="ipad-win ipad-win--snake" data-window="snake" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--snake">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="sk-toolbar">
+                      <img class="sk-icon" src="/assets/snake.svg" alt="" />
+                      <span class="sk-brand">{t('cto.win_snake_title')}</span>
+                      <span class="sk-divider"></span>
+                      <span class="sk-prompt">{t('cto.win_snake_subtitle')}<span class="sk-caret"></span></span>
+                    </div>
+                  </header>
+                  <div class="sk-body">
+                    <aside class="sk-stats">
+                      <div class="sk-stat">
+                        <span class="sk-stat_label">{t('cto.win_snake_score')}</span>
+                        <span class="sk-stat_value" data-snake-score>00</span>
+                      </div>
+                      <div class="sk-stat">
+                        <span class="sk-stat_label">{t('cto.win_snake_best')}</span>
+                        <span class="sk-stat_value" data-snake-best>00</span>
+                      </div>
+                      <div class="sk-hint">{t('cto.win_snake_controls')}</div>
+                      <button type="button" class="sk-restart" data-snake-restart>
+                        <span data-snake-restart-label>{t('cto.win_snake_play')}</span>
+                      </button>
+                    </aside>
+                    <main class="sk-stage" data-snake-stage tabindex="0">
+                      <canvas data-snake-canvas></canvas>
+                      <div class="sk-overlay" data-snake-overlay>
+                        <div class="sk-overlay_message" data-snake-status>{t('cto.win_snake_idle')}</div>
+                      </div>
+                      <!-- Mobile / touch D-pad -->
+                      <div class="sk-dpad" aria-hidden="true">
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--u" data-snake-dir="up">▲</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--l" data-snake-dir="left">◀</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--r" data-snake-dir="right">▶</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--d" data-snake-dir="down">▼</button>
+                      </div>
                     </main>
                   </div>
                 </section>
@@ -1334,7 +1381,8 @@ const accents = [
   .ipad-app[data-open-window="webstorm"]       .ipad-win--webstorm,
   .ipad-app[data-open-window="figma"]          .ipad-win--figma,
   .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian,
-  .ipad-app[data-open-window="messages"]       .ipad-win--messages {
+  .ipad-app[data-open-window="messages"]       .ipad-win--messages,
+  .ipad-app[data-open-window="snake"]          .ipad-win--snake {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -2251,6 +2299,195 @@ const accents = [
   .msg-continue_arrow { transition: transform 0.2s ease; }
   .msg-continue:hover .msg-continue_arrow { transform: translateX(3px); }
 
+  /* ============== SNAKE / BUG HUNT ============== */
+  .ipad-win--snake {
+    background:
+      radial-gradient(120% 60% at 0% 0%, rgba(255, 116, 72, 0.10) 0%, transparent 55%),
+      linear-gradient(180deg, #1a0f0a 0%, #0a0507 100%);
+    color: #f0ede6;
+    --sk-accent: #ff9b6e;
+  }
+  .ipad-win_chrome--snake {
+    background: linear-gradient(180deg, #1f1410 0%, #14080a 100%);
+    border-bottom: 1px solid rgba(255, 116, 72, 0.12);
+  }
+  .sk-toolbar { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; color: #d9d3c8; }
+  .sk-icon { width: 18px; height: 18px; border-radius: 5px; }
+  .sk-brand { font-weight: 600; }
+  .sk-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.10); }
+  .sk-prompt {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--sk-accent);
+  }
+  .sk-caret {
+    display: inline-block;
+    width: 7px;
+    background: var(--sk-accent);
+    color: transparent;
+    margin-left: 4px;
+    animation: skBlink 1s steps(2, end) infinite;
+  }
+  @keyframes skBlink { 50% { opacity: 0; } }
+
+  .sk-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: clamp(14px, 1.6vw, 22px);
+    padding: clamp(14px, 1.8vw, 22px);
+    min-height: 0;
+  }
+  .sk-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .sk-stat {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+      linear-gradient(180deg, rgba(20, 14, 12, 0.65) 0%, rgba(10, 5, 7, 0.75) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+  .sk-stat_label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(240, 237, 230, 0.45);
+    margin-bottom: 4px;
+  }
+  .sk-stat_value {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum';
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+  }
+  .sk-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    color: rgba(240, 237, 230, 0.4);
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+  }
+  .sk-restart {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    cursor: pointer;
+    margin-top: auto;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ff8e5c, #ff4848);
+    color: #1a0508;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 6px 16px rgba(255, 116, 72, 0.35);
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .sk-restart:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+  /* Stage / canvas */
+  .sk-stage {
+    position: relative;
+    border-radius: 14px;
+    background: #060304;
+    border: 1px solid rgba(255, 116, 72, 0.18);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      inset 0 0 60px rgba(255, 116, 72, 0.10),
+      0 6px 22px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    outline: none;
+    cursor: pointer;
+  }
+  .sk-stage canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+  }
+  .sk-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    pointer-events: none;
+    background: rgba(6, 3, 4, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+  .sk-stage.is-running .sk-overlay { opacity: 0; }
+  .sk-overlay_message {
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #f0ede6;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* D-pad — hidden on desktop, shown on touch */
+  .sk-dpad {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 96px;
+    height: 96px;
+    display: none;
+    z-index: 3;
+  }
+  .sk-dpad_btn {
+    position: absolute;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .sk-dpad_btn--u { top: 0;  left: 34px; }
+  .sk-dpad_btn--d { bottom: 0; left: 34px; }
+  .sk-dpad_btn--l { left: 0;  top: 34px; }
+  .sk-dpad_btn--r { right: 0; top: 34px; }
+  @media (pointer: coarse), (hover: none) {
+    .sk-dpad { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk-caret { animation: none; }
+  }
+
   /* Hide windows on mobile — too cramped to be useful */
   @media (max-width: 768px) {
     .ipad-win { inset: 30px 8px 70px; }
@@ -2259,8 +2496,10 @@ const accents = [
     .ipad-app[data-open-window] .ipad-win .ws-body,
     .ipad-app[data-open-window] .ipad-win .fg-body,
     .ipad-app[data-open-window] .ipad-win .ob-body,
-    .ipad-app[data-open-window] .ipad-win .msg-body { grid-template-columns: 1fr; }
+    .ipad-app[data-open-window] .ipad-win .msg-body,
+    .ipad-app[data-open-window] .ipad-win .sk-body { grid-template-columns: 1fr; }
     .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph, .msg-sidebar { display: none; }
+    .sk-stats { display: none; }
     .ipad-notif_card { padding: 10px 12px; }
     .msg-bubble { max-width: 82%; font-size: 12.5px; }
     .msg-meta { font-size: 11.5px; padding: 8px 10px; }
@@ -2956,6 +3195,260 @@ const accents = [
       });
     }
 
+    // ---------- Snake / Bug Hunt ----------
+    function initSnake(app) {
+      var win = app.querySelector('.ipad-win--snake');
+      if (!win) return;
+      var canvas = win.querySelector('[data-snake-canvas]');
+      var stage = win.querySelector('[data-snake-stage]');
+      var overlay = win.querySelector('[data-snake-overlay]');
+      var statusEl = win.querySelector('[data-snake-status]');
+      var scoreEl = win.querySelector('[data-snake-score]');
+      var bestEl = win.querySelector('[data-snake-best]');
+      var restartBtn = win.querySelector('[data-snake-restart]');
+      var restartLabel = win.querySelector('[data-snake-restart-label]');
+      if (!canvas || !ctx_safe(canvas)) return;
+
+      var COLS = 24, ROWS = 16;
+      var CELL = 24;
+      canvas.width = COLS * CELL;
+      canvas.height = ROWS * CELL;
+      var ctx = canvas.getContext('2d');
+
+      var i18n = {
+        idle:    win.querySelector('[data-snake-status]').textContent,
+        paused:  lang === 'de' ? 'Pause — Leertaste zum Weitermachen' : 'Paused — press space to resume',
+        overTpl: lang === 'de' ? 'Game Over · {n} Bug{s} gefangen'    : 'Game over · ate {n} bug{s}',
+        play:    lang === 'de' ? 'Los'           : 'Play',
+        pause:   lang === 'de' ? 'Pause'         : 'Pause',
+        restart: lang === 'de' ? 'Neu starten'   : 'Restart',
+      };
+
+      var STORE_KEY = 'tyfn-snake-best';
+      var best = 0;
+      try { best = parseInt(sessionStorage.getItem(STORE_KEY) || '0', 10) || 0; } catch (e) {}
+      bestEl.textContent = String(best).padStart(2, '0');
+
+      var snake, dir, nextDir, bug, score, state, lastStep, stepInterval, raf;
+
+      function reset() {
+        snake = [{ x: 6, y: 8 }, { x: 5, y: 8 }, { x: 4, y: 8 }];
+        dir = { x: 1, y: 0 };
+        nextDir = { x: 1, y: 0 };
+        score = 0;
+        stepInterval = 130;
+        spawnBug();
+        updateScore();
+        state = 'idle';
+        statusEl.textContent = i18n.idle;
+        restartLabel.textContent = i18n.play;
+        stage.classList.remove('is-running');
+        draw();
+      }
+
+      function spawnBug() {
+        var attempts = 0;
+        while (attempts < 200) {
+          var x = Math.floor(Math.random() * COLS);
+          var y = Math.floor(Math.random() * ROWS);
+          if (!snake.some(function (s) { return s.x === x && s.y === y; })) {
+            bug = { x: x, y: y, t: 0 };
+            return;
+          }
+          attempts++;
+        }
+        bug = { x: 0, y: 0, t: 0 };
+      }
+
+      function updateScore() {
+        scoreEl.textContent = String(score).padStart(2, '0');
+        if (score > best) {
+          best = score;
+          bestEl.textContent = String(best).padStart(2, '0');
+          try { sessionStorage.setItem(STORE_KEY, String(best)); } catch (e) {}
+        }
+      }
+
+      function step() {
+        dir = nextDir;
+        var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) return gameOver();
+        for (var i = 0; i < snake.length; i++) {
+          if (snake[i].x === head.x && snake[i].y === head.y) return gameOver();
+        }
+        snake.unshift(head);
+        if (head.x === bug.x && head.y === bug.y) {
+          score++;
+          updateScore();
+          // speed up slightly each bug, floor 60ms
+          stepInterval = Math.max(60, stepInterval - 4);
+          spawnBug();
+        } else {
+          snake.pop();
+        }
+      }
+
+      function gameOver() {
+        state = 'over';
+        stage.classList.remove('is-running');
+        statusEl.textContent = i18n.overTpl
+          .replace('{n}', String(score))
+          .replace('{s}', score === 1 ? '' : 's');
+        restartLabel.textContent = i18n.restart;
+      }
+
+      function draw() {
+        // bg grid
+        ctx.fillStyle = '#06030a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255, 116, 72, 0.05)';
+        for (var gy = 0; gy < ROWS; gy++) {
+          for (var gx = 0; gx < COLS; gx++) {
+            if ((gx + gy) % 2 === 0) ctx.fillRect(gx * CELL, gy * CELL, CELL, CELL);
+          }
+        }
+        // bug
+        var bx = bug.x * CELL + CELL / 2;
+        var by = bug.y * CELL + CELL / 2;
+        var pulse = 1 + Math.sin(bug.t) * 0.06;
+        var r = (CELL * 0.32) * pulse;
+        ctx.beginPath();
+        ctx.fillStyle = '#ff3b30';
+        ctx.arc(bx, by, r, 0, Math.PI * 2);
+        ctx.fill();
+        // bug antennae
+        ctx.strokeStyle = '#ff3b30';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(bx - r * 0.5, by - r * 0.7);
+        ctx.lineTo(bx - r * 0.9, by - r * 1.4);
+        ctx.moveTo(bx + r * 0.5, by - r * 0.7);
+        ctx.lineTo(bx + r * 0.9, by - r * 1.4);
+        ctx.stroke();
+        // snake
+        for (var s = snake.length - 1; s >= 0; s--) {
+          var seg = snake[s];
+          var hue = s / Math.max(1, snake.length - 1);
+          // gradient from #ffb86b (head) → #ff4848 (tail end)
+          var t = 1 - hue;
+          var rr = Math.round(255 - (255 - 255) * (1 - t));
+          var gg = Math.round(184 + (72 - 184) * (1 - t));
+          var bb = Math.round(107 + (72 - 107) * (1 - t));
+          ctx.fillStyle = 'rgb(' + rr + ',' + gg + ',' + bb + ')';
+          ctx.fillRect(seg.x * CELL + 2, seg.y * CELL + 2, CELL - 4, CELL - 4);
+        }
+        // head eye
+        var h = snake[0];
+        var hx = h.x * CELL + CELL / 2;
+        var hy = h.y * CELL + CELL / 2;
+        ctx.fillStyle = '#1a0508';
+        var eyeR = 2.5;
+        var ex = hx + dir.x * 4, ey = hy + dir.y * 4;
+        ctx.beginPath();
+        ctx.arc(ex, ey, eyeR, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function loop(ts) {
+        raf = requestAnimationFrame(loop);
+        if (!lastStep) lastStep = ts;
+        if (state === 'running' && ts - lastStep >= stepInterval) {
+          step();
+          lastStep = ts;
+        }
+        if (bug) bug.t = (bug.t || 0) + 0.18;
+        draw();
+      }
+
+      function start() {
+        if (state === 'over') reset();
+        state = 'running';
+        stage.classList.add('is-running');
+        restartLabel.textContent = i18n.restart;
+        if (!raf) raf = requestAnimationFrame(loop);
+        stage.focus();
+      }
+      function pause() {
+        state = 'paused';
+        stage.classList.remove('is-running');
+        statusEl.textContent = i18n.paused;
+      }
+
+      function setDir(d) {
+        // disallow 180° reversal
+        if (d.x === -dir.x && d.y === -dir.y) return;
+        nextDir = d;
+        if (state === 'idle' || state === 'paused') start();
+      }
+
+      // Keyboard
+      function onKey(e) {
+        if (app.getAttribute('data-open-window') !== 'snake') return;
+        var k = e.key.toLowerCase();
+        if (k === 'arrowup'    || k === 'w') { e.preventDefault(); setDir({ x: 0, y: -1 }); }
+        else if (k === 'arrowdown'  || k === 's') { e.preventDefault(); setDir({ x: 0, y:  1 }); }
+        else if (k === 'arrowleft'  || k === 'a') { e.preventDefault(); setDir({ x: -1, y: 0 }); }
+        else if (k === 'arrowright' || k === 'd') { e.preventDefault(); setDir({ x:  1, y: 0 }); }
+        else if (k === ' ' || k === 'spacebar') {
+          e.preventDefault();
+          if (state === 'running') pause();
+          else start();
+        }
+      }
+      window.addEventListener('keydown', onKey);
+
+      // Tap on stage starts/pauses
+      stage.addEventListener('click', function (e) {
+        if (e.target.closest('.sk-dpad_btn')) return;
+        if (state === 'running') pause();
+        else start();
+      });
+
+      restartBtn.addEventListener('click', function () {
+        if (state === 'over') reset();
+        start();
+      });
+
+      // D-pad
+      win.querySelectorAll('[data-snake-dir]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var d = btn.getAttribute('data-snake-dir');
+          if (d === 'up')    setDir({ x: 0, y: -1 });
+          if (d === 'down')  setDir({ x: 0, y:  1 });
+          if (d === 'left')  setDir({ x: -1, y: 0 });
+          if (d === 'right') setDir({ x:  1, y: 0 });
+        });
+      });
+
+      // Swipe
+      var tStart = null;
+      stage.addEventListener('touchstart', function (e) {
+        var t = e.touches[0];
+        tStart = { x: t.clientX, y: t.clientY };
+      }, { passive: true });
+      stage.addEventListener('touchend', function (e) {
+        if (!tStart) return;
+        var t = e.changedTouches[0];
+        var dx = t.clientX - tStart.x;
+        var dy = t.clientY - tStart.y;
+        tStart = null;
+        if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+        if (Math.abs(dx) > Math.abs(dy)) setDir({ x: dx > 0 ? 1 : -1, y: 0 });
+        else setDir({ x: 0, y: dy > 0 ? 1 : -1 });
+      });
+
+      // Pause when window closes
+      var mo = new MutationObserver(function () {
+        if (app.getAttribute('data-open-window') !== 'snake' && state === 'running') pause();
+      });
+      mo.observe(app, { attributes: true, attributeFilter: ['data-open-window'] });
+
+      reset();
+    }
+    function ctx_safe(c) { try { return !!c.getContext('2d'); } catch (e) { return false; } }
+
     // ---------- Messages → bridge to n8n chatbot ----------
     function initMessagesBridge(app) {
       var btn = app.querySelector('[data-msg-continue]');
@@ -3234,6 +3727,7 @@ const accents = [
         initWindows(app);
         initNotif(app);
         initMessagesBridge(app);
+        initSnake(app);
       }
     }
 
