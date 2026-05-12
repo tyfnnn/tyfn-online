@@ -1010,26 +1010,6 @@ const accents = [
       linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 18%, transparent 82%, rgba(255, 255, 255, 0.06) 100%);
     mix-blend-mode: overlay;
   }
-  .ipad-frame::after {
-    /* side speaker grilles — subtle */
-    content: '';
-    position: absolute;
-    inset: 22% 0;
-    pointer-events: none;
-    border-radius: 42px;
-    background:
-      linear-gradient(90deg,
-        transparent 0,
-        transparent calc(50% - 545px),
-        rgba(0, 0, 0, 0.5) calc(50% - 545px),
-        rgba(0, 0, 0, 0.5) calc(50% - 543px),
-        transparent calc(50% - 543px),
-        transparent calc(50% + 543px),
-        rgba(0, 0, 0, 0.5) calc(50% + 543px),
-        rgba(0, 0, 0, 0.5) calc(50% + 545px),
-        transparent calc(50% + 545px),
-        transparent 100%);
-  }
   .ipad-camera {
     position: absolute;
     top: 5px;
@@ -2660,6 +2640,7 @@ const accents = [
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.14),
       inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+    contain: layout paint;
   }
   .ipad-item_index {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
