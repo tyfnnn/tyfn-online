@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useTranslations, type Lang } from '../../i18n/t';
+import { getBlogPosts, postHref, formatDate } from '../../lib/blog';
 
 interface Props {
   lang: Lang;
@@ -8,40 +9,2354 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
 const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+const blogHref = getRelativeLocaleUrl(lang, '/blog/');
+
+const projects = [
+  {
+    href: getRelativeLocaleUrl(lang, '/portfolio/zentrik/'),
+    title: t('portfolio.zentrik.card_title'),
+    tag: t('portfolio.zentrik.tag_3'),
+    status: t('portfolio.zentrik.status'),
+    image:
+      'https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png',
+    accent: 'linear-gradient(135deg, #6e8efb, #4f6df5)',
+  },
+  {
+    href: getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/'),
+    title: t('portfolio.stellar.card_title'),
+    tag: t('portfolio.stellar.tag_1'),
+    status: t('portfolio.stellar.status'),
+    image:
+      'https://res.cloudinary.com/dmokvj08w/image/upload/v1752659137/stellar-horizon-title_h0aah5.png',
+    accent: 'linear-gradient(135deg, #ff7448, #ff4848)',
+  },
+].slice(0, 4);
+
+const allPosts = await getBlogPosts(lang);
+const posts = allPosts.slice(0, 4).map((entry) => ({
+  href: postHref(lang, entry),
+  title: entry.data.title,
+  description: entry.data.description,
+  date: formatDate(entry.data.pubDate, lang),
+  tag: entry.data.tags?.[0] ?? '',
+  image: entry.data.heroImage ?? '',
+}));
+
+const accents = [
+  'linear-gradient(135deg, #ff7448, #ff4848)',
+  'linear-gradient(135deg, #ffb86b, #ff7448)',
+  'linear-gradient(135deg, #7ad0ff, #4f8df5)',
+  'linear-gradient(135deg, #c69bff, #ff6bbd)',
+];
 ---
-<section class="cto-section">
+<section class="cto-section ipad-cto">
   <div class="padding-global-2">
-    <div class="cto-card-container">
-      <a href={portfolioHref} class="cto-card">
-        <div class="floating-element"></div>
-        <div class="floating-element"></div>
+    <div class="ipad-stage" data-ipad-stage>
+      <!-- editorial framing -->
+      <div class="ipad-margin ipad-margin--top" aria-hidden="true">
+        <span class="ipad-marker">↳ index 0—1</span>
+        <span class="ipad-hairline"></span>
+        <span class="ipad-marker ipad-marker--right">live · runtime · v{(new Date()).getFullYear()}</span>
+      </div>
 
-        <div class="cto-content">
-          <div class="cto-badge" data-scramble>{t('cto.badge')}</div>
+      <div class="ipad-frame" data-ipad-frame>
+        <span class="ipad-corner ipad-corner--tl" aria-hidden="true"></span>
+        <span class="ipad-corner ipad-corner--tr" aria-hidden="true"></span>
+        <span class="ipad-corner ipad-corner--bl" aria-hidden="true"></span>
+        <span class="ipad-corner ipad-corner--br" aria-hidden="true"></span>
+        <span class="ipad-sidelabel" aria-hidden="true">M · 11" · WiFi — staged from /home</span>
 
-          <h2 class="cto-title" data-scramble>{t('cto.title')}</h2>
+        <span class="ipad-camera" aria-hidden="true"></span>
 
-          <p class="cto-subtitle" data-scramble>{t('cto.subtitle')}</p>
+        <div class="ipad-frame_inner">
+          <div class="ipad-screen">
+            <div class="ipad-statusbar">
+              <div class="ipad-statusbar_left">
+                <span class="ipad-time" data-clock-time>9:41</span>
+                <span class="ipad-date" data-clock-date></span>
+              </div>
+              <span class="ipad-icons" aria-hidden="true">
+                <span class="ipad-signal"></span>
+                <span class="ipad-wifi"></span>
+                <span class="ipad-battery" data-battery>
+                  <span class="ipad-battery_level" data-battery-level></span>
+                </span>
+                <span class="ipad-battery_pct" data-battery-pct></span>
+              </span>
+            </div>
 
-          <p class="cto-description" data-scramble>
-            {t('cto.description')}
-          </p>
+            <div class="ipad-app" data-ipad-app>
+              <div class="ipad-app_head">
+                <div class="ipad-app_title">
+                  <span class="ipad-dot ipad-dot--orange"></span>
+                  <span>tyfn.online</span>
+                </div>
 
-          <div class="cto-skills">
-            <span class="skill-tag">{t('cto.skill_1')}</span>
-            <span class="skill-tag">{t('cto.skill_2')}</span>
-            <span class="skill-tag">{t('cto.skill_3')}</span>
-            <span class="skill-tag">{t('cto.skill_4')}</span>
-            <span class="skill-tag">{t('cto.skill_5')}</span>
-          </div>
+                <div class="ipad-tabs" role="tablist">
+                  <button type="button" class="ipad-tab is-active" role="tab" aria-selected="true" data-tab="all">{t('cto.tab_all')}</button>
+                  <button type="button" class="ipad-tab" role="tab" aria-selected="false" data-tab="projects">{t('cto.tab_projects')}</button>
+                  <button type="button" class="ipad-tab" role="tab" aria-selected="false" data-tab="writing">{t('cto.tab_writing')}</button>
+                  <span class="ipad-tab_pill" aria-hidden="true"></span>
+                </div>
 
-          <div class="cto-action">
-            <span data-scramble>{t('cto.action')}</span>
-            <span class="arrow-icon">→</span>
+                <label class="ipad-searchbar">
+                  <span class="ipad-searchbar_icon" aria-hidden="true">⌕</span>
+                  <input
+                    type="search"
+                    class="ipad-searchbar_input"
+                    placeholder={t('cto.search_placeholder')}
+                    aria-label={t('cto.search_placeholder')}
+                    data-search
+                  />
+                  <kbd class="ipad-searchbar_kbd" aria-hidden="true">⌘K</kbd>
+                </label>
+
+                <button type="button" class="ipad-sort" data-sort="newest" aria-label="Toggle sort order">
+                  <span class="ipad-sort_arrow" aria-hidden="true">↓</span>
+                  <span class="ipad-sort_label" data-sort-label>{t('cto.sort_newest')}</span>
+                </button>
+              </div>
+
+              <div class="ipad-app_body" data-ipad-body>
+                <!-- Portfolio column -->
+                <section class="ipad-col" data-list="projects">
+                  <header class="ipad-col_head">
+                    <span class="ipad-col_index">A</span>
+                    <h3 class="ipad-col_title">
+                      <span class="ipad-col_title-main">{t('cto.list_projects')}</span>
+                      <span class="ipad-col_title-meta" data-count>{projects.length}/04</span>
+                    </h3>
+                    <a class="ipad-col_all" href={portfolioHref}>
+                      {t('cto.view_all')} <span aria-hidden="true">→</span>
+                    </a>
+                  </header>
+
+                  <ul class="ipad-list" data-sortable>
+                    {projects.map((p, i) => (
+                      <li data-search={`${p.title} ${p.tag} ${p.status}`.toLowerCase()}>
+                        <a class="ipad-item ipad-item--project" href={p.href}>
+                          <span class="ipad-item_index" aria-hidden="true">0{i + 1}</span>
+                          <span
+                            class="ipad-item_thumb"
+                            style={`background-image:url('${p.image}'); --thumb-accent:${p.accent};`}
+                            aria-hidden="true"
+                          ></span>
+                          <span class="ipad-item_text">
+                            <span class="ipad-item_title">{p.title}</span>
+                            <span class="ipad-item_meta">
+                              <span class="ipad-pill" style={`background:${p.accent};`}>{p.tag}</span>
+                              <span class="ipad-item_status">{p.status}</span>
+                            </span>
+                          </span>
+                          <span class="ipad-item_arrow" aria-hidden="true">→</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="ipad-empty" data-empty>{t('cto.empty')}</p>
+                </section>
+
+                <!-- Blog column -->
+                <section class="ipad-col" data-list="writing">
+                  <header class="ipad-col_head">
+                    <span class="ipad-col_index">B</span>
+                    <h3 class="ipad-col_title">
+                      <span class="ipad-col_title-main">{t('cto.list_blog')}</span>
+                      <span class="ipad-col_title-meta" data-count>{posts.length}/04</span>
+                    </h3>
+                    <a class="ipad-col_all" href={blogHref}>
+                      {t('cto.view_all')} <span aria-hidden="true">→</span>
+                    </a>
+                  </header>
+
+                  <ul class="ipad-list" data-sortable>
+                    {posts.map((post, i) => (
+                      <li data-search={`${post.title} ${post.tag} ${post.description}`.toLowerCase()}>
+                        <a class="ipad-item ipad-item--post" href={post.href}>
+                          <span class="ipad-item_index" aria-hidden="true">0{i + 1}</span>
+                          {post.image ? (
+                            <span
+                              class="ipad-item_thumb"
+                              style={`background-image:url('${post.image}');`}
+                              aria-hidden="true"
+                            ></span>
+                          ) : (
+                            <span
+                              class="ipad-item_accent"
+                              style={`background:${accents[i % accents.length]};`}
+                              aria-hidden="true"
+                            ></span>
+                          )}
+                          <span class="ipad-item_text">
+                            <span class="ipad-item_title">{post.title}</span>
+                            <span class="ipad-item_meta">
+                              {post.tag && <span class="ipad-pill ipad-pill--ghost">#{post.tag}</span>}
+                              <span class="ipad-item_status">{post.date}</span>
+                            </span>
+                          </span>
+                          <span class="ipad-item_arrow" aria-hidden="true">→</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="ipad-empty" data-empty>{t('cto.empty')}</p>
+                </section>
+              </div>
+
+              <div class="ipad-dock">
+                <button type="button" class="ipad-dock_app" data-open="xcode" data-tooltip="Xcode"><img src="/assets/xcode.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app" data-open="android-studio" data-tooltip="Android Studio"><img src="/assets/android-studio.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app" data-open="webstorm" data-tooltip="WebStorm"><img src="/assets/webstorm.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app" data-open="figma" data-tooltip="Figma"><img src="/assets/figma.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app" data-open="obsidian" data-tooltip="Obsidian"><img src="/assets/obsidian.svg" alt="" loading="lazy" /></button>
+                <a class="ipad-dock_app ipad-dock_app--badge" href={`mailto:${t('common.email')}`} data-tooltip={`Mail — ${t('cto.inbox_label')}`} data-badge="1"><img src="/assets/mail.svg" alt="" loading="lazy" /></a>
+                <a class="ipad-dock_app" href="https://open.spotify.com" target="_blank" rel="noopener" data-tooltip="Spotify"><img src="/assets/spotify.svg" alt="" loading="lazy" /></a>
+              </div>
+
+              <!-- App windows (mock IDE / app overlays inside the iPad) -->
+              <div class="ipad-windows" data-windows>
+
+                <!-- ========== XCODE 26 ========== -->
+                <section class="ipad-win ipad-win--xcode" data-window="xcode" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--xcode">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="xc-toolbar">
+                      <span class="xc-btn">▶</span>
+                      <span class="xc-btn">■</span>
+                      <span class="xc-divider"></span>
+                      <span class="xc-scheme">
+                        <span class="xc-scheme_dot"></span>
+                        tyfn.app <span class="xc-scheme_caret">›</span> iPhone 16 Pro
+                      </span>
+                    </div>
+                    <div class="xc-status">{t('cto.win_xcode_subtitle')}</div>
+                  </header>
+                  <div class="xc-body">
+                    <aside class="xc-nav">
+                      <div class="xc-nav_head">PROJECT</div>
+                      <ul class="xc-tree">
+                        <li class="xc-tree_group is-open">
+                          <span class="xc-tree_label">▾ tyfn.app</span>
+                          <ul>
+                            <li class="xc-tree_group is-open">
+                              <span class="xc-tree_label">▾ iOS</span>
+                              <ul>
+                                <li><span class="xc-file is-active">􀐘 tyfnApp.swift</span></li>
+                                <li><span class="xc-file">􀐘 ContentView.swift</span></li>
+                              </ul>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ macOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ watchOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ iPadOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ Assets.xcassets</span>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="xc-editor">
+                      <div class="xc-tabbar">
+                        <span class="xc-tab is-active">tyfnApp.swift</span>
+                        <span class="xc-tab">ContentView.swift</span>
+                      </div>
+                      <pre class="xc-code"><code><span class="xc-ln">1</span>  <span class="xc-c">// {t('cto.win_xcode_lede')}</span>
+<span class="xc-ln">2</span>  <span class="xc-kw">import</span> <span class="xc-id">SwiftUI</span>
+<span class="xc-ln">3</span>
+<span class="xc-ln">4</span>  <span class="xc-at">@main</span>
+<span class="xc-ln">5</span>  <span class="xc-kw">struct</span> <span class="xc-ty">tyfnApp</span>: <span class="xc-ty">App</span> {'{'}
+<span class="xc-ln">6</span>    <span class="xc-kw">var</span> body: <span class="xc-kw">some</span> <span class="xc-ty">Scene</span> {'{'}
+<span class="xc-ln">7</span>      <span class="xc-ty">WindowGroup</span> {'{'} <span class="xc-ty">ContentView</span>() {'}'}
+<span class="xc-ln">8</span>    {'}'}
+<span class="xc-ln">9</span>  {'}'}
+<span class="xc-ln">10</span>
+<span class="xc-ln">11</span>  <span class="xc-kw">struct</span> <span class="xc-ty">ContentView</span>: <span class="xc-ty">View</span> {'{'}
+<span class="xc-ln">12</span>    <span class="xc-kw">let</span> platforms = [<span class="xc-s">"iOS"</span>, <span class="xc-s">"macOS"</span>, <span class="xc-s">"watchOS"</span>, <span class="xc-s">"iPadOS"</span>]
+<span class="xc-ln">13</span>
+<span class="xc-ln">14</span>    <span class="xc-kw">var</span> body: <span class="xc-kw">some</span> <span class="xc-ty">View</span> {'{'}
+<span class="xc-ln">15</span>      <span class="xc-ty">ForEach</span>(platforms, id: \.self) {'{'} <span class="xc-id">platform</span> <span class="xc-kw">in</span>
+<span class="xc-ln">16</span>        <span class="xc-ty">Text</span>(<span class="xc-s">"Shipped on \(platform)."</span>)
+<span class="xc-ln">17</span>      {'}'}
+<span class="xc-ln">18</span>    {'}'}
+<span class="xc-ln">19</span>  {'}'}</code></pre>
+                      <div class="xc-note">
+                        <strong>{t('cto.win_xcode_lede')}</strong>
+                        <p>{t('cto.win_xcode_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="xc-inspector">
+                      <div class="xc-insp_head">INSPECTOR</div>
+                      <dl class="xc-insp_grid">
+                        <dt>Target</dt><dd>tyfn.app</dd>
+                        <dt>Platforms</dt><dd>iOS · macOS · watchOS · iPadOS</dd>
+                        <dt>Swift</dt><dd>6.1</dd>
+                        <dt>Min iOS</dt><dd>17.0</dd>
+                      </dl>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== ANDROID STUDIO ========== -->
+                <section class="ipad-win ipad-win--android" data-window="android-studio" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--android">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="as-toolbar">
+                      <span class="as-app">
+                        <img src="/assets/android-studio.svg" alt="" />
+                        <strong>Android Studio</strong>
+                      </span>
+                      <span class="as-divider"></span>
+                      <span class="as-scheme">▣ app · debug · 🤖 Pixel 8 Pro</span>
+                      <span class="as-spacer"></span>
+                      <span class="as-run">▶ Run</span>
+                    </div>
+                    <div class="as-status">{t('cto.win_android_subtitle')}</div>
+                  </header>
+                  <div class="as-body">
+                    <aside class="as-nav">
+                      <div class="as-nav_head">▾ TyfnLab</div>
+                      <ul class="as-tree">
+                        <li class="as-tree_group is-open">
+                          <span>▾ composeApp</span>
+                          <ul>
+                            <li class="as-tree_group is-open">
+                              <span>▾ commonMain</span>
+                              <ul>
+                                <li><span class="as-file is-active">⌨ App.kt</span></li>
+                                <li><span class="as-file">⌨ HomeScreen.kt</span></li>
+                                <li><span class="as-file">⌨ Theme.kt</span></li>
+                              </ul>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ androidMain</span>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ iosMain</span>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ desktopMain</span>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="as-tree_group">
+                          <span>▸ gradle</span>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="as-editor">
+                      <div class="as-tabbar">
+                        <span class="as-tab is-active">⌨ App.kt</span>
+                        <span class="as-tab">⌨ HomeScreen.kt</span>
+                      </div>
+                      <pre class="as-code"><code><span class="as-ln">1</span>  <span class="as-c">// {t('cto.win_android_lede')}</span>
+<span class="as-ln">2</span>  <span class="as-kw">package</span> <span class="as-id">tyfn.lab</span>
+<span class="as-ln">3</span>
+<span class="as-ln">4</span>  <span class="as-at">@Composable</span>
+<span class="as-ln">5</span>  <span class="as-kw">fun</span> <span class="as-fn">App</span>() {'{'}
+<span class="as-ln">6</span>    <span class="as-ty">MaterialTheme</span> {'{'}
+<span class="as-ln">7</span>      <span class="as-ty">HomeScreen</span>(platform = <span class="as-fn">currentPlatform</span>())
+<span class="as-ln">8</span>    {'}'}
+<span class="as-ln">9</span>  {'}'}
+<span class="as-ln">10</span>
+<span class="as-ln">11</span>  <span class="as-kw">expect fun</span> <span class="as-fn">currentPlatform</span>(): <span class="as-ty">Platform</span>
+<span class="as-ln">12</span>
+<span class="as-ln">13</span>  <span class="as-kw">enum class</span> <span class="as-ty">Platform</span> {'{'} <span class="as-id">ANDROID</span>, <span class="as-id">IOS</span>, <span class="as-id">DESKTOP</span> {'}'}</code></pre>
+                      <div class="as-note">
+                        <strong>{t('cto.win_android_lede')}</strong>
+                        <p>{t('cto.win_android_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="as-preview">
+                      <div class="as-preview_label">PREVIEW · PIXEL 8</div>
+                      <div class="as-device">
+                        <div class="as-device_screen">
+                          <div class="as-device_topbar"></div>
+                          <div class="as-device_hero">Hi, Tayfun.</div>
+                          <div class="as-device_card">📱 Android</div>
+                          <div class="as-device_card">🍎 iOS</div>
+                          <div class="as-device_card">🖥 Desktop</div>
+                        </div>
+                      </div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== WEBSTORM ========== -->
+                <section class="ipad-win ipad-win--webstorm" data-window="webstorm" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--webstorm">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="ws-toolbar">
+                      <span class="ws-app">
+                        <img src="/assets/webstorm.svg" alt="" />
+                        <strong>WebStorm</strong>
+                      </span>
+                      <span class="ws-divider"></span>
+                      <span class="ws-scheme">▣ dev · localhost:4321</span>
+                      <span class="ws-spacer"></span>
+                      <span class="ws-run">▶ npm run dev</span>
+                    </div>
+                    <div class="ws-status">{t('cto.win_webstorm_subtitle')}</div>
+                  </header>
+                  <div class="ws-body">
+                    <aside class="ws-nav">
+                      <div class="ws-nav_head">▾ tyfn.online</div>
+                      <ul class="ws-tree">
+                        <li class="ws-tree_group is-open">
+                          <span>▾ src</span>
+                          <ul>
+                            <li class="ws-tree_group is-open">
+                              <span>▾ pages</span>
+                              <ul>
+                                <li><span class="ws-file">⌨ index.astro</span></li>
+                                <li><span class="ws-file">⌨ portfolio</span></li>
+                                <li><span class="ws-file">⌨ blog</span></li>
+                              </ul>
+                            </li>
+                            <li class="ws-tree_group is-open">
+                              <span>▾ components/home</span>
+                              <ul>
+                                <li><span class="ws-file is-active">⌨ CtoCard.astro</span></li>
+                                <li><span class="ws-file">⌨ Hero.astro</span></li>
+                                <li><span class="ws-file">⌨ Projects.astro</span></li>
+                              </ul>
+                            </li>
+                            <li class="ws-tree_group">
+                              <span>▸ i18n</span>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ public</span>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ astro.config.mjs</span>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ package.json</span>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="ws-editor">
+                      <div class="ws-tabbar">
+                        <span class="ws-tab is-active">⌨ CtoCard.astro</span>
+                        <span class="ws-tab">⌨ Hero.astro</span>
+                        <span class="ws-tab">⌨ index.astro</span>
+                      </div>
+                      <pre class="ws-code"><code><span class="ws-ln">1</span>  <span class="ws-c">// {t('cto.win_webstorm_lede')}</span>
+<span class="ws-ln">2</span>  <span class="ws-kw">---</span>
+<span class="ws-ln">3</span>  <span class="ws-kw">import</span> <span class="ws-id">{'{'} getRelativeLocaleUrl {'}'}</span> <span class="ws-kw">from</span> <span class="ws-s">'astro:i18n'</span>;
+<span class="ws-ln">4</span>  <span class="ws-kw">import</span> <span class="ws-id">{'{'} getBlogPosts {'}'}</span> <span class="ws-kw">from</span> <span class="ws-s">'../../lib/blog'</span>;
+<span class="ws-ln">5</span>
+<span class="ws-ln">6</span>  <span class="ws-kw">const</span> <span class="ws-id">posts</span> = <span class="ws-kw">await</span> <span class="ws-fn">getBlogPosts</span>(<span class="ws-id">lang</span>);
+<span class="ws-ln">7</span>  <span class="ws-kw">const</span> <span class="ws-id">latest</span> = <span class="ws-id">posts</span>.<span class="ws-fn">slice</span>(<span class="ws-n">0</span>, <span class="ws-n">4</span>);
+<span class="ws-ln">8</span>  <span class="ws-kw">---</span>
+<span class="ws-ln">9</span>  <span class="ws-tag">&lt;section</span> <span class="ws-attr">class</span>=<span class="ws-s">"cto-section"</span><span class="ws-tag">&gt;</span>
+<span class="ws-ln">10</span>    <span class="ws-tag">&lt;Ipad</span> <span class="ws-attr">posts</span>={'{'}<span class="ws-id">latest</span>{'}'} <span class="ws-tag">/&gt;</span>
+<span class="ws-ln">11</span>  <span class="ws-tag">&lt;/section&gt;</span></code></pre>
+                      <div class="ws-note">
+                        <strong>{t('cto.win_webstorm_lede')}</strong>
+                        <p>{t('cto.win_webstorm_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="ws-side">
+                      <div class="ws-side_head">TERMINAL</div>
+                      <div class="ws-term">
+                        <div class="ws-term_line"><span class="ws-term_prompt">tyfn ~/tyfn.online</span> <span class="ws-term_cmd">npm run dev</span></div>
+                        <div class="ws-term_line ws-term_out">  <span class="ws-term_arrow">▲</span> astro v5.13.5 ready in <b>421</b> ms</div>
+                        <div class="ws-term_line ws-term_out">  ┃ Local   http://localhost:4321/</div>
+                        <div class="ws-term_line ws-term_out">  ┃ watching for file changes…</div>
+                        <div class="ws-term_line"><span class="ws-term_prompt">tyfn ~/tyfn.online</span> <span class="ws-term_caret">_</span></div>
+                      </div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== FIGMA ========== -->
+                <section class="ipad-win ipad-win--figma" data-window="figma" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--figma">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="fg-toolbar">
+                      <img class="fg-icon" src="/assets/figma.svg" alt="" />
+                      <span class="fg-file">tyfn — Designs / Home</span>
+                      <span class="fg-divider"></span>
+                      <span class="fg-cursor">▿ Move</span>
+                      <span class="fg-spacer"></span>
+                      <span class="fg-avatars">
+                        <span class="fg-av" style="background:linear-gradient(135deg,#ff7448,#ff4848)">T</span>
+                        <span class="fg-av" style="background:linear-gradient(135deg,#7ad0ff,#4f8df5)">·</span>
+                      </span>
+                      <span class="fg-share">↗ Share</span>
+                    </div>
+                  </header>
+                  <div class="fg-body">
+                    <aside class="fg-layers">
+                      <div class="fg-layers_head">LAYERS</div>
+                      <ul class="fg-tree">
+                        <li class="is-page">▾ Page 1</li>
+                        <li class="is-frame">▾ ▢ Frame — Home <span>1440×900</span></li>
+                        <li class="is-layer is-active">▢ Hero</li>
+                        <li class="is-layer">▢ Card stack</li>
+                        <li class="is-layer">T Heading</li>
+                        <li class="is-layer">▢ Footer</li>
+                      </ul>
+                    </aside>
+                    <main class="fg-canvas">
+                      <div class="fg-grid" aria-hidden="true"></div>
+                      <div class="fg-artboard">
+                        <div class="fg-artboard_label">Home — 1440 × 900</div>
+                        <div class="fg-rect fg-rect--hero">
+                          <span class="fg-rect_caption">Hero</span>
+                        </div>
+                        <div class="fg-rect fg-rect--text">
+                          {t('cto.win_figma_lede')}
+                        </div>
+                        <div class="fg-rect fg-rect--c1"></div>
+                        <div class="fg-rect fg-rect--c2"></div>
+                        <div class="fg-rect fg-rect--c3"></div>
+                        <div class="fg-handles" aria-hidden="true">
+                          <span></span><span></span><span></span><span></span>
+                        </div>
+                      </div>
+                      <div class="fg-note">
+                        <strong>{t('cto.win_figma_lede')}</strong>
+                        <p>{t('cto.win_figma_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="fg-props">
+                      <div class="fg-props_head">DESIGN</div>
+                      <div class="fg-row"><span>W</span><b>1440</b><span>H</span><b>900</b></div>
+                      <div class="fg-row"><span>X</span><b>0</b><span>Y</span><b>0</b></div>
+                      <div class="fg-section">FILL</div>
+                      <div class="fg-fill"><span class="fg-swatch" style="background:#ff7448"></span><span>FF7448</span></div>
+                      <div class="fg-section">TYPE</div>
+                      <div class="fg-row"><span>Fraunces</span><b>Italic 300</b></div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== OBSIDIAN ========== -->
+                <section class="ipad-win ipad-win--obsidian" data-window="obsidian" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--obsidian">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="ob-toolbar">
+                      <img class="ob-icon" src="/assets/obsidian.svg" alt="" />
+                      <span class="ob-vault">vault · tyfn</span>
+                      <span class="ob-divider"></span>
+                      <span class="ob-file">brain.md</span>
+                    </div>
+                  </header>
+                  <div class="ob-body">
+                    <aside class="ob-nav">
+                      <div class="ob-nav_head">▾ brain</div>
+                      <ul class="ob-files">
+                        <li class="is-active">📄 brain.md</li>
+                        <li>📄 ideas.md</li>
+                        <li>📄 mobile-eng.md</li>
+                        <li>📄 design-notes.md</li>
+                        <li>📄 reading.md</li>
+                        <li>📁 archive</li>
+                      </ul>
+                    </aside>
+                    <main class="ob-editor">
+                      <div class="ob-doc">
+                        <h1># {t('cto.win_obsidian_lede')}</h1>
+                        <p>{t('cto.win_obsidian_body')}</p>
+                        <h2>## Currently chewing on</h2>
+                        <ul>
+                          <li>SwiftUI animations &amp; <span class="ob-link">[[motion-design]]</span></li>
+                          <li>Kotlin Multiplatform on iOS — what actually works</li>
+                          <li>The shape of a <span class="ob-link">[[good portfolio]]</span></li>
+                        </ul>
+                        <h2>## Linked</h2>
+                        <p><span class="ob-tag">#mobile</span> <span class="ob-tag">#design</span> <span class="ob-tag">#process</span></p>
+                      </div>
+                    </main>
+                    <aside class="ob-graph" aria-hidden="true">
+                      <div class="ob-graph_label">GRAPH</div>
+                      <svg viewBox="0 0 200 200" class="ob-graph_svg">
+                        <g stroke="rgba(124, 90, 255, 0.45)" stroke-width="0.8" fill="none">
+                          <line x1="100" y1="100" x2="40" y2="50"/>
+                          <line x1="100" y1="100" x2="160" y2="60"/>
+                          <line x1="100" y1="100" x2="50" y2="160"/>
+                          <line x1="100" y1="100" x2="155" y2="150"/>
+                          <line x1="40" y1="50"  x2="160" y2="60"/>
+                          <line x1="50" y1="160" x2="155" y2="150"/>
+                          <line x1="100" y1="100" x2="100" y2="30"/>
+                        </g>
+                        <g fill="#c4b5fd">
+                          <circle cx="100" cy="100" r="7"/>
+                        </g>
+                        <g fill="#7c3aed">
+                          <circle cx="40" cy="50" r="4"/>
+                          <circle cx="160" cy="60" r="4.5"/>
+                          <circle cx="50" cy="160" r="3.5"/>
+                          <circle cx="155" cy="150" r="4"/>
+                          <circle cx="100" cy="30" r="3"/>
+                        </g>
+                      </svg>
+                      <div class="ob-graph_legend">7 notes · 8 links</div>
+                    </aside>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div class="ipad-home-indicator" aria-hidden="true"></div>
           </div>
         </div>
-      </a>
+      </div>
+
+      <div class="ipad-header" data-ipad-header>
+        <div class="ipad-eyebrow">
+          <span class="ipad-eyebrow_rule" aria-hidden="true"></span>
+          <span class="ipad-eyebrow_text" data-scramble>{t('cto.badge')}</span>
+          <span class="ipad-eyebrow_rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="ipad-heading">
+          <span class="ipad-heading_kicker" aria-hidden="true">02 ·</span>
+          <span class="ipad-heading_main" data-scramble>{t('cto.heading')}</span>
+        </h2>
+        <p class="ipad-subheading">{t('cto.subheading')}</p>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400;0,9..144,500&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  .ipad-cto {
+    width: 100%;
+    margin: 0 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ipad-stage {
+    max-width: 1180px;
+    margin: 0 auto;
+    perspective: 1600px;
+    position: relative;
+  }
+
+  /* Editorial frame markers */
+  .ipad-margin {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: rgba(240, 237, 230, 0.42);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 0 auto clamp(20px, 2vw, 32px);
+    max-width: 1100px;
+    padding: 0 4px;
+  }
+  .ipad-marker { white-space: nowrap; }
+  .ipad-marker--right { margin-left: auto; }
+  .ipad-hairline {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(240, 237, 230, 0.22), rgba(240, 237, 230, 0.04));
+  }
+
+  .ipad-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .ipad-corner::before,
+  .ipad-corner::after {
+    content: '';
+    position: absolute;
+    background: rgba(240, 237, 230, 0.55);
+  }
+  .ipad-corner::before { width: 100%; height: 1px; }
+  .ipad-corner::after  { width: 1px; height: 100%; }
+  .ipad-corner--tl { top: -28px; left: -28px; }
+  .ipad-corner--tl::before { top: 0; left: 0; }
+  .ipad-corner--tl::after  { top: 0; left: 0; }
+  .ipad-corner--tr { top: -28px; right: -28px; }
+  .ipad-corner--tr::before { top: 0; right: 0; }
+  .ipad-corner--tr::after  { top: 0; right: 0; }
+  .ipad-corner--bl { bottom: -28px; left: -28px; }
+  .ipad-corner--bl::before { bottom: 0; left: 0; }
+  .ipad-corner--bl::after  { bottom: 0; left: 0; }
+  .ipad-corner--br { bottom: -28px; right: -28px; }
+  .ipad-corner--br::before { bottom: 0; right: 0; }
+  .ipad-corner--br::after  { bottom: 0; right: 0; }
+
+  .ipad-sidelabel {
+    position: absolute;
+    top: 50%;
+    right: -42px;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: left center;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(240, 237, 230, 0.38);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 4;
+  }
+  @media (max-width: 991px) {
+    .ipad-sidelabel, .ipad-corner { display: none; }
+  }
+
+  /* iPad shell — thin aluminum bezel */
+  .ipad-frame {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1100px;
+    aspect-ratio: 4 / 3;
+    border-radius: 42px;
+    padding: 11px;
+    background:
+      linear-gradient(180deg, #3a3a3c 0%, #1c1c1e 100%);
+    box-shadow:
+      /* outer edge */
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      /* drop shadow */
+      0 16px 24px rgba(0, 0, 0, 0.30),
+      0 48px 64px rgba(0, 0, 0, 0.30),
+      0 120px 80px rgba(0, 0, 0, 0.16);
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .ipad-frame::before {
+    /* bezel highlight band */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 42px;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 18%, transparent 82%, rgba(255, 255, 255, 0.06) 100%);
+    mix-blend-mode: overlay;
+  }
+  .ipad-frame::after {
+    /* side speaker grilles — subtle */
+    content: '';
+    position: absolute;
+    inset: 22% 0;
+    pointer-events: none;
+    border-radius: 42px;
+    background:
+      linear-gradient(90deg,
+        transparent 0,
+        transparent calc(50% - 545px),
+        rgba(0, 0, 0, 0.5) calc(50% - 545px),
+        rgba(0, 0, 0, 0.5) calc(50% - 543px),
+        transparent calc(50% - 543px),
+        transparent calc(50% + 543px),
+        rgba(0, 0, 0, 0.5) calc(50% + 543px),
+        rgba(0, 0, 0, 0.5) calc(50% + 545px),
+        transparent calc(50% + 545px),
+        transparent 100%);
+  }
+  .ipad-camera {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #2a2a2a 0%, #050505 70%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+      0 0 0 1px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+  }
+
+  .ipad-frame_inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #0a0a0a;
+    box-shadow:
+      inset 0 0 0 1.5px rgba(0, 0, 0, 0.8),
+      inset 0 0 0 2.5px rgba(255, 255, 255, 0.04);
+  }
+
+  /* Screen — real wallpaper photo */
+  .ipad-screen {
+    width: 100%;
+    height: 100%;
+    background:
+      url('/assets/ipad-wallpaper.svg') center / cover no-repeat,
+      #0c0608;
+    display: flex;
+    flex-direction: column;
+    color: #F0EDE6;
+    position: relative;
+    isolation: isolate;
+  }
+  /* glossy reflection band */
+  .ipad-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 28%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.04) 100%);
+    mix-blend-mode: overlay;
+  }
+
+  .ipad-statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 26px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(240, 237, 230, 0.92);
+    position: relative;
+    z-index: 2;
+  }
+  .ipad-statusbar_left {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .ipad-time { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+  .ipad-date {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(240, 237, 230, 0.55);
+  }
+  .ipad-icons { display: inline-flex; gap: 6px; align-items: center; }
+  .ipad-battery_pct {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    margin-left: 4px;
+    color: rgba(240, 237, 230, 0.75);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ipad-signal,
+  .ipad-wifi {
+    display: inline-block;
+    background: rgba(240, 237, 230, 0.92);
+  }
+  .ipad-signal { width: 17px; height: 10px; clip-path: polygon(0 100%, 25% 100%, 25% 60%, 50% 60%, 50% 30%, 75% 30%, 75% 0, 100% 0, 100% 100%); }
+  .ipad-wifi   { width: 15px; height: 10px; clip-path: polygon(50% 0, 100% 50%, 80% 60%, 50% 30%, 20% 60%, 0 50%); }
+  .ipad-battery {
+    width: 25px; height: 11px;
+    border: 1px solid rgba(240, 237, 230, 0.7);
+    background: transparent;
+    border-radius: 3px;
+    position: relative;
+    padding: 1px;
+    box-sizing: border-box;
+  }
+  .ipad-battery_level {
+    display: block;
+    height: 100%;
+    width: 75%;
+    background: rgba(240, 237, 230, 0.92);
+    border-radius: 1.5px;
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+  .ipad-battery::after { content: ''; position: absolute; right: -3px; top: 50%; transform: translateY(-50%); width: 2px; height: 5px; background: rgba(240, 237, 230, 0.6); border-radius: 1px; }
+
+  /* App container inside screen */
+  .ipad-app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(14px, 1.6vw, 22px);
+    gap: clamp(12px, 1.4vw, 18px);
+    min-height: 0;
+  }
+  .ipad-app_head {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: clamp(8px, 1vw, 14px);
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: rgba(20, 20, 20, 0.5);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Tabs */
+  .ipad-tabs {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .ipad-tab {
+    position: relative;
+    z-index: 1;
+    padding: 5px 12px;
+    border-radius: 7px;
+    background: transparent;
+    border: 0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(240, 237, 230, 0.55);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .ipad-tab:hover { color: rgba(240, 237, 230, 0.9); }
+  .ipad-tab.is-active { color: #fff; }
+  .ipad-tab_pill {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: calc(100% - 6px);
+    background: linear-gradient(135deg, #ff7448, #ff4848);
+    border-radius: 7px;
+    box-shadow: 0 4px 12px rgba(255, 116, 72, 0.35);
+    transition: left 0.32s cubic-bezier(0.45, 0.05, 0.2, 1),
+                width 0.32s cubic-bezier(0.45, 0.05, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Search */
+  .ipad-searchbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    min-width: 0;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .ipad-searchbar:focus-within {
+    border-color: rgba(255, 154, 110, 0.55);
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .ipad-searchbar_icon { color: rgba(240, 237, 230, 0.55); font-size: 13px; }
+  .ipad-searchbar_input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #F0EDE6;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 0;
+  }
+  .ipad-searchbar_input::placeholder { color: rgba(240, 237, 230, 0.4); }
+  .ipad-searchbar_input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .ipad-searchbar_kbd {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: rgba(240, 237, 230, 0.5);
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom-width: 2px;
+  }
+
+  /* Sort toggle */
+  .ipad-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: rgba(240, 237, 230, 0.75);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .ipad-sort:hover { color: #ff9b6e; border-color: rgba(255, 154, 110, 0.4); }
+  .ipad-sort_arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    color: #ff9b6e;
+  }
+  .ipad-sort[data-sort="oldest"] .ipad-sort_arrow { transform: rotate(180deg); }
+
+  /* Tab-driven column visibility */
+  .ipad-app[data-tab-active="projects"] .ipad-col[data-list="writing"],
+  .ipad-app[data-tab-active="writing"]  .ipad-col[data-list="projects"] {
+    display: none;
+  }
+  .ipad-app[data-tab-active="projects"] .ipad-app_body,
+  .ipad-app[data-tab-active="writing"]  .ipad-app_body {
+    grid-template-columns: 1fr;
+  }
+
+  /* Empty state */
+  .ipad-empty {
+    display: none;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(240, 237, 230, 0.4);
+    padding: 18px 8px;
+    text-align: center;
+    margin: 0;
+  }
+  .ipad-col.is-empty .ipad-list { display: none; }
+  .ipad-col.is-empty .ipad-empty { display: block; }
+  .ipad-item.is-hidden { display: none; }
+
+  /* =================================================================
+     APP WINDOWS (mock IDE/app overlays inside the iPad)
+     ================================================================= */
+  .ipad-windows {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .ipad-win {
+    position: absolute;
+    inset: clamp(36px, 4vw, 60px) clamp(12px, 1.6vw, 22px) clamp(74px, 8vw, 100px);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 20px 60px rgba(0, 0, 0, 0.55),
+      0 60px 120px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.32, 0.72, 0.24, 1);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: #d8d6d2;
+  }
+  .ipad-app[data-open-window="xcode"]          .ipad-win--xcode,
+  .ipad-app[data-open-window="android-studio"] .ipad-win--android,
+  .ipad-app[data-open-window="webstorm"]       .ipad-win--webstorm,
+  .ipad-app[data-open-window="figma"]          .ipad-win--figma,
+  .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  /* dim the underlying app contents while a window is open */
+  .ipad-app[data-open-window] .ipad-app_head,
+  .ipad-app[data-open-window] .ipad-app_body {
+    opacity: 0.35;
+    filter: blur(2px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  /* Shared window chrome: traffic lights bar */
+  .ipad-win_chrome {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  .ipad-win_lights {
+    display: inline-flex;
+    gap: 7px;
+    align-items: center;
+  }
+  .ipad-light {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.3);
+  }
+  .ipad-light--r { background: #ff5f57; cursor: pointer; transition: filter 0.2s ease; }
+  .ipad-light--r:hover { filter: brightness(1.15); }
+  .ipad-light--y { background: #ffbd2e; }
+  .ipad-light--g { background: #28c840; }
+
+  /* ============== XCODE 26 ============== */
+  .ipad-win--xcode {
+    background: linear-gradient(180deg, #1e1e1e 0%, #161616 100%);
+    color: #e7e6e3;
+  }
+  .ipad-win_chrome--xcode {
+    background: linear-gradient(180deg, #2c2c2e 0%, #232325 100%);
+    border-bottom-color: rgba(0, 0, 0, 0.4);
+  }
+  .xc-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #d0cfcb;
+    font-size: 11px;
+  }
+  .xc-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #d0cfcb;
+    font-size: 10px;
+  }
+  .xc-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.08); }
+  .xc-scheme {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 11px;
+    color: #e7e6e3;
+  }
+  .xc-scheme_dot { width: 8px; height: 8px; border-radius: 50%; background: #0a84ff; box-shadow: 0 0 6px rgba(10, 132, 255, 0.6); }
+  .xc-scheme_caret { opacity: 0.5; }
+  .xc-status { margin-left: auto; font-size: 11px; color: rgba(231, 230, 227, 0.5); }
+
+  .xc-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .xc-nav, .xc-inspector {
+    background: #1c1c1d;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    overflow: auto;
+    font-size: 11px;
+  }
+  .xc-inspector { border-right: 0; border-left: 1px solid rgba(255, 255, 255, 0.05); }
+  .xc-nav_head, .xc-insp_head {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(231, 230, 227, 0.45);
+    padding: 4px 6px 8px;
+  }
+  .xc-tree, .xc-tree ul { list-style: none; padding: 0; margin: 0; }
+  .xc-tree ul { padding-left: 14px; }
+  .xc-tree_label { display: block; padding: 3px 6px; color: #d0cfcb; cursor: default; font-size: 11px; }
+  .xc-file { display: inline-block; padding: 3px 6px; border-radius: 4px; color: #c8c7c4; font-size: 11px; }
+  .xc-file.is-active { background: #0a84ff; color: #fff; }
+
+  .xc-editor { display: flex; flex-direction: column; min-width: 0; background: #1e1e1e; }
+  .xc-tabbar {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: #232325;
+    flex-shrink: 0;
+  }
+  .xc-tab {
+    padding: 6px 12px;
+    font-size: 11px;
+    color: rgba(231, 230, 227, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .xc-tab.is-active { color: #fff; background: #1e1e1e; }
+  .xc-code {
+    flex: 1;
+    margin: 0;
+    padding: 12px 14px;
+    overflow: auto;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: #e7e6e3;
+    background: #1e1e1e;
+    white-space: pre;
+  }
+  .xc-code code { font-family: inherit; }
+  .xc-ln { display: inline-block; width: 22px; color: rgba(231, 230, 227, 0.28); user-select: none; }
+  .xc-kw { color: #ff7ab2; }
+  .xc-ty { color: #d0a8ff; }
+  .xc-id { color: #e7e6e3; }
+  .xc-s  { color: #fc6a5d; }
+  .xc-c  { color: #6c7986; font-style: italic; }
+  .xc-at { color: #ffa14f; }
+  .xc-fn { color: #67b7a4; }
+  .xc-note {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(10, 132, 255, 0.06);
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #e7e6e3;
+  }
+  .xc-note strong { font-weight: 500; color: #fff; font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; color: #ff9b6e; }
+  .xc-note p { margin: 0; }
+
+  .xc-insp_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 8px;
+  }
+  .xc-insp_grid dt { font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(231, 230, 227, 0.45); margin-bottom: 2px; }
+  .xc-insp_grid dd { margin: 0; font-size: 11px; color: #e7e6e3; }
+
+  /* ============== ANDROID STUDIO ============== */
+  .ipad-win--android {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+  .ipad-win_chrome--android {
+    background: #3c3f41;
+  }
+  .as-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d2d2d2; }
+  .as-app { display: inline-flex; align-items: center; gap: 6px; }
+  .as-app img { width: 16px; height: 16px; border-radius: 4px; }
+  .as-app strong { font-weight: 500; }
+  .as-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.1); }
+  .as-scheme { padding: 3px 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); }
+  .as-spacer { flex: 1; }
+  .as-run { color: #3DDC84; font-weight: 600; padding: 3px 10px; border-radius: 4px; background: rgba(61, 220, 132, 0.12); }
+  .as-status { font-size: 11px; color: rgba(255, 255, 255, 0.45); }
+
+  .as-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 200px; min-height: 0; }
+  .as-nav { background: #2b2b2b; border-right: 1px solid #1a1a1a; padding: 8px; overflow: auto; font-size: 11px; }
+  .as-nav_head { color: #bbbbbb; padding: 4px 6px; margin-bottom: 4px; }
+  .as-tree, .as-tree ul { list-style: none; padding: 0; margin: 0; }
+  .as-tree ul { padding-left: 14px; }
+  .as-tree > li > span, .as-tree li > span { display: block; padding: 3px 6px; color: #bbbbbb; font-size: 11px; }
+  .as-file { color: #cccccc; }
+  .as-file.is-active { background: #2a4d6e; color: #fff; border-radius: 3px; }
+
+  .as-editor { display: flex; flex-direction: column; min-width: 0; background: #2b2b2b; }
+  .as-tabbar { background: #3c3f41; display: flex; border-bottom: 1px solid #1a1a1a; }
+  .as-tab { padding: 5px 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+  .as-tab.is-active { background: #2b2b2b; color: #fff; border-bottom: 2px solid #3DDC84; }
+  .as-code {
+    flex: 1; margin: 0; padding: 12px 14px; overflow: auto;
+    font-size: 11.5px; line-height: 1.55; color: #a9b7c6; background: #2b2b2b;
+    white-space: pre; font-family: inherit;
+  }
+  .as-ln { display: inline-block; width: 22px; color: #606366; user-select: none; }
+  .as-kw { color: #cc7832; font-weight: 600; }
+  .as-ty { color: #ffc66d; }
+  .as-id { color: #a9b7c6; }
+  .as-fn { color: #ffc66d; }
+  .as-c  { color: #808080; font-style: italic; }
+  .as-at { color: #bbb529; }
+  .as-note {
+    padding: 10px 14px; border-top: 1px solid #1a1a1a;
+    background: rgba(61, 220, 132, 0.08);
+    font-family: 'Fraunces', Georgia, serif; font-style: italic;
+    font-size: 13px; line-height: 1.5; color: #d2d2d2;
+  }
+  .as-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #3DDC84; margin-bottom: 4px; font-weight: 500; }
+  .as-note p { margin: 0; }
+
+  .as-preview { background: #2b2b2b; border-left: 1px solid #1a1a1a; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .as-preview_label { font-size: 9.5px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.5); }
+  .as-device {
+    flex: 1; border-radius: 18px;
+    background: #0a0a0a;
+    padding: 12px 8px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    display: flex; flex-direction: column;
+  }
+  .as-device_screen {
+    flex: 1; background: linear-gradient(170deg, #1a1a1f 0%, #0c0c0f 100%);
+    border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .as-device_topbar { height: 4px; width: 30%; background: rgba(255, 255, 255, 0.15); border-radius: 2px; margin: 4px auto 6px; }
+  .as-device_hero { font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: #fff; margin-bottom: 4px; }
+  .as-device_card {
+    background: rgba(61, 220, 132, 0.12);
+    border: 1px solid rgba(61, 220, 132, 0.25);
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 10px;
+    color: #c8efd9;
+  }
+
+  /* ============== WEBSTORM ============== */
+  .ipad-win--webstorm {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+  .ipad-win_chrome--webstorm {
+    background:
+      linear-gradient(180deg, #2f3133 0%, #25272a 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+  }
+  .ipad-win_chrome--webstorm::after {
+    /* WebStorm signature cyan→blue→yellow accent stripe */
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #07C3F2 0%, #087CFA 55%, #FFF045 100%);
+    opacity: 0.55;
+  }
+  .ws-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d2d2d2; }
+  .ws-app { display: inline-flex; align-items: center; gap: 6px; }
+  .ws-app img { width: 16px; height: 16px; border-radius: 4px; }
+  .ws-app strong { font-weight: 500; }
+  .ws-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.1); }
+  .ws-scheme { padding: 3px 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); color: #c2c2c2; }
+  .ws-spacer { flex: 1; }
+  .ws-run {
+    color: #07C3F2;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(7, 195, 242, 0.10);
+    border: 1px solid rgba(7, 195, 242, 0.25);
+  }
+  .ws-status { font-size: 11px; color: rgba(255, 255, 255, 0.45); }
+
+  .ws-body { flex: 1; display: grid; grid-template-columns: 200px 1fr 220px; min-height: 0; }
+  .ws-nav { background: #2b2b2b; border-right: 1px solid #1a1a1a; padding: 8px; overflow: auto; font-size: 11px; }
+  .ws-nav_head { color: #bbbbbb; padding: 4px 6px; margin-bottom: 4px; font-weight: 500; }
+  .ws-tree, .ws-tree ul { list-style: none; padding: 0; margin: 0; }
+  .ws-tree ul { padding-left: 14px; }
+  .ws-tree li > span { display: block; padding: 3px 6px; color: #bbbbbb; font-size: 11px; }
+  .ws-file { color: #cccccc; border-radius: 3px; }
+  .ws-file.is-active { background: rgba(7, 195, 242, 0.20); color: #fff; }
+
+  .ws-editor { display: flex; flex-direction: column; min-width: 0; background: #2b2b2b; }
+  .ws-tabbar { background: #3c3f41; display: flex; border-bottom: 1px solid #1a1a1a; }
+  .ws-tab { padding: 5px 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+  .ws-tab.is-active { background: #2b2b2b; color: #fff; border-bottom: 2px solid #07C3F2; }
+  .ws-code {
+    flex: 1; margin: 0; padding: 12px 14px; overflow: auto;
+    font-size: 11.5px; line-height: 1.55; color: #a9b7c6; background: #2b2b2b;
+    white-space: pre; font-family: inherit;
+  }
+  .ws-ln { display: inline-block; width: 22px; color: #606366; user-select: none; }
+  .ws-kw { color: #cc7832; font-weight: 600; }
+  .ws-id { color: #a9b7c6; }
+  .ws-fn { color: #ffc66d; }
+  .ws-s  { color: #6a8759; }
+  .ws-n  { color: #6897bb; }
+  .ws-c  { color: #808080; font-style: italic; }
+  .ws-tag { color: #e8bf6a; }
+  .ws-attr { color: #bababa; }
+  .ws-note {
+    padding: 10px 14px; border-top: 1px solid #1a1a1a;
+    background: rgba(7, 195, 242, 0.07);
+    font-family: 'Fraunces', Georgia, serif; font-style: italic;
+    font-size: 13px; line-height: 1.5; color: #d2d2d2;
+  }
+  .ws-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #07C3F2; margin-bottom: 4px; font-weight: 500; }
+  .ws-note p { margin: 0; }
+
+  .ws-side { background: #1e1e1e; border-left: 1px solid #1a1a1a; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .ws-side_head { font-size: 9.5px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.4); }
+  .ws-term {
+    flex: 1;
+    background: #0d0d0d;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    line-height: 1.65;
+    color: #c8c8c8;
+    overflow: auto;
+  }
+  .ws-term_line { display: block; white-space: nowrap; }
+  .ws-term_prompt { color: #07C3F2; }
+  .ws-term_cmd { color: #fff; }
+  .ws-term_out { color: rgba(200, 200, 200, 0.85); }
+  .ws-term_arrow { color: #FFF045; }
+  .ws-term_caret {
+    display: inline-block;
+    width: 7px;
+    background: #07C3F2;
+    color: transparent;
+    animation: wsBlink 1s steps(2, end) infinite;
+  }
+  @keyframes wsBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ws-term_caret { animation: none; }
+  }
+
+  /* ============== FIGMA ============== */
+  .ipad-win--figma {
+    background: #1e1e1e;
+    color: #e6e6e6;
+  }
+  .ipad-win_chrome--figma { background: #2c2c2c; }
+  .fg-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d6d6d6; }
+  .fg-icon { width: 16px; height: 16px; border-radius: 4px; }
+  .fg-file { font-weight: 500; }
+  .fg-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.08); }
+  .fg-cursor { padding: 3px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); }
+  .fg-spacer { flex: 1; }
+  .fg-avatars { display: inline-flex; gap: -6px; }
+  .fg-av {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff; font-size: 10px; font-weight: 700;
+    box-shadow: 0 0 0 2px #2c2c2c;
+    margin-left: -6px;
+  }
+  .fg-share {
+    padding: 4px 12px; border-radius: 5px;
+    background: #0d99ff; color: #fff; font-weight: 600;
+  }
+
+  .fg-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .fg-layers, .fg-props {
+    background: #2c2c2c;
+    border-right: 1px solid #1a1a1a;
+    padding: 8px;
+    font-size: 11px;
+  }
+  .fg-props { border-right: 0; border-left: 1px solid #1a1a1a; }
+  .fg-layers_head, .fg-props_head, .fg-section {
+    font-size: 9.5px; letter-spacing: 0.14em;
+    color: rgba(230, 230, 230, 0.45);
+    padding: 4px 6px 6px;
+  }
+  .fg-tree { list-style: none; padding: 0; margin: 0; }
+  .fg-tree li { padding: 3px 8px; font-size: 11px; color: #c6c6c6; border-radius: 3px; }
+  .fg-tree li.is-page { color: #888; font-weight: 600; }
+  .fg-tree li.is-frame { color: #d6d6d6; display: flex; justify-content: space-between; }
+  .fg-tree li.is-frame span { color: #888; font-size: 10px; }
+  .fg-tree li.is-layer { padding-left: 22px; }
+  .fg-tree li.is-layer.is-active { background: #0d99ff; color: #fff; }
+
+  .fg-canvas {
+    position: relative;
+    background: #1e1e1e;
+    overflow: hidden;
+    padding: 24px;
+    min-width: 0;
+  }
+  .fg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .fg-artboard {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 80px);
+    background: #f7f3ec;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 12px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+  .fg-artboard_label {
+    position: absolute;
+    top: -20px; left: 0;
+    font-size: 10px;
+    color: rgba(230, 230, 230, 0.6);
+  }
+  .fg-rect { position: absolute; }
+  .fg-rect--hero {
+    inset: 12px 12px auto 12px;
+    height: 40%;
+    background: linear-gradient(135deg, #ff7448 0%, #ff4848 100%);
+    border-radius: 4px;
+    display: flex; align-items: flex-end; padding: 12px;
+  }
+  .fg-rect_caption { color: #fff; font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; }
+  .fg-rect--text {
+    bottom: 90px; left: 12px; right: 12px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #1a0808;
+    padding: 0 8px;
+  }
+  .fg-rect--c1, .fg-rect--c2, .fg-rect--c3 {
+    bottom: 14px;
+    height: 60px; width: 28%;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+  }
+  .fg-rect--c1 { left: 12px; background: linear-gradient(135deg, #4a3070, #7c3aed); }
+  .fg-rect--c2 { left: 36%; background: linear-gradient(135deg, #1ED760, #34d399); }
+  .fg-rect--c3 { right: 12px; background: linear-gradient(135deg, #ffb86b, #ff7448); }
+  .fg-handles {
+    position: absolute; inset: -1px;
+    pointer-events: none;
+  }
+  .fg-handles span {
+    position: absolute; width: 6px; height: 6px;
+    background: #0d99ff;
+    border: 1px solid #fff;
+  }
+  .fg-handles span:nth-child(1) { top: -3px; left: -3px; }
+  .fg-handles span:nth-child(2) { top: -3px; right: -3px; }
+  .fg-handles span:nth-child(3) { bottom: -3px; left: -3px; }
+  .fg-handles span:nth-child(4) { bottom: -3px; right: -3px; }
+  .fg-note {
+    position: absolute;
+    left: 24px; right: 24px; bottom: 14px;
+    padding: 8px 12px;
+    background: rgba(13, 153, 255, 0.10);
+    border: 1px solid rgba(13, 153, 255, 0.3);
+    border-radius: 4px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #e6e6e6;
+    z-index: 2;
+  }
+  .fg-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #79bfff; margin-bottom: 2px; font-weight: 500; }
+  .fg-note p { margin: 0; }
+
+  .fg-row { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 6px; padding: 4px 6px; align-items: center; font-size: 10.5px; }
+  .fg-row span { color: rgba(230, 230, 230, 0.5); font-size: 10px; }
+  .fg-row b { color: #e6e6e6; font-weight: 500; }
+  .fg-fill { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px; font-size: 10.5px; color: #e6e6e6; }
+  .fg-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+  /* ============== OBSIDIAN ============== */
+  .ipad-win--obsidian {
+    background: #1e1e2a;
+    color: #d4d4d6;
+  }
+  .ipad-win_chrome--obsidian {
+    background: #232434;
+    border-bottom-color: rgba(124, 90, 255, 0.15);
+  }
+  .ob-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; }
+  .ob-icon { width: 16px; height: 16px; border-radius: 4px; }
+  .ob-vault { color: #b0aac7; }
+  .ob-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.08); }
+  .ob-file { color: #c4b5fd; font-weight: 500; }
+
+  .ob-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .ob-nav {
+    background: #1a1b27;
+    border-right: 1px solid rgba(124, 90, 255, 0.1);
+    padding: 10px;
+    font-size: 11.5px;
+  }
+  .ob-nav_head { color: #c4b5fd; padding: 4px 6px; margin-bottom: 4px; font-weight: 500; }
+  .ob-files { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ob-files li { padding: 4px 8px; color: #b0aac7; border-radius: 4px; font-size: 11px; cursor: default; }
+  .ob-files li.is-active { background: rgba(124, 90, 255, 0.18); color: #fff; }
+  .ob-files li:hover:not(.is-active) { background: rgba(255, 255, 255, 0.03); }
+
+  .ob-editor {
+    background: #1e1e2a;
+    overflow: auto;
+    padding: 18px 22px;
+    min-width: 0;
+  }
+  .ob-doc {
+    font-family: 'Fraunces', Georgia, serif;
+    color: #d4d4d6;
+    max-width: 60ch;
+  }
+  .ob-doc h1 {
+    font-style: italic;
+    font-weight: 300;
+    font-size: 26px;
+    margin: 0 0 14px;
+    color: #fff;
+  }
+  .ob-doc h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #c4b5fd;
+    margin: 22px 0 8px;
+  }
+  .ob-doc p {
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+    color: #c8c5cd;
+  }
+  .ob-doc ul { margin: 0 0 12px; padding-left: 18px; }
+  .ob-doc li { font-size: 13px; line-height: 1.7; color: #c8c5cd; }
+  .ob-link {
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.08);
+    padding: 0 4px;
+    border-radius: 3px;
+    text-decoration: none;
+  }
+  .ob-tag {
+    display: inline-block;
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.10);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-right: 4px;
+  }
+
+  .ob-graph {
+    background: #1a1b27;
+    border-left: 1px solid rgba(124, 90, 255, 0.1);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ob-graph_label, .ob-graph_legend {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(196, 181, 253, 0.55);
+  }
+  .ob-graph_legend { text-align: center; }
+  .ob-graph_svg { width: 100%; height: 100%; max-height: 200px; }
+
+  /* Hide windows on mobile — too cramped to be useful */
+  @media (max-width: 768px) {
+    .ipad-win { inset: 30px 8px 70px; }
+    .ipad-app[data-open-window] .ipad-win .xc-body,
+    .ipad-app[data-open-window] .ipad-win .as-body,
+    .ipad-app[data-open-window] .ipad-win .ws-body,
+    .ipad-app[data-open-window] .ipad-win .fg-body,
+    .ipad-app[data-open-window] .ipad-win .ob-body { grid-template-columns: 1fr; }
+    .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph { display: none; }
+  }
+  .ipad-app_title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    color: #F0EDE6;
+    font-weight: 500;
+  }
+  .ipad-app_title > span:last-child::before { content: '/ '; color: rgba(240, 237, 230, 0.4); }
+  .ipad-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .ipad-dot--orange { background: linear-gradient(135deg, #ff7448, #ff4848); box-shadow: 0 0 12px rgba(255, 116, 72, 0.5); }
+  .ipad-search {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(240, 237, 230, 0.7);
+    font-size: 14px;
+  }
+
+  .ipad-app_body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 1.4vw, 18px);
+  }
+
+  .ipad-col {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: rgba(15, 15, 18, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: clamp(12px, 1.2vw, 16px);
+    gap: clamp(8px, 0.8vw, 12px);
+  }
+  .ipad-col_head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 2px 4px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: clamp(6px, 0.6vw, 10px);
+  }
+  .ipad-col_index {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 1.6vw, 1.8rem);
+    line-height: 1;
+    color: #ff9b6e;
+    background: linear-gradient(135deg, #ff7448, #ff4848);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-right: 6px;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .ipad-col_title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+    min-width: 0;
+  }
+  .ipad-col_title-main {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: clamp(0.7rem, 0.78vw, 0.82rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #F0EDE6;
+  }
+  .ipad-col_title-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.66rem;
+    color: rgba(240, 237, 230, 0.4);
+    letter-spacing: 0.08em;
+  }
+  .ipad-col_all {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: rgba(240, 237, 230, 0.55);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+  .ipad-col_all:hover { color: #ff9b6e; }
+  .ipad-col_all span { display: inline-block; transition: transform 0.2s ease; }
+  .ipad-col_all:hover span { transform: translateX(3px); }
+
+  .ipad-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 0.7vw, 10px);
+    flex: 1;
+    min-height: 0;
+  }
+  .ipad-list li { display: contents; }
+
+  .ipad-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px 10px 8px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+    color: #F0EDE6;
+    overflow: hidden;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    isolation: isolate;
+  }
+  .ipad-item_index {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.66rem;
+    font-weight: 500;
+    color: rgba(240, 237, 230, 0.32);
+    letter-spacing: 0.06em;
+    min-width: 18px;
+    text-align: center;
+    transition: color 0.25s ease;
+  }
+  .ipad-item:hover .ipad-item_index { color: #ff9b6e; }
+  .ipad-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 116, 72, 0.14), rgba(124, 90, 255, 0.10));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+  .ipad-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateX(2px);
+  }
+  .ipad-item:hover::before { opacity: 1; }
+
+  .ipad-item_thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 11px;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.10),
+      0 6px 12px rgba(0, 0, 0, 0.35);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .ipad-item_accent {
+    width: 6px;
+    height: 48px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .ipad-item_text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .ipad-item_title {
+    font-size: clamp(0.82rem, 0.9vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: #F0EDE6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .ipad-item_meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.7rem;
+    color: rgba(240, 237, 230, 0.52);
+  }
+  .ipad-item_status {
+    color: rgba(240, 237, 230, 0.52);
+    letter-spacing: 0.02em;
+  }
+  .ipad-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+  }
+  .ipad-pill--ghost {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(240, 237, 230, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+  }
+  .ipad-item_arrow {
+    color: rgba(240, 237, 230, 0.4);
+    font-size: 1rem;
+    transition: transform 0.25s ease, color 0.25s ease;
+  }
+  .ipad-item:hover .ipad-item_arrow {
+    color: #ff9b6e;
+    transform: translateX(3px);
+  }
+
+  /* Dock at bottom */
+  .ipad-dock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 1vw, 14px);
+    padding: 8px clamp(12px, 1.4vw, 20px);
+    border-radius: 22px;
+    background: rgba(15, 15, 18, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 0 auto;
+    width: max-content;
+    max-width: 100%;
+  }
+  .ipad-dock_app {
+    position: relative;
+    width: clamp(32px, 3.4vw, 42px);
+    height: clamp(32px, 3.4vw, 42px);
+    border-radius: 11px;
+    overflow: visible;
+    display: grid;
+    place-items: center;
+    background: #0a0a0a;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 4px 10px rgba(0, 0, 0, 0.35);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    /* normalise <button> defaults so they match <a> siblings */
+    padding: 0;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .ipad-dock_app img {
+    border-radius: 11px;
+    overflow: hidden;
+  }
+  .ipad-dock_app:hover { transform: translateY(-3px) scale(1.06); }
+  .ipad-dock_app::after {
+    /* tooltip */
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translate(-50%, 6px);
+    padding: 5px 10px;
+    border-radius: 7px;
+    background: rgba(20, 20, 20, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #F0EDE6;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .ipad-dock_app:hover::after,
+  .ipad-dock_app:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  /* unread badge */
+  .ipad-dock_app--badge::before {
+    content: attr(data-badge);
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #ff3b30;
+    color: #fff;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 0 2px rgba(15, 15, 18, 0.9);
+    z-index: 2;
+  }
+  .ipad-dock_app img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ipad-home-indicator {
+    width: 130px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(240, 237, 230, 0.55);
+    margin: 4px auto 8px;
+  }
+
+  /* Header below iPad */
+  .ipad-header {
+    max-width: 820px;
+    margin: clamp(56px, 6vw, 88px) auto 0;
+    text-align: center;
+    will-change: transform, opacity;
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  .ipad-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    color: rgba(240, 237, 230, 0.55);
+  }
+  .ipad-eyebrow_text {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    white-space: nowrap;
+  }
+  .ipad-eyebrow_rule {
+    width: clamp(36px, 6vw, 80px);
+    height: 1px;
+    background: rgba(240, 237, 230, 0.35);
+  }
+  .ipad-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 0 0 18px;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .ipad-heading_kicker {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(240, 237, 230, 0.45);
+    letter-spacing: 0.1em;
+    transform: translateY(-0.6em);
+  }
+  .ipad-heading_main {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.2rem, 4.8vw, 4.2rem);
+    color: #F0EDE6;
+    background: linear-gradient(180deg, #F0EDE6 30%, rgba(240, 237, 230, 0.55) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .ipad-subheading {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    line-height: 1.5;
+    color: rgba(240, 237, 230, 0.6);
+    margin: 0 auto;
+    max-width: 520px;
+  }
+
+  /* Responsive */
+  @media (max-width: 991px) {
+    .ipad-frame { aspect-ratio: 4 / 3; }
+    .ipad-item_thumb { width: 48px; height: 48px; }
+    .ipad-item_accent { height: 48px; }
+  }
+  @media (max-width: 768px) {
+    .ipad-heading { font-size: 2.1rem; }
+    .ipad-subheading { font-size: 0.98rem; }
+    .ipad-frame { border-radius: 30px; padding: 8px; aspect-ratio: 3 / 4; }
+    .ipad-frame_inner { border-radius: 22px; }
+    .ipad-app_body { grid-template-columns: 1fr; }
+    .ipad-app { padding: 12px; gap: 10px; }
+    .ipad-col { padding: 10px; }
+    .ipad-item { padding: 8px; gap: 10px; }
+    .ipad-item_title { font-size: 0.85rem; }
+    .ipad-dock { gap: 8px; padding: 6px 12px; }
+    .ipad-dock_app { width: 30px; height: 30px; border-radius: 9px; }
+  }
+  @media (max-width: 479px) {
+    .ipad-heading { font-size: 1.7rem; }
+    .ipad-statusbar { padding: 8px 16px 4px; font-size: 11px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ipad-header { opacity: 1 !important; transform: none !important; }
+    .ipad-frame { transform: none !important; }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    if (typeof window === 'undefined') return;
+    var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var lang = document.documentElement.lang === 'de' ? 'de' : 'en';
+
+    function initScroll(stage, frame, header) {
+      if (prefersReduce) return;
+      if (!window.gsap || !window.ScrollTrigger) return;
+      try { window.gsap.registerPlugin(window.ScrollTrigger); } catch (e) {}
+
+      var isMobile = window.matchMedia('(max-width: 768px)').matches;
+      var fromScale = isMobile ? 0.82 : 0.9;
+      var fromRotate = isMobile ? 20 : 28;
+
+      window.gsap.set(frame, { rotateX: fromRotate, scale: fromScale, transformOrigin: '50% 100%' });
+
+      window.gsap.to(frame, {
+        rotateX: 0, scale: 1, ease: 'none',
+        scrollTrigger: {
+          trigger: frame, start: 'top bottom', end: 'center 55%', scrub: 0.6,
+          onLeave: function () { frame.style.willChange = 'auto'; },
+          onEnterBack: function () { frame.style.willChange = 'transform'; },
+        },
+      });
+
+      window.gsap.to(header, {
+        opacity: 1, y: 0, ease: 'power2.out',
+        scrollTrigger: { trigger: frame, start: 'bottom 85%', end: 'bottom 50%', scrub: 0.8 },
+      });
+    }
+
+    // ---------- Live clock & date ----------
+    function initClock(app) {
+      var timeEl = app.querySelector('[data-clock-time]');
+      var dateEl = app.querySelector('[data-clock-date]');
+      if (!timeEl || !dateEl) return;
+      var dateOpts = { weekday: 'short', day: '2-digit', month: 'short' };
+      var locale = lang === 'de' ? 'de-DE' : 'en-US';
+      function tick() {
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, '0');
+        var mm = String(now.getMinutes()).padStart(2, '0');
+        timeEl.textContent = hh + ':' + mm;
+        dateEl.textContent = now.toLocaleDateString(locale, dateOpts);
+      }
+      tick();
+      // re-tick on the next minute boundary, then every minute
+      var msToNextMin = (60 - new Date().getSeconds()) * 1000;
+      setTimeout(function () { tick(); setInterval(tick, 60000); }, msToNextMin);
+    }
+
+    // ---------- Battery indicator ----------
+    function initBattery(app) {
+      var level = app.querySelector('[data-battery-level]');
+      var pct = app.querySelector('[data-battery-pct]');
+      if (!level || !pct) return;
+      function paint(value, charging) {
+        var v = Math.max(0.04, Math.min(1, value));
+        level.style.width = (v * 100).toFixed(0) + '%';
+        pct.textContent = Math.round(v * 100) + '%';
+        level.style.background = v < 0.2 ? '#ff3b30' : (charging ? '#1ED760' : 'rgba(240, 237, 230, 0.92)');
+      }
+      if (navigator.getBattery) {
+        navigator.getBattery().then(function (b) {
+          paint(b.level, b.charging);
+          b.addEventListener('levelchange', function () { paint(b.level, b.charging); });
+          b.addEventListener('chargingchange', function () { paint(b.level, b.charging); });
+        }).catch(function () { paint(0.82, false); });
+      } else {
+        paint(0.82, false);
+      }
+    }
+
+    // ---------- Tabs ----------
+    function initTabs(app) {
+      var tabs = app.querySelectorAll('.ipad-tab');
+      var pill = app.querySelector('.ipad-tab_pill');
+      if (!tabs.length || !pill) return;
+
+      function movePill(target) {
+        var parentRect = target.parentElement.getBoundingClientRect();
+        var rect = target.getBoundingClientRect();
+        pill.style.width = rect.width + 'px';
+        pill.style.left = (rect.left - parentRect.left) + 'px';
+      }
+
+      function activate(target, opts) {
+        opts = opts || {};
+        tabs.forEach(function (t) {
+          var on = t === target;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        var key = target.getAttribute('data-tab');
+        if (key === 'all') app.removeAttribute('data-tab-active');
+        else app.setAttribute('data-tab-active', key);
+        movePill(target);
+      }
+
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () { activate(t); });
+      });
+
+      // initial pill placement (after layout settles)
+      var initial = app.querySelector('.ipad-tab.is-active') || tabs[0];
+      requestAnimationFrame(function () { movePill(initial); });
+      window.addEventListener('resize', function () {
+        var active = app.querySelector('.ipad-tab.is-active') || tabs[0];
+        movePill(active);
+      });
+    }
+
+    // ---------- Live search filter ----------
+    function initSearch(app) {
+      var input = app.querySelector('[data-search]');
+      if (!input) return;
+      var cols = app.querySelectorAll('.ipad-col');
+
+      function apply() {
+        var q = input.value.trim().toLowerCase();
+        cols.forEach(function (col) {
+          var items = col.querySelectorAll('.ipad-list > li');
+          var visible = 0;
+          items.forEach(function (li) {
+            var hay = li.getAttribute('data-search') || '';
+            var match = !q || hay.indexOf(q) !== -1;
+            li.classList.toggle('is-hidden', !match);
+            if (match) visible++;
+          });
+          col.classList.toggle('is-empty', visible === 0);
+          var count = col.querySelector('[data-count]');
+          if (count) {
+            var total = items.length;
+            count.textContent = (q ? visible : total) + '/0' + total;
+          }
+        });
+      }
+      input.addEventListener('input', apply);
+
+      // ⌘K / Ctrl+K to focus
+      window.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          if (input.getBoundingClientRect().top > 0) {
+            e.preventDefault();
+            input.focus();
+            input.select();
+          }
+        }
+      });
+    }
+
+    // ---------- Sort toggle ----------
+    function initSort(app) {
+      var btn = app.querySelector('[data-sort]');
+      var label = app.querySelector('[data-sort-label]');
+      if (!btn) return;
+      var labels = {
+        en: { newest: 'Newest', oldest: 'Oldest' },
+        de: { newest: 'Neueste', oldest: 'Älteste' },
+      };
+      btn.addEventListener('click', function () {
+        var current = btn.getAttribute('data-sort') || 'newest';
+        var next = current === 'newest' ? 'oldest' : 'newest';
+        btn.setAttribute('data-sort', next);
+        if (label) label.textContent = (labels[lang] || labels.en)[next];
+
+        app.querySelectorAll('.ipad-list[data-sortable]').forEach(function (list) {
+          var lis = Array.prototype.slice.call(list.children);
+          lis.reverse();
+          lis.forEach(function (li, i) {
+            list.appendChild(li);
+            var idx = li.querySelector('.ipad-item_index');
+            if (idx) idx.textContent = '0' + (i + 1);
+          });
+        });
+      });
+    }
+
+    // ---------- App windows ----------
+    function initWindows(app) {
+      var openers = app.querySelectorAll('[data-open]');
+      var closers = app.querySelectorAll('[data-close]');
+
+      function open(name) {
+        app.setAttribute('data-open-window', name);
+      }
+      function close() {
+        app.removeAttribute('data-open-window');
+      }
+
+      openers.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          open(btn.getAttribute('data-open'));
+        });
+      });
+      closers.forEach(function (el) {
+        el.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          close();
+        });
+      });
+
+      // ESC closes
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && app.hasAttribute('data-open-window')) close();
+      });
+
+      // Clicking outside the window (on the dimmed background) closes
+      app.addEventListener('click', function (e) {
+        if (!app.hasAttribute('data-open-window')) return;
+        var win = e.target.closest('.ipad-win');
+        var opener = e.target.closest('[data-open]');
+        if (!win && !opener) close();
+      });
+    }
+
+    function init() {
+      var stage = document.querySelector('[data-ipad-stage]');
+      if (!stage) return;
+      var frame = stage.querySelector('[data-ipad-frame]');
+      var header = stage.querySelector('[data-ipad-header]');
+      var app = stage.querySelector('[data-ipad-app]');
+
+      if (frame && header) initScroll(stage, frame, header);
+      if (app) {
+        initClock(app);
+        initBattery(app);
+        initTabs(app);
+        initSearch(app);
+        initSort(app);
+        initWindows(app);
+      }
+    }
+
+    if (document.readyState === 'complete') init();
+    else window.addEventListener('load', init, { once: true });
+  })();
+</script>
