@@ -140,11 +140,13 @@ const steps = [
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: 100svh;
     background-color: transparent;
   }
 
   .process-flow_inner {
     min-height: 100vh;
+    min-height: 100svh;
     width: 100%;
     padding: clamp(2rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
     display: flex;
@@ -276,6 +278,9 @@ const steps = [
   if (root && gsap && ScrollTrigger) {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     gsap.registerPlugin(ScrollTrigger);
+    (ScrollTrigger as unknown as { config: (vars: Record<string, unknown>) => void }).config({
+      ignoreMobileResize: true,
+    });
 
     const panels = Array.from(root.querySelectorAll<HTMLElement>('.process-flow_panel'));
 
