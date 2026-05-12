@@ -2646,6 +2646,10 @@ const accents = [
       if (!cursor || !frame) return;
       if (window.matchMedia('(pointer: coarse)').matches) return;
 
+      // Hoist to <body> so no transformed ancestor (Webflow IX2 inline
+      // transforms on section_home-work) breaks `position: fixed`.
+      document.body.appendChild(cursor);
+
       var w = cursor.offsetWidth || 36;
       var h = cursor.offsetHeight || 36;
       // hot-spot offset — the SF hand points up with the index finger
