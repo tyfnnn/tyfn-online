@@ -5,6 +5,7 @@ import CustomCursor from '../components/CustomCursor.astro';
 import LangScramble from '../components/LangScramble.astro';
 import FabMenu from '../components/FabMenu.astro';
 import Chatbot from '../components/Chatbot.astro';
+import LiquidGlass from '../components/ui/LiquidGlass.astro';
 
 interface Props {
   title: string;
@@ -106,6 +107,7 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
 <body class={bodyClass}>
   <CustomCursor />
   <FabMenu lang={lang} />
+  <LiquidGlass />
   <slot />
 
   <script

@@ -1,0 +1,220 @@
+---
+/**
+ * Liquid-Glass-Effekt im Stil von Apples iOS 26 / dem "Generate"-Button-CodePen.
+ *
+ * Diese Komponente rendert einmal pro Seite:
+ *   1. eine versteckte SVG-Filterdefinition (#liquid-glass-filter), die per
+ *      feDisplacementMap das hinter dem Element liegende Bild refraktiert
+ *   2. globale CSS-Regeln für `.liquid-glass` (+ Modifier-Klassen)
+ *
+ * Verwendung im Markup:
+ *   <a class="liquid-glass" href="...">
+ *     <span class="liquid-glass__text">Label</span>
+ *   </a>
+ *
+ * Varianten:
+ *   .liquid-glass--accent  -> orange getöntes Glas (Brand-Farbe)
+ *   .liquid-glass--sm      -> kleinere Höhe / Padding
+ */
+import { LIQUID_GLASS_DISPLACEMENT_MAP } from './displacement-map';
+---
+<svg class="liquid-glass-defs" aria-hidden="true" focusable="false">
+  <!-- Stark gebrechender Filter für kleine Buttons (Pill, Toggle, FAB).
+       scale="0.5" in objectBoundingBox = 50 % der Element-Größe – das ergibt
+       auf kleinen Elementen den knackigen Liquid-Glass-Rand. -->
+  <filter id="liquid-glass-filter" primitiveUnits="objectBoundingBox">
+    <feImage
+      result="map"
+      width="100%"
+      height="100%"
+      x="0"
+      y="0"
+      href={LIQUID_GLASS_DISPLACEMENT_MAP}
+      preserveAspectRatio="none"
+    />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="0.01" result="blur" />
+    <feDisplacementMap
+      in="blur"
+      in2="map"
+      scale="0.5"
+      xChannelSelector="R"
+      yChannelSelector="G"
+    />
+  </filter>
+
+  <!-- Sanfter Filter für große Flächen (Chat-Fenster, FAB-Panel).
+       Pixel-basiert (userSpaceOnUse) mit fixer Verschiebung – so wächst
+       der Refraktions-Effekt NICHT proportional zur Element-Größe und
+       die dunklen Halos an den Außenecken verschwinden. -->
+  <filter
+    id="liquid-glass-filter-soft"
+    primitiveUnits="userSpaceOnUse"
+    x="-10%"
+    y="-10%"
+    width="120%"
+    height="120%"
+  >
+    <feImage
+      result="map"
+      width="100%"
+      height="100%"
+      x="0"
+      y="0"
+      href={LIQUID_GLASS_DISPLACEMENT_MAP}
+      preserveAspectRatio="none"
+    />
+    <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
+    <feDisplacementMap
+      in="blur"
+      in2="map"
+      scale="8"
+      xChannelSelector="R"
+      yChannelSelector="G"
+    />
+  </filter>
+</svg>
+
+<style is:global>
+  .liquid-glass-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .liquid-glass {
+    --lg-light: 1;
+    --lg-dark: 1;
+    --lg-bg: rgba(230, 230, 221, 0.06);
+    --lg-color: rgba(230, 230, 221, 0.96);
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.6rem;
+    border: 0;
+    border-radius: 9999px;
+    appearance: none;
+    background: transparent;
+    color: var(--lg-color);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1);
+  }
+
+  /*
+   * Die Linsen-Ebene muss komplett leer bleiben – Chrome/Edge greifen für
+   * backdrop-filter ausschließlich Pixel HINTER dem Element ab, dadurch
+   * entsteht keinerlei Text-Ghosting auf der Glas-Oberfläche.
+   */
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-color: var(--lg-bg);
+    backdrop-filter: blur(8px) url(#liquid-glass-filter) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, white calc(var(--lg-light) * 10%), transparent),
+      inset 1.8px 3px 0px -2px color-mix(in srgb, white calc(var(--lg-light) * 90%), transparent),
+      inset -2px -2px 0px -2px color-mix(in srgb, white calc(var(--lg-light) * 80%), transparent),
+      inset -3px -8px 1px -6px color-mix(in srgb, white calc(var(--lg-light) * 60%), transparent),
+      inset -0.3px -1px 4px 0px color-mix(in srgb, black calc(var(--lg-dark) * 12%), transparent),
+      inset -1.5px 2.5px 0px -2px color-mix(in srgb, black calc(var(--lg-dark) * 20%), transparent),
+      inset 0px 3px 4px -2px color-mix(in srgb, black calc(var(--lg-dark) * 20%), transparent),
+      inset 2px -6.5px 1px -4px color-mix(in srgb, black calc(var(--lg-dark) * 10%), transparent),
+      0px 1px 5px 0px color-mix(in srgb, black calc(var(--lg-dark) * 10%), transparent),
+      0px 6px 16px 0px color-mix(in srgb, black calc(var(--lg-dark) * 8%), transparent);
+    transition:
+      background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+      box-shadow 400ms cubic-bezier(1, 0, 0.4, 1);
+  }
+
+  .liquid-glass > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .liquid-glass__text {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    user-select: none;
+  }
+
+  @media (hover: hover) {
+    .liquid-glass:not(:disabled):hover {
+      transform: scale(1.03);
+    }
+    .liquid-glass:not(:disabled):hover::before {
+      --lg-light: 1.15;
+    }
+  }
+
+  .liquid-glass:not(:disabled):active {
+    transform: scale(0.96);
+  }
+
+  .liquid-glass:focus-visible {
+    outline: none;
+  }
+  .liquid-glass:focus-visible::before {
+    box-shadow:
+      0 0 0 2px rgba(230, 230, 221, 0.55),
+      0 6px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .liquid-glass:disabled,
+  .liquid-glass[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Akzent-Variante – orange getöntes Glas */
+  .liquid-glass--accent {
+    --lg-bg: rgba(219, 74, 43, 0.32);
+    --lg-color: #fff;
+  }
+  .liquid-glass--accent .liquid-glass__text {
+    text-shadow: 0 1px 2px rgba(60, 12, 0, 0.45);
+  }
+
+  .liquid-glass--sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .liquid-glass--lg {
+    padding: 1rem 1.9rem;
+    font-size: 1.05rem;
+  }
+
+  /* Pressed/Aktiv-Zustand für Toggle-Buttons (z. B. Blog-Sortierung) */
+  .liquid-glass[aria-pressed='true'] {
+    --lg-bg: rgba(219, 74, 43, 0.35);
+    --lg-color: #fff;
+  }
+
+  /*
+   * Safari liefert kein url(#…)-backdrop-filter; dort fällt das Glas
+   * automatisch auf den reinen Blur + sanften Hintergrund zurück.
+   */
+  @supports not (backdrop-filter: blur(1px)) {
+    .liquid-glass::before {
+      background-color: rgba(20, 20, 20, 0.55);
+    }
+  }
+</style>
