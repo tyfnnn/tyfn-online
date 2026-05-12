@@ -3297,6 +3297,97 @@ const accents = [
         restartLabel.textContent = i18n.restart;
       }
 
+      function drawBeetle(cx, cy, t) {
+        var pulse = 1 + Math.sin(t) * 0.04;
+        var bodyR = CELL * 0.34 * pulse;      // body half-width
+        var bodyH = CELL * 0.42 * pulse;      // body half-height (elongated)
+        var legLen = CELL * 0.22;
+        var legW = 1.4;
+        var legWiggle = Math.sin(t * 1.6) * 1.5;
+
+        // Six legs (drawn first so they sit under the body)
+        ctx.strokeStyle = '#1a0508';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = legW;
+        ctx.beginPath();
+        for (var i = -1; i <= 1; i++) {
+          var ly = cy + i * bodyH * 0.45;
+          // left
+          ctx.moveTo(cx - bodyR * 0.8, ly);
+          ctx.lineTo(cx - bodyR - legLen, ly + legWiggle * (i === 0 ? -1 : 1));
+          // right
+          ctx.moveTo(cx + bodyR * 0.8, ly);
+          ctx.lineTo(cx + bodyR + legLen, ly - legWiggle * (i === 0 ? -1 : 1));
+        }
+        ctx.stroke();
+
+        // Black head
+        var headY = cy - bodyH * 0.85;
+        var headR = bodyR * 0.55;
+        ctx.fillStyle = '#0a0508';
+        ctx.beginPath();
+        ctx.ellipse(cx, headY, headR, headR * 0.78, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Antennae
+        ctx.strokeStyle = '#0a0508';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(cx - headR * 0.55, headY - headR * 0.55);
+        ctx.quadraticCurveTo(cx - headR * 1.3, headY - headR * 1.4, cx - headR * 1.7, headY - headR * 1.9);
+        ctx.moveTo(cx + headR * 0.55, headY - headR * 0.55);
+        ctx.quadraticCurveTo(cx + headR * 1.3, headY - headR * 1.4, cx + headR * 1.7, headY - headR * 1.9);
+        ctx.stroke();
+        // antenna tips
+        ctx.fillStyle = '#0a0508';
+        ctx.beginPath();
+        ctx.arc(cx - headR * 1.7, headY - headR * 1.9, 1.6, 0, Math.PI * 2);
+        ctx.arc(cx + headR * 1.7, headY - headR * 1.9, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Body (elytra) — red dome
+        var grad = ctx.createRadialGradient(
+          cx - bodyR * 0.3, cy - bodyH * 0.4, bodyR * 0.1,
+          cx, cy, bodyR * 1.4
+        );
+        grad.addColorStop(0, '#ff6b62');
+        grad.addColorStop(0.55, '#ff3b30');
+        grad.addColorStop(1, '#b71a14');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, bodyR, bodyH, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Wing-case split
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - bodyH * 0.7);
+        ctx.lineTo(cx, cy + bodyH * 0.85);
+        ctx.stroke();
+
+        // Black spots
+        ctx.fillStyle = '#0a0508';
+        var spots = [
+          [-0.45, -0.30, 0.16],
+          [ 0.45, -0.30, 0.16],
+          [-0.35,  0.30, 0.14],
+          [ 0.35,  0.30, 0.14],
+          [ 0,     0.55, 0.12],
+        ];
+        for (var s = 0; s < spots.length; s++) {
+          ctx.beginPath();
+          ctx.arc(cx + spots[s][0] * bodyR, cy + spots[s][1] * bodyH, bodyR * spots[s][2], 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Highlight sheen
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+        ctx.beginPath();
+        ctx.ellipse(cx - bodyR * 0.35, cy - bodyH * 0.5, bodyR * 0.25, bodyH * 0.18, -0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       function draw() {
         // bg grid
         ctx.fillStyle = '#06030a';
@@ -3307,25 +3398,8 @@ const accents = [
             if ((gx + gy) % 2 === 0) ctx.fillRect(gx * CELL, gy * CELL, CELL, CELL);
           }
         }
-        // bug
-        var bx = bug.x * CELL + CELL / 2;
-        var by = bug.y * CELL + CELL / 2;
-        var pulse = 1 + Math.sin(bug.t) * 0.06;
-        var r = (CELL * 0.32) * pulse;
-        ctx.beginPath();
-        ctx.fillStyle = '#ff3b30';
-        ctx.arc(bx, by, r, 0, Math.PI * 2);
-        ctx.fill();
-        // bug antennae
-        ctx.strokeStyle = '#ff3b30';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(bx - r * 0.5, by - r * 0.7);
-        ctx.lineTo(bx - r * 0.9, by - r * 1.4);
-        ctx.moveTo(bx + r * 0.5, by - r * 0.7);
-        ctx.lineTo(bx + r * 0.9, by - r * 1.4);
-        ctx.stroke();
+        // bug — proper beetle (ladybug-ish)
+        drawBeetle(bug.x * CELL + CELL / 2, bug.y * CELL + CELL / 2, bug.t);
         // snake
         for (var s = snake.length - 1; s >= 0; s--) {
           var seg = snake[s];
