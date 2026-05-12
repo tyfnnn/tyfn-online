@@ -13,70 +13,68 @@ translationKey: lost-in-space-404
 heroImage: /assets/lost-in-space-404-hero.png?v=1
 ---
 
-I shipped a proper 404 page this weekend. Not because anyone asked
-for one — analytics suggest exactly nobody hits dead links on a
-five-page portfolio — but because the default "Page not found" felt
-like a missed opportunity to make someone smile.
+I built a proper 404 page this weekend. Not because analytics were
+yelling at me — nobody really hits dead links on a five-page
+portfolio — but because the default "Page not found" annoyed me every
+time I clicked through to it.
 
 ## Why bother
 
-A 404 is the one page on your site where the user is, by definition,
-already mildly disappointed. They typed something wrong, followed a
-stale link, or got redirected by an AI summary that hallucinated a
-path. You have one job there: don't make it worse, and ideally,
-help them back out.
+If you've landed on a 404, you're already mildly grumpy. You typed
+something wrong, followed a stale link, or an AI answer sent you to a
+path that never existed. The page has exactly one job there: don't
+pile on, and give them a way out.
 
-Most "fun" 404s I've seen lean too hard into either side of the
-spectrum. Either they're a wall of corporate apology, or they're a
-single oversized illustration with no way to actually get home.
-I wanted both: a small joke, then two clear exits.
+What I don't like about most "fun" 404s: it's either a wall of
+corporate apology, or a giant illustration with no button. I wanted
+the middle ground — a short joke, then two clear doors back.
 
 ## The copy
 
-The voice has to match the rest of the site. The portfolio is
-direct and a bit playful — it isn't a bank — so the 404 leans into
-that:
+The voice is the same one the rest of the site uses. The portfolio is
+direct and a bit playful, it's not a bank — so the 404 sounds like
+that too:
 
 - Eyebrow: **TRANSMISSION LOST · ERROR 404**
 - Headline: **This page got abducted by aliens.**
-- Body: *We searched every route. Even peeked at `/api/secret-cookies`.*
+- Body: *We searched every route. Even peeked at
+  `/api/secret-cookies`.*
 - Closer: *Either the URL never existed, or you just discovered a
   wormhole. Honestly, pretty cool either way.*
 
-The German version had to keep the same energy without translating
-verbatim. `Diese Seite wurde von Aliens entführt.` works. The fake
-endpoint became `/api/geheime-kekse`, and "Beam me home" turned into
-`Zurück zur Erde` — slightly less Star-Trek, slightly more grounded.
+The German version isn't a literal translation — it just had to land
+the same energy. `Diese Seite wurde von Aliens entführt.` does the
+job. `/api/secret-cookies` became `/api/geheime-kekse`, and *Beam me
+home* turned into *Zurück zur Erde* — a bit more Star Trek on the EN
+page, a bit more grounded on the DE one.
 
-Both copies sit under `notfound.*` in `en.json` / `de.json`, same as
-every other string on the site. The language switcher at the top
-scrambles between them with the same `data-scramble` runtime that
-powers the rest of the navigation.
+Both strings live under `notfound.*` in `en.json` / `de.json`, like
+every other piece of copy on the site. They get the `data-scramble`
+effect from the nav for free.
 
 ## The animation
 
-Pure CSS, no JS, no GSAP. The page already lives under
+Pure CSS. No JS, no GSAP. The page already runs under
 `PortfolioLayout`, which deliberately doesn't load the Webflow IX2
-runtime — and I wanted to keep it that way. Adding a heavy animation
-library for a page most users will never see felt like the wrong
-trade.
+runtime — and I wasn't going to drag in a heavy animation library for
+a page most users will never see.
 
-The composition is:
+What the scene is made of:
 
-- A big `404` in `Archivo Black`. The two `4`s tilt opposite
+- A big `404` in `Archivo Black`. The two `4`s tilt in opposite
   directions and breathe up-down on a five-second loop.
-- The `0` is hue-rotated through a radial gradient so it pulses
-  through orange/red/black like a tiny planet.
-- A 2px ring sits on top of the zero at -18°, slightly squashed —
-  cheap Saturn impression.
-- An SVG astronaut (helmet, visor reflection, NASA-style chest patch,
-  tiny suit details) orbits the whole composition. The orbit
-  container rotates clockwise; the astronaut counter-rotates so its
-  head always stays "up". A separate bob animation gives it the
-  zero-G float.
-- Two layered `radial-gradient` starfields with offset twinkle
-  timings (4s and 7s) make the background feel alive without
-  shipping any extra assets.
+- The `0` isn't really a digit anymore — it's a div with a radial
+  gradient running from amber through red into dark oxide, a layer of
+  atmospheric bands on top, and a slow brightness breathe. Reads as a
+  tiny planet.
+- A 2px ring sits at -18° on the zero, slightly squashed. Enough to
+  hint at Saturn.
+- An SVG astronaut (helmet, visor reflection, "404" chest patch, red
+  antenna light) orbits the scene. The orbit container rotates
+  clockwise, the astronaut counter-rotates so its head stays up, and
+  a separate bob animation gives the zero-G float.
+- Two starfields built from `radial-gradient` with offset twinkle
+  timings (4s and 7s). Doesn't cost a single asset.
 
 ```css
 @keyframes nf-orbit {
@@ -90,35 +88,32 @@ The composition is:
 }
 ```
 
-The whole composition is wrapped in a `prefers-reduced-motion`
-guard. Anyone who's asked their OS for less motion gets the same
-layout, just frozen — same readability, no vestibular surprises.
+All of it sits behind a `prefers-reduced-motion` guard. Anyone with
+that set in their OS gets the same layout, just frozen. Nobody should
+get motion sick on a 404.
 
 ## Astro and the 404 quirk
 
-Astro static builds have one specific convention worth knowing:
-`src/pages/404.astro` is emitted as `dist/404.html` (flat), even
-when `build.format` is set to `directory` for the rest of the site.
-Most static hosts — Cloudflare Pages, Netlify, Vercel — pick that
-file up automatically as the site-wide 404.
+One thing that briefly tripped me up: Astro emits
+`src/pages/404.astro` as `dist/404.html` (flat), even when
+`build.format` is set to `directory` for the rest of the site.
+Cloudflare Pages, Netlify, Vercel — they all pick that file up as the
+site-wide 404 automatically.
 
-I also added `src/pages/de/404.astro`, but here Astro applies the
-directory rule and emits `dist/de/404/index.html` instead of
-`dist/de/404.html`. Hosting platforms differ in how they pick up
-per-directory 404s, so on Cloudflare Pages I'll wire the German
-fallback through a `_redirects` rule later. For now, an unknown
-URL anywhere on the site lands on the English 404 — acceptable
-trade-off for a v1.
+`src/pages/de/404.astro` falls back to the directory rule and ends up
+as `dist/de/404/index.html`. How each host handles nested 404s
+varies — I'll wire the German fallback through a `_redirects` rule
+when I get to it. Until then, an unknown URL anywhere on the site
+lands on the English 404, which is fine for v1.
 
-## Lessons
+## What stuck
 
-- A small CSS-only scene reads as more "considered" than a giant
-  Lottie, and ships in roughly 4 KB of style. Use the constraint.
-- Keep the joke short. One headline, one body line, one closer.
-  Anything more starts feeling like the user is being held hostage.
-- Always ship the two exits. On this page: *Beam me home* and
-  *Browse the portfolio*. Without them, the joke stops being charming
-  and starts being annoying.
+A small CSS-only scene reads as more considered than a giant Lottie,
+and ships in roughly 4 KB of style. Keep the joke as short as
+possible — one headline, one body line, one closer, done. And always
+ship the two buttons back, otherwise the joke stops being charming
+around the third read.
 
-If you want to test it, the easiest way is to make up a path. Try
-`/abducted-by-aliens` — that's exactly what it's there for.
+If you want to see it: just make up a path. Try
+[`/abducted-by-aliens`](https://www.tyfn.online/abducted-by-aliens) —
+that's exactly what it's there for.

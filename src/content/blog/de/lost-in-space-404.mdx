@@ -13,74 +13,69 @@ translationKey: lost-in-space-404
 heroImage: /assets/lost-in-space-404-hero.png?v=1
 ---
 
-Am Wochenende habe ich eine richtige 404-Seite ausgeliefert. Nicht
-weil jemand danach gefragt hätte — die Analytics zeigen, dass auf
-einem fünfseitigen Portfolio quasi niemand auf tote Links klickt —
-sondern weil das Standard-"Seite nicht gefunden" sich wie eine
-verpasste Chance anfühlte, jemanden zum Schmunzeln zu bringen.
+Am Wochenende habe ich eine eigene 404-Seite gebaut. Nicht weil mir
+Analytics rote Lampen blinken — auf einem fünfseitigen Portfolio läuft
+quasi niemand in tote Links — sondern weil mir das Standard-"Seite
+nicht gefunden" schon beim eigenen Klicken auf die Nerven ging.
 
 ## Warum überhaupt
 
-Eine 404 ist die eine Seite, auf der der Nutzer per Definition
-schon leicht enttäuscht ist. Vertippt, einem alten Link gefolgt,
-oder von einer KI-Zusammenfassung auf einen halluzinierten Pfad
-geschickt. Dort hat man genau einen Job: es nicht schlimmer machen,
-und idealerweise helfen, wieder herauszufinden.
+Wer auf einer 404 landet, ist eh schon mies drauf. Vertippt, alten
+Link erwischt, von einer KI-Antwort auf einen Pfad geschickt, den es
+nie gab. Da hat man eigentlich nur einen Job: nicht noch eins
+draufsetzen, und einen Weg raus anbieten.
 
-Die meisten "lustigen" 404-Seiten, die ich gesehen habe, kippen in
-eines von zwei Extremen. Entweder eine Wand aus konzernigen
-Entschuldigungen, oder eine einzige überdimensionierte Illustration
-ohne Weg zurück. Ich wollte beides: einen kleinen Witz, dann zwei
-klare Ausgänge.
+Was ich an den meisten "lustigen" 404s nicht mag: entweder eine Wand
+aus Corporate-Entschuldigungen, oder ein riesiges Illu-Bild ohne
+Button. Ich wollte den Mittelweg — kurzer Witz, dann zwei klare Türen
+zurück.
 
 ## Der Text
 
-Die Tonalität muss zum Rest der Seite passen. Das Portfolio ist
-direkt und etwas verspielt — keine Bank — also lehnt sich die 404
-genau dort hinein:
+Die Tonalität ist die vom Rest der Seite. Das Portfolio ist direkt,
+ein bisschen verspielt, keine Bank — also klingt die 404 auch so:
 
 - Augenbraue: **VERBINDUNG VERLOREN · FEHLER 404**
 - Headline: **Diese Seite wurde von Aliens entführt.**
-- Body: *Wir haben jede Route durchsucht. Sogar bei `/api/geheime-kekse` nachgesehen.*
+- Body: *Wir haben jede Route durchsucht. Sogar bei
+  `/api/geheime-kekse` nachgesehen.*
 - Abschluss: *Entweder gab es diese URL nie, oder du hast gerade ein
   Wurmloch entdeckt. Beides irgendwie cool, ehrlich gesagt.*
 
-Die englische Variante musste die gleiche Energie tragen, ohne
-wörtlich übersetzt zu sein. `This page got abducted by aliens.`
-funktioniert. Der Fake-Endpoint heißt dort `/api/secret-cookies`,
-und `Zurück zur Erde` wurde zu **Beam me home** — etwas mehr
-Star Trek, etwas weniger bodenständig.
+Für die englische Version musste ich nicht wörtlich übersetzen,
+sondern die gleiche Energie treffen. `This page got abducted by
+aliens.` passt. Aus `/api/geheime-kekse` wurde `/api/secret-cookies`,
+und aus *Zurück zur Erde* wurde *Beam me home* — etwas mehr Star Trek
+auf der EN-Seite, etwas bodenständiger auf der DE-Seite.
 
-Beide Texte liegen unter `notfound.*` in `en.json` / `de.json`,
-genauso wie jeder andere String auf der Seite. Der Sprachumschalter
-oben scramblet zwischen ihnen über die gleiche `data-scramble`
-Runtime, die auch den Rest der Navigation antreibt.
+Beide Texte liegen unter `notfound.*` in `en.json` / `de.json`, wie
+jeder andere String auf der Site. Den `data-scramble`-Effekt aus der
+Navigation bekommen sie umsonst dazu.
 
 ## Die Animation
 
-Reines CSS, kein JS, kein GSAP. Die Seite läuft schon unter
-`PortfolioLayout`, das die Webflow-IX2-Runtime bewusst nicht lädt —
-und ich wollte das so lassen. Eine schwere Animationsbibliothek
-für eine Seite zu laden, die die meisten Besucher nie sehen, fühlte
-sich nach dem falschen Trade an.
+Reines CSS. Kein JS, kein GSAP. Die Seite hängt eh am
+`PortfolioLayout`, das die Webflow-IX2-Runtime bewusst nicht lädt, und
+das wollte ich nicht für eine Seite kaputtmachen, die im besten Fall
+niemand sieht.
 
-Die Komposition besteht aus:
+Was zusammen das Bild ergibt:
 
 - Ein großes `404` in `Archivo Black`. Die beiden `4`er kippen in
-  entgegengesetzte Richtungen und atmen in einem Fünf-Sekunden-Loop
-  hoch und runter.
-- Die `0` läuft über einen Radial-Gradient mit `hue-rotate`, sodass
-  sie wie ein kleiner Planet zwischen Orange/Rot/Schwarz pulsiert.
-- Ein 2px-Ring liegt bei -18° auf der Null und ist leicht gestaucht
-  — ein günstiger Saturn-Eindruck.
-- Ein SVG-Astronaut (Helm, Visier-Reflexion, NASA-Brustpatch, kleine
-  Anzug-Details) umkreist die ganze Komposition. Der Orbit-Container
-  dreht sich im Uhrzeigersinn, der Astronaut counter-rotiert, damit
-  sein Kopf immer "oben" bleibt. Eine separate Bob-Animation gibt
-  ihm das Zero-G-Schweben.
-- Zwei gestaffelte Sternenfelder über `radial-gradient` mit
-  versetzten Funkel-Timings (4s und 7s) lassen den Hintergrund
-  lebendig wirken, ohne ein einziges Asset zu laden.
+  Gegenrichtung und atmen über fünf Sekunden hoch und runter.
+- Die `0` ist gar keine Ziffer mehr, sondern ein Div mit Radial-
+  Gradient von Amber über Rot in dunkles Oxid, ein paar Atmosphären-
+  Bändern als zweiter Layer und einem leichten Hell/Dunkel-Atmen
+  obendrauf — sieht aus wie ein winziger Planet.
+- Ein 2-px-Ring liegt bei -18° auf der Null, leicht gestaucht. Reicht
+  als Saturn-Andeutung.
+- Ein SVG-Astronaut (Helm, Visier-Reflex, Brust-Patch mit "404",
+  rote Antennenlampe) umkreist die Szene. Der Orbit-Container dreht
+  sich im Uhrzeigersinn, der Astronaut counter-rotiert, damit sein
+  Kopf immer oben bleibt. Eine zweite Bob-Animation gibt ihm das
+  Zero-G-Schweben.
+- Zwei Sternenfelder über `radial-gradient` mit versetzten Funkel-
+  Timings (4s und 7s). Kostet kein einziges Asset.
 
 ```css
 @keyframes nf-orbit {
@@ -94,39 +89,33 @@ Die Komposition besteht aus:
 }
 ```
 
-Die gesamte Komposition liegt hinter einem
-`prefers-reduced-motion`-Guard. Wer sein OS auf weniger Bewegung
-gestellt hat, bekommt das gleiche Layout, einfach eingefroren —
-gleiche Lesbarkeit, keine Vestibulär-Überraschungen.
+Alles davon liegt hinter einem `prefers-reduced-motion`-Guard. Wer das
+im OS reduziert hat, sieht das gleiche Layout, einfach eingefroren.
+Niemand soll von einer 404 motion sick werden.
 
 ## Astro und die 404-Eigenheit
 
-Statische Astro-Builds haben eine spezifische Konvention, die man
-kennen sollte: `src/pages/404.astro` wird als `dist/404.html` (flach)
-ausgegeben, selbst wenn `build.format` für den Rest der Seite auf
-`directory` steht. Die meisten statischen Hosts — Cloudflare Pages,
-Netlify, Vercel — picken diese Datei automatisch als seitenweite 404.
+Eine Sache, die mich beim Setup kurz aufgehalten hat:
+`src/pages/404.astro` wird von Astro als `dist/404.html` (flach)
+exportiert, auch wenn `build.format` für den Rest der Seite auf
+`directory` steht. Cloudflare Pages, Netlify, Vercel picken diese
+Datei automatisch als seitenweite 404.
 
-Ich habe zusätzlich `src/pages/de/404.astro` angelegt, aber hier
-greift die Directory-Regel und Astro schreibt
-`dist/de/404/index.html` statt `dist/de/404.html`. Wie Hosting-
-Plattformen verschachtelte 404s aufgreifen, unterscheidet sich, also
-verdrahte ich den deutschen Fallback bei Cloudflare Pages später
-über eine `_redirects`-Regel. Im Moment landet eine unbekannte URL
-irgendwo auf der Seite auf der englischen 404 — akzeptabler Trade
-für eine v1.
+`src/pages/de/404.astro` greift wieder die Directory-Regel und landet
+als `dist/de/404/index.html`. Wie die einzelnen Plattformen
+verschachtelte 404s behandeln, ist unterschiedlich — den deutschen
+Fallback verdrahte ich bei Gelegenheit über eine `_redirects`-Regel.
+Bis dahin landet eine unbekannte URL auf der englischen 404, was für
+v1 völlig okay ist.
 
-## Lessons
+## Was hängen geblieben ist
 
-- Eine kleine CSS-Szene wirkt "durchdachter" als ein riesiges
-  Lottie und kostet ungefähr 4 KB Stylesheet. Die Constraint nutzen.
-- Den Witz kurz halten. Eine Headline, ein Body-Satz, ein Abschluss.
-  Alles darüber hinaus fühlt sich an, als würde man dem Nutzer
-  Geiselhaft drohen.
-- Immer die zwei Ausgänge mitliefern. Auf dieser Seite: *Zurück zur
-  Erde* und *Lieber Projekte ansehen*. Ohne sie hört der Witz auf,
-  charmant zu sein, und fängt an zu nerven.
+Eine kleine CSS-Szene wirkt am Ende durchdachter als ein riesiges
+Lottie und kostet ungefähr 4 KB Stylesheet. Den Witz so kurz wie
+möglich halten — eine Headline, ein Body-Satz, ein Abschluss, fertig.
+Und immer die zwei Buttons zurück, sonst nervt der Joke beim dritten
+Lesen.
 
-Wenn du es testen willst: am einfachsten geht das, indem du dir
-einen Pfad ausdenkst. Probier `/von-aliens-entfuehrt` — genau dafür
-ist sie da.
+Falls du es selbst sehen willst: einfach einen Pfad ausdenken. Probier
+[`/abducted-by-aliens`](https://www.tyfn.online/abducted-by-aliens) —
+genau dafür ist sie da.
