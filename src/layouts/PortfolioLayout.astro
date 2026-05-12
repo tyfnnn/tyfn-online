@@ -5,6 +5,7 @@ import CustomCursor from '../components/CustomCursor.astro';
 import LangScramble from '../components/LangScramble.astro';
 import FabMenu from '../components/FabMenu.astro';
 import Chatbot from '../components/Chatbot.astro';
+import LiquidGlass from '../components/ui/LiquidGlass.astro';
 
 interface Props {
   title: string;
@@ -58,6 +59,7 @@ const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toStrin
 <body>
   <CustomCursor />
   <FabMenu lang={lang} />
+  <LiquidGlass />
   <slot />
   <slot name="scripts-after" />
   <LangScramble />
