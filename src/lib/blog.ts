@@ -23,7 +23,7 @@ export async function getBlogPosts(lang: Lang): Promise<BlogEntry[]> {
     return true;
   });
   return all.sort(
-    (a, b) => a.data.pubDate.getTime() - b.data.pubDate.getTime(),
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
   );
 }
 

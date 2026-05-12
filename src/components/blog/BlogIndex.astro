@@ -32,7 +32,25 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
       </p>
     </div>
 
-    <div class="portfolio-grid">
+    {posts.length > 0 && (
+      <div class="blog-sort" role="group" aria-label={t('blog.index.sort_label')}>
+        <span class="blog-sort-label">{t('blog.index.sort_label')}:</span>
+        <button
+          type="button"
+          class="blog-sort-button is-active"
+          data-sort="desc"
+          aria-pressed="true"
+        >{t('blog.index.sort_newest')}</button>
+        <button
+          type="button"
+          class="blog-sort-button"
+          data-sort="asc"
+          aria-pressed="false"
+        >{t('blog.index.sort_oldest')}</button>
+      </div>
+    )}
+
+    <div class="portfolio-grid" data-blog-grid>
       {posts.length === 0 && (
         <div class="blog-empty" data-scramble>{t('blog.index.empty')}</div>
       )}
@@ -42,7 +60,7 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
           ? `background-image: url('${post.data.heroImage}');`
           : '';
         return (
-          <a href={href} class="project-card">
+          <a href={href} class="project-card" data-date={post.data.pubDate.toISOString()}>
             <div class="project-image" style={heroStyle}></div>
             <div class="project-content">
               <h3 class="project-title" data-scramble>{post.data.title}</h3>
@@ -82,3 +100,30 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     />
   </div>
 </section>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-blog-grid]');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.blog-sort-button');
+  if (grid && buttons.length) {
+    const apply = (dir: 'asc' | 'desc') => {
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>('.project-card'));
+      cards.sort((a, b) => {
+        const da = Date.parse(a.dataset.date ?? '');
+        const db = Date.parse(b.dataset.date ?? '');
+        return dir === 'desc' ? db - da : da - db;
+      });
+      for (const card of cards) grid.appendChild(card);
+      for (const btn of buttons) {
+        const active = btn.dataset.sort === dir;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      }
+    };
+    for (const btn of buttons) {
+      btn.addEventListener('click', () => {
+        const dir = btn.dataset.sort === 'asc' ? 'asc' : 'desc';
+        apply(dir);
+      });
+    }
+  }
+</script>
