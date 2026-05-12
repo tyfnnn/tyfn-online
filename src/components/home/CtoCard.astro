@@ -70,12 +70,101 @@ const accents = [
         <span class="ipad-camera" aria-hidden="true"></span>
 
         <div class="ipad-frame_inner">
-          <div class="ipad-screen">
+          <div class="ipad-screen" data-ipad-screen>
+
+            <!-- LOCK SCREEN -->
+            <div class="ipad-lock" data-ipad-lock>
+              <div class="ipad-lock_statusbar">
+                <span class="ipad-time" data-clock-time-lock>9:41</span>
+                <span class="ipad-icons" aria-hidden="true">
+                  <span class="ipad-signal"></span>
+                  <span class="ipad-wifi"></span>
+                  <span class="ipad-battery"><span class="ipad-battery_level"></span></span>
+                </span>
+              </div>
+              <div class="ipad-lock_clock">
+                <div class="ipad-lock_date" data-clock-fullday>{t('cto.lock_today')}</div>
+                <div class="ipad-lock_time" data-clock-big>9:41</div>
+              </div>
+              <div class="ipad-lock_notifs">
+                <div class="ipad-lock_notif">
+                  <span class="ipad-lock_notif_icon" style="background:linear-gradient(135deg,#5af07f,#0bbf3c);">✉</span>
+                  <div>
+                    <div class="ipad-lock_notif_title">{t('cto.notif_hire_title')}</div>
+                    <div class="ipad-lock_notif_body">{t('cto.notif_hire_body')}</div>
+                  </div>
+                  <span class="ipad-lock_notif_time">{t('cto.notif_now')}</span>
+                </div>
+                <div class="ipad-lock_notif">
+                  <span class="ipad-lock_notif_icon" style="background:linear-gradient(135deg,#86d9ff,#1f7af0);">◴</span>
+                  <div>
+                    <div class="ipad-lock_notif_title">{t('cto.notif_calendar_title')}</div>
+                    <div class="ipad-lock_notif_body">{t('cto.notif_calendar_body')}</div>
+                  </div>
+                  <span class="ipad-lock_notif_time">2m</span>
+                </div>
+              </div>
+              <div class="ipad-lock_hint">
+                <span class="ipad-lock_arrow" aria-hidden="true">⌃</span>
+                <span>{t('cto.lock_hint')}</span>
+              </div>
+            </div>
+
+            <!-- NOTIFICATION CENTER -->
+            <div class="ipad-notif" data-ipad-notif aria-hidden="true">
+              <div class="ipad-notif_head">
+                <span class="ipad-notif_title">{t('cto.notif_title')}</span>
+                <button type="button" class="ipad-notif_clear" data-notif-close>{t('cto.notif_clear')}</button>
+              </div>
+              <div class="ipad-notif_list">
+                <a class="ipad-notif_card ipad-notif_card--accent" href={`mailto:${t('common.email')}`}>
+                  <span class="ipad-notif_icon" style="background:linear-gradient(135deg,#ff8e5c,#ff4848);">✉</span>
+                  <div class="ipad-notif_text">
+                    <div class="ipad-notif_card_title">{t('cto.notif_hire_title')}</div>
+                    <div class="ipad-notif_card_body">{t('cto.notif_hire_body')}</div>
+                  </div>
+                  <span class="ipad-notif_time">{t('cto.notif_now')}</span>
+                </a>
+                <div class="ipad-notif_card">
+                  <span class="ipad-notif_icon" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">●</span>
+                  <div class="ipad-notif_text">
+                    <div class="ipad-notif_card_title">{t('cto.notif_inquiry_title')}</div>
+                    <div class="ipad-notif_card_body">{t('cto.notif_inquiry_body')}</div>
+                  </div>
+                  <span class="ipad-notif_time">2m</span>
+                </div>
+                <div class="ipad-notif_card">
+                  <span class="ipad-notif_icon" style="background:linear-gradient(135deg,#86d9ff,#1f7af0);">◴</span>
+                  <div class="ipad-notif_text">
+                    <div class="ipad-notif_card_title">{t('cto.notif_calendar_title')}</div>
+                    <div class="ipad-notif_card_body">{t('cto.notif_calendar_body')}</div>
+                  </div>
+                  <span class="ipad-notif_time">5m</span>
+                </div>
+                <div class="ipad-notif_card">
+                  <span class="ipad-notif_icon" style="background:linear-gradient(180deg,#3a3a3a,#0a0a0a);">⌥</span>
+                  <div class="ipad-notif_text">
+                    <div class="ipad-notif_card_title">{t('cto.notif_github_title')}</div>
+                    <div class="ipad-notif_card_body">{t('cto.notif_github_body')}</div>
+                  </div>
+                  <span class="ipad-notif_time">1h</span>
+                </div>
+                <div class="ipad-notif_card">
+                  <span class="ipad-notif_icon" style="background:linear-gradient(135deg,#1ED760,#0d6e2c);">◉</span>
+                  <div class="ipad-notif_text">
+                    <div class="ipad-notif_card_title">{t('cto.notif_calm_title')}</div>
+                    <div class="ipad-notif_card_body">{t('cto.notif_calm_body')}</div>
+                  </div>
+                  <span class="ipad-notif_time">3h</span>
+                </div>
+              </div>
+            </div>
+
             <div class="ipad-statusbar">
-              <div class="ipad-statusbar_left">
+              <button type="button" class="ipad-statusbar_left" data-toggle="notif" aria-label="Notifications">
                 <span class="ipad-time" data-clock-time>9:41</span>
                 <span class="ipad-date" data-clock-date></span>
-              </div>
+              </button>
               <span class="ipad-icons" aria-hidden="true">
                 <span class="ipad-signal"></span>
                 <span class="ipad-wifi"></span>
@@ -210,6 +299,7 @@ const accents = [
                 <button type="button" class="ipad-dock_app" data-open="webstorm" data-tooltip="WebStorm"><img src="/assets/webstorm.svg" alt="" loading="lazy" /></button>
                 <button type="button" class="ipad-dock_app" data-open="figma" data-tooltip="Figma"><img src="/assets/figma.svg" alt="" loading="lazy" /></button>
                 <button type="button" class="ipad-dock_app" data-open="obsidian" data-tooltip="Obsidian"><img src="/assets/obsidian.svg" alt="" loading="lazy" /></button>
+                <button type="button" class="ipad-dock_app ipad-dock_app--badge" data-open="messages" data-tooltip="Messages" data-badge="3"><img src="/assets/messages.svg" alt="" loading="lazy" /></button>
                 <a class="ipad-dock_app ipad-dock_app--badge" href={`mailto:${t('common.email')}`} data-tooltip={`Mail — ${t('cto.inbox_label')}`} data-badge="1"><img src="/assets/mail.svg" alt="" loading="lazy" /></a>
               </div>
 
@@ -622,6 +712,71 @@ const accents = [
                       </svg>
                       <div class="ob-graph_legend">7 notes · 8 links</div>
                     </aside>
+                  </div>
+                </section>
+
+                <!-- ========== MESSAGES ========== -->
+                <section class="ipad-win ipad-win--messages" data-window="messages" aria-hidden="true">
+                  <header class="ipad-win_chrome ipad-win_chrome--messages">
+                    <div class="ipad-win_lights" aria-hidden="true">
+                      <span class="ipad-light ipad-light--r" data-close></span>
+                      <span class="ipad-light ipad-light--y"></span>
+                      <span class="ipad-light ipad-light--g"></span>
+                    </div>
+                    <div class="msg-toolbar">
+                      <img class="msg-icon" src="/assets/messages.svg" alt="" />
+                      <span class="msg-brand">{t('cto.win_messages_title')}</span>
+                      <span class="msg-divider"></span>
+                      <span class="msg-sub">{t('cto.win_messages_subtitle')}</span>
+                    </div>
+                  </header>
+                  <div class="msg-body">
+                    <aside class="msg-sidebar">
+                      <div class="msg-side_head">{t('cto.win_messages_title')}</div>
+                      <a class="msg-thread is-active" href="#">
+                        <span class="msg-avatar" aria-hidden="true">
+                          <img src="/assets/t-icon.png" alt="" />
+                        </span>
+                        <div class="msg-thread_text">
+                          <div class="msg-thread_name">Tayfun · AI</div>
+                          <div class="msg-thread_snippet">{t('cto.msg_b3_bot')}</div>
+                        </div>
+                        <span class="msg-thread_meta">{t('cto.notif_now')}</span>
+                      </a>
+                    </aside>
+                    <main class="msg-thread_view">
+                      <div class="msg-thread_header">
+                        <span class="msg-avatar msg-avatar--lg" aria-hidden="true"><img src="/assets/t-icon.png" alt="" /></span>
+                        <div>
+                          <div class="msg-thread_name">Tayfun · AI</div>
+                          <div class="msg-thread_status">
+                            <span class="msg-dot" aria-hidden="true"></span>
+                            <span>{t('cto.win_messages_typing')}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="msg-thread_stage">
+                        <div class="msg-day">{t('cto.win_messages_today')} · 14:32</div>
+                        <div class="msg-bubble msg-bubble--in">{t('cto.msg_b1_bot')}</div>
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b1_user')}</div>
+                        <div class="msg-bubble msg-bubble--in" set:html={t('cto.msg_b2_bot')} />
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b2_user')}</div>
+                        <div class="msg-bubble msg-bubble--in">{t('cto.msg_b3_bot')}</div>
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b3_user')}</div>
+                        <div class="msg-bubble msg-bubble--in msg-bubble--typing" aria-hidden="true">
+                          <span></span><span></span><span></span>
+                        </div>
+                      </div>
+                      <div class="msg-meta">
+                        <strong>{t('cto.win_messages_lede')}</strong>
+                        <p>{t('cto.win_messages_body')}</p>
+                      </div>
+                      <button type="button" class="msg-continue" data-msg-continue>
+                        <img src="/assets/messages.svg" alt="" />
+                        <span>{t('cto.win_messages_continue')}</span>
+                        <span class="msg-continue_arrow" aria-hidden="true">→</span>
+                      </button>
+                    </main>
                   </div>
                 </section>
 
@@ -1216,7 +1371,8 @@ const accents = [
   .ipad-app[data-open-window="android-studio"] .ipad-win--android,
   .ipad-app[data-open-window="webstorm"]       .ipad-win--webstorm,
   .ipad-app[data-open-window="figma"]          .ipad-win--figma,
-  .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian {
+  .ipad-app[data-open-window="obsidian"]       .ipad-win--obsidian,
+  .ipad-app[data-open-window="messages"]       .ipad-win--messages {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -1788,6 +1944,481 @@ const accents = [
   .ob-graph_legend { text-align: center; }
   .ob-graph_svg { width: 100%; height: 100%; max-height: 200px; }
 
+  /* ============== LOCK SCREEN ============== */
+  .ipad-lock {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    padding: 0;
+    transition: transform 0.65s cubic-bezier(0.32, 0.72, 0.24, 1.06), opacity 0.45s ease;
+    overflow: hidden;
+  }
+  .ipad-lock::before {
+    /* extra dim so the clock pops */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.42) 100%);
+    pointer-events: none;
+  }
+  .ipad-screen.is-unlocked .ipad-lock {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ipad-lock_statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 26px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+    z-index: 1;
+  }
+  .ipad-lock_clock {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: clamp(12px, 2vw, 24px);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .ipad-lock_date {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: clamp(10px, 1vw, 12px);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 6px;
+  }
+  .ipad-lock_time {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    font-size: clamp(72px, 14vw, 168px);
+    line-height: 0.95;
+    color: #fff;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+    font-feature-settings: 'tnum';
+  }
+  .ipad-lock_notifs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 clamp(16px, 3vw, 36px);
+    margin-bottom: clamp(20px, 3vw, 36px);
+    position: relative;
+    z-index: 1;
+  }
+  .ipad-lock_notif {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  }
+  .ipad-lock_notif_icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+  .ipad-lock_notif_title { font-size: 12px; font-weight: 600; color: #fff; }
+  .ipad-lock_notif_body { font-size: 11px; color: rgba(255, 255, 255, 0.75); }
+  .ipad-lock_notif_time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .ipad-lock_hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0 clamp(14px, 2vw, 22px);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    z-index: 1;
+  }
+  .ipad-lock_arrow {
+    display: inline-block;
+    animation: lockBob 1.6s ease-in-out infinite;
+  }
+  @keyframes lockBob {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50%      { transform: translateY(-4px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ipad-lock_arrow { animation: none; }
+  }
+
+  /* ============== NOTIFICATION CENTER ============== */
+  .ipad-notif {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 8;
+    max-height: 100%;
+    padding: clamp(46px, 5.5vw, 64px) clamp(16px, 2vw, 28px) clamp(16px, 2vw, 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.32, 0.72, 0.24, 1);
+    overflow-y: auto;
+  }
+  .ipad-notif::before {
+    /* full-screen scrim with strong blur */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    z-index: -1;
+  }
+  .ipad-screen.is-notif-open .ipad-notif {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .ipad-notif_head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 4px 4px;
+  }
+  .ipad-notif_title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .ipad-notif_clear {
+    background: transparent;
+    border: 0;
+    color: #ff9b6e;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .ipad-notif_list { display: flex; flex-direction: column; gap: 8px; }
+  .ipad-notif_card {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26);
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    animation: notifSlideIn 0.45s cubic-bezier(0.32, 0.72, 0.24, 1) backwards;
+  }
+  .ipad-notif_card:nth-child(2) { animation-delay: 0.05s; }
+  .ipad-notif_card:nth-child(3) { animation-delay: 0.10s; }
+  .ipad-notif_card:nth-child(4) { animation-delay: 0.15s; }
+  .ipad-notif_card:nth-child(5) { animation-delay: 0.20s; }
+  @keyframes notifSlideIn {
+    from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)     scale(1); }
+  }
+  .ipad-notif_card--accent {
+    background:
+      linear-gradient(180deg, rgba(255, 140, 90, 0.22) 0%, rgba(255, 72, 72, 0.10) 100%);
+    border-color: rgba(255, 154, 110, 0.45);
+  }
+  .ipad-notif_card:not(.ipad-notif_card--accent):hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.30);
+  }
+  a.ipad-notif_card:hover { transform: translateY(-2px); }
+  .ipad-notif_icon {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  }
+  .ipad-notif_card_title { font-size: 13px; font-weight: 600; color: #fff; }
+  .ipad-notif_card_body { font-size: 11.5px; color: rgba(255, 255, 255, 0.75); margin-top: 2px; }
+  .ipad-notif_time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    align-self: flex-start;
+  }
+
+  /* Tappable statusbar time */
+  .ipad-statusbar_left {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .ipad-statusbar_left:hover { opacity: 0.7; }
+
+  /* ============== MESSAGES (iMessage) ============== */
+  .ipad-win--messages {
+    background: #0e0e0f;
+    color: #e8e8eb;
+  }
+  .ipad-win_chrome--messages {
+    background: linear-gradient(180deg, #1c1c1d 0%, #131314 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .msg-toolbar { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; color: #d6d6da; }
+  .msg-icon { width: 18px; height: 18px; border-radius: 5px; }
+  .msg-brand { font-weight: 600; }
+  .msg-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.10); }
+  .msg-sub { color: rgba(214, 214, 218, 0.6); }
+
+  .msg-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 0;
+  }
+  .msg-sidebar {
+    background: #18181a;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .msg-side_head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232, 232, 235, 0.5);
+    padding: 4px 6px 2px;
+  }
+  .msg-thread {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+  }
+  .msg-thread.is-active { background: rgba(0, 122, 255, 0.16); }
+  .msg-thread:not(.is-active):hover { background: rgba(255, 255, 255, 0.04); }
+  .msg-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #2a2a2a;
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  .msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .msg-avatar--lg { width: 44px; height: 44px; }
+  .msg-thread_text { min-width: 0; }
+  .msg-thread_name { font-size: 12px; font-weight: 600; color: #fff; }
+  .msg-thread_snippet {
+    font-size: 11px;
+    color: rgba(232, 232, 235, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .msg-thread_meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: rgba(232, 232, 235, 0.5);
+  }
+
+  .msg-thread_view {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: #0e0e0f;
+    overflow: hidden;
+  }
+  .msg-thread_header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .msg-thread_status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(232, 232, 235, 0.6);
+  }
+  .msg-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+  }
+
+  .msg-thread_stage {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .msg-day {
+    align-self: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(232, 232, 235, 0.45);
+    padding: 4px 0 6px;
+  }
+  .msg-bubble {
+    max-width: 70%;
+    padding: 9px 13px;
+    border-radius: 18px;
+    font-size: 13.5px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: msgPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+  .msg-bubble strong {
+    font-weight: 600;
+    color: inherit;
+  }
+  .msg-bubble--in {
+    align-self: flex-start;
+    background: #29292b;
+    color: #fff;
+    border-bottom-left-radius: 5px;
+  }
+  .msg-bubble--out {
+    align-self: flex-end;
+    background: linear-gradient(180deg, #2a8cff 0%, #0a6eff 100%);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 4px 12px rgba(10, 110, 255, 0.25);
+  }
+  .msg-bubble--typing {
+    display: inline-flex;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .msg-bubble--typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    animation: msgTyping 1.2s ease-in-out infinite;
+  }
+  .msg-bubble--typing span:nth-child(2) { animation-delay: 0.15s; }
+  .msg-bubble--typing span:nth-child(3) { animation-delay: 0.30s; }
+  @keyframes msgTyping {
+    0%, 60%, 100% { transform: scale(0.8); opacity: 0.5; }
+    30% { transform: scale(1.2); opacity: 1; }
+  }
+  @keyframes msgPop {
+    from { opacity: 0; transform: translateY(6px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  .msg-meta {
+    margin: 0 18px;
+    padding: 10px 14px;
+    background: rgba(10, 110, 255, 0.08);
+    border: 1px solid rgba(10, 110, 255, 0.22);
+    border-radius: 10px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #d6d6da;
+  }
+  .msg-meta strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #79bfff;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .msg-meta p { margin: 0; }
+
+  .msg-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    margin: 12px 18px 18px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #0a6eff;
+    border: 0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(10, 110, 255, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .msg-continue img { width: 16px; height: 16px; border-radius: 4px; }
+  .msg-continue:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(10, 110, 255, 0.45); }
+  .msg-continue_arrow { transition: transform 0.2s ease; }
+  .msg-continue:hover .msg-continue_arrow { transform: translateX(3px); }
+
   /* Hide windows on mobile — too cramped to be useful */
   @media (max-width: 768px) {
     .ipad-win { inset: 30px 8px 70px; }
@@ -1795,8 +2426,15 @@ const accents = [
     .ipad-app[data-open-window] .ipad-win .as-body,
     .ipad-app[data-open-window] .ipad-win .ws-body,
     .ipad-app[data-open-window] .ipad-win .fg-body,
-    .ipad-app[data-open-window] .ipad-win .ob-body { grid-template-columns: 1fr; }
-    .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph { display: none; }
+    .ipad-app[data-open-window] .ipad-win .ob-body,
+    .ipad-app[data-open-window] .ipad-win .msg-body { grid-template-columns: 1fr; }
+    .xc-nav, .xc-inspector, .as-nav, .as-preview, .ws-nav, .ws-side, .fg-layers, .fg-props, .ob-nav, .ob-graph, .msg-sidebar { display: none; }
+    .ipad-lock_time { font-size: clamp(56px, 14vw, 96px); }
+    .ipad-lock_notif { padding: 8px 10px; }
+    .ipad-lock_notif_body { font-size: 10.5px; }
+    .ipad-notif_card { padding: 10px 12px; }
+    .msg-bubble { max-width: 82%; font-size: 12.5px; }
+    .msg-meta { font-size: 11.5px; padding: 8px 10px; }
   }
   .ipad-app_title {
     display: inline-flex;
@@ -2444,20 +3082,109 @@ const accents = [
     function initClock(app) {
       var timeEl = app.querySelector('[data-clock-time]');
       var dateEl = app.querySelector('[data-clock-date]');
+      var timeLockEl = app.querySelector('[data-clock-time-lock]');
+      var bigEl = app.querySelector('[data-clock-big]');
+      var fullDayEl = app.querySelector('[data-clock-fullday]');
       if (!timeEl || !dateEl) return;
       var dateOpts = { weekday: 'short', day: '2-digit', month: 'short' };
+      var fullOpts = { weekday: 'long', day: 'numeric', month: 'long' };
       var locale = lang === 'de' ? 'de-DE' : 'en-US';
       function tick() {
         var now = new Date();
         var hh = String(now.getHours()).padStart(2, '0');
         var mm = String(now.getMinutes()).padStart(2, '0');
-        timeEl.textContent = hh + ':' + mm;
+        var hm = hh + ':' + mm;
+        timeEl.textContent = hm;
+        if (timeLockEl) timeLockEl.textContent = hm;
+        if (bigEl) bigEl.textContent = hm;
         dateEl.textContent = now.toLocaleDateString(locale, dateOpts);
+        if (fullDayEl) fullDayEl.textContent = now.toLocaleDateString(locale, fullOpts);
       }
       tick();
-      // re-tick on the next minute boundary, then every minute
       var msToNextMin = (60 - new Date().getSeconds()) * 1000;
       setTimeout(function () { tick(); setInterval(tick, 60000); }, msToNextMin);
+    }
+
+    // ---------- Lock screen ----------
+    function initLock(app, frame) {
+      var screen = app.querySelector('[data-ipad-screen]');
+      var lock = app.querySelector('[data-ipad-lock]');
+      if (!screen || !lock) return;
+
+      function unlock() {
+        screen.classList.add('is-unlocked');
+        try { sessionStorage.setItem('tyfn-ipad-unlocked', '1'); } catch (e) {}
+      }
+      // Click anywhere on the lock area
+      lock.addEventListener('click', unlock);
+
+      // Skip lock if we've already unlocked this session
+      try {
+        if (sessionStorage.getItem('tyfn-ipad-unlocked') === '1') {
+          screen.classList.add('is-unlocked');
+          return;
+        }
+      } catch (e) {}
+
+      // Auto-unlock once the iPad has scrolled fully into view
+      if (window.IntersectionObserver && frame) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.intersectionRatio >= 0.75) {
+              setTimeout(unlock, 900);
+              io.disconnect();
+            }
+          });
+        }, { threshold: [0, 0.5, 0.75, 1] });
+        io.observe(frame);
+      } else {
+        setTimeout(unlock, 1500);
+      }
+    }
+
+    // ---------- Notification center ----------
+    function initNotif(app) {
+      var screen = app.querySelector('[data-ipad-screen]');
+      var notif = app.querySelector('[data-ipad-notif]');
+      var toggle = app.querySelector('[data-toggle="notif"]');
+      var close = app.querySelector('[data-notif-close]');
+      if (!screen || !notif || !toggle) return;
+
+      function setOpen(open) {
+        screen.classList.toggle('is-notif-open', open);
+        notif.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        setOpen(!screen.classList.contains('is-notif-open'));
+      });
+      if (close) close.addEventListener('click', function () { setOpen(false); });
+      // ESC or click outside
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && screen.classList.contains('is-notif-open')) setOpen(false);
+      });
+      screen.addEventListener('click', function (e) {
+        if (!screen.classList.contains('is-notif-open')) return;
+        if (e.target.closest('.ipad-notif_card')) return;
+        if (e.target.closest('.ipad-statusbar_left')) return;
+        if (e.target.closest('.ipad-notif_clear')) return;
+        if (!e.target.closest('.ipad-notif_list')) setOpen(false);
+      });
+    }
+
+    // ---------- Messages → bridge to n8n chatbot ----------
+    function initMessagesBridge(app) {
+      var btn = app.querySelector('[data-msg-continue]');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        // Close the iPad window first
+        app.removeAttribute('data-open-window');
+        // Trigger the global n8n chat toggle
+        setTimeout(function () {
+          var t = document.querySelector('#n8n-chat .chat-window-toggle');
+          if (t) t.click();
+        }, 220);
+      });
     }
 
     // ---------- Battery indicator ----------
@@ -2721,6 +3448,9 @@ const accents = [
         initSearch(app);
         initSort(app);
         initWindows(app);
+        initLock(app, frame);
+        initNotif(app);
+        initMessagesBridge(app);
       }
     }
 
