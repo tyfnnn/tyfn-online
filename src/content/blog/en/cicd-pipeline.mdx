@@ -1,0 +1,220 @@
+---
+title: From one branch to a real pipeline — how easyNGO got a CI/CD setup
+description: Three weeks from a single main branch with manual deployments to staging and production environments wired up through GitHub Actions, environment approvals and Edge Function proxies — and why it was worth doing before the first release.
+pubDate: 2026-05-12
+lang: en
+tags:
+  - ci-cd
+  - github-actions
+  - supabase
+  - devops
+  - easyngo
+translationKey: cicd-pipeline
+draft: false
+---
+
+Three weeks. One week of planning, two weeks of implementation.
+That's how long it took easyNGO to grow from a single `main` branch
+with manual deployments into a full CI/CD pipeline with staging and
+production environments. And every minute was worth it.
+
+## Why now — and not later?
+
+easyNGO isn't in the app store yet. There are no end users yet who
+rely on a stable app. You could argue: why bother with a pipeline now?
+Just do it once the app goes live.
+
+That was exactly my thinking — until I remembered my previous
+employer e2n. The team there had a clean CI/CD pipeline, and I saw
+first-hand how much stability and trust that creates. Nobody ever
+taught me *how* to build a pipeline back then — but I experienced
+every day *why* it matters so much. Bugs that land in production are
+expensive. Not just technically, but in user trust. That's exactly
+what I wanted to get right for easyNGO from the start.
+
+For easyNGO this is especially critical. The app handles financial
+data — receipts, expenses, budgets, approval workflows. If I break
+something in the backend and users suddenly can't submit their
+receipts or lose data, that's not just a bug. That's a breach of
+trust.
+
+That's why I wanted to set up the infrastructure *before* the first
+beta version goes out. The beta should run against a staging
+environment, the final app against production. And between them
+should sit a pipeline that ensures nothing wanders from one
+environment to the other uncontrolled.
+
+## The starting state: one branch, one backend
+
+Up to three weeks ago, development looked like this: everything
+happened on `main`. Every feature, every fix, every migration —
+straight onto the one branch, against the one Supabase project. There
+was no protection against accidentally pushing a broken migration to
+the database that would immediately be visible to everyone.
+
+The API keys for external services — Mistral for OCR receipt
+recognition, ExchangeRate for currency conversion — were also baked
+straight into the client binary. Anyone decompiling the APK could
+have extracted them. For an AI API key that costs money per call,
+that's not a theoretical risk.
+
+## The planning: what do we actually need?
+
+I didn't spend the planning week on tools, but on questions:
+
+**What needs to be protected?** The production database. Full stop.
+Everything else — code, edge functions, build artifacts — can be
+redeployed. But a broken database migration on production is hard to
+roll back once real user data is in there.
+
+**What's the simplest setup that provides that protection?** Two
+Supabase projects (staging + production), two Git branches
+(`develop` + `main`), and GitHub Actions workflows that automate the
+deployment. Supabase offers two projects in the free tier — tailor
+made for exactly this setup.
+
+**Where's the line between automation and control?** Staging should
+deploy fully automatically. Every push to `develop` with Supabase
+changes should land on staging immediately, so I can test quickly.
+Production, on the other hand, should be *triggered* automatically
+but only actually deploy after my explicit approval. That way I can't
+forget anything, but I keep control.
+
+## The implementation: step by step
+
+### 1. Introduce a branching strategy
+
+The first step was the simplest and at the same time the most
+far-reaching: create a `develop` branch and set it as the default
+branch.
+
+From that moment on, development no longer happened directly on
+`main`. Instead:
+
+- Feature branches are cut from `develop`
+- PRs go to `develop` — that's where things get tested
+- `main` only gets tested, stable code via PR from `develop`
+
+That sounds like a standard Git flow, and it is. But the difference
+to before was huge: for the first time there was a place where things
+were *allowed* to break.
+
+### 2. Set up a staging backend
+
+The second Supabase project — "easyNGO Staging" — was created in
+five minutes. The actual work was bringing it into the same state as
+production: applying 54 migrations, deploying 12 edge functions,
+configuring all secrets.
+
+Setting it up already showed why a staging environment is so
+valuable: little things in the configuration that never surface on a
+grown database show up immediately on a fresh system. That's exactly
+what staging is for — finding and fixing these things before they
+ever reach a real user.
+
+### 3. Get API keys out of the client
+
+In parallel with the pipeline work, I removed the API keys for
+Mistral and ExchangeRate from the client binary and moved them into
+Supabase Edge Functions. The app no longer calls the external APIs
+directly; it goes through edge functions:
+
+```
+App → (Supabase Auth) → Edge Function → Mistral/ExchangeRate API
+                              ↑
+                     API key stays here
+```
+
+The edge functions are thin proxies — they check whether the user is
+logged in, read the API key from an environment variable, and forward
+the request. No business logic, no complexity. But the keys are no
+longer in the client.
+
+### 4. CI checks on pull requests
+
+The `ci.yml` workflow runs on every PR against `develop` or `main`:
+
+- Desktop and Android tests
+- Android debug compile
+- Desktop compile
+- iOS framework compile (on a macOS runner)
+
+No PR gets merged that doesn't compile. That sounds obvious, but it
+wasn't before — without CI, a typo in a Kotlin file could slip
+through and only show up on the next manual build.
+
+### 5. Automatic Supabase deployments
+
+The heart of the pipeline: two workflows for Supabase deployments.
+
+**Staging** (`supabase-staging.yml`): triggers automatically on push
+to `develop` when files under `supabase/` have changed. Applies
+migrations and deploys all edge functions. No manual step required.
+
+**Production** (`supabase-production.yml`): also triggers
+automatically on push to `main` + Supabase changes — but with one
+crucial difference: the workflow waits for my approval. GitHub's
+environment protection rules make sure I have to confirm the deploy
+first. On top of that, a schema backup is saved as a GitHub artifact
+before every production deploy.
+
+## What I learned
+
+**Staging finds bugs that production hides.** The RLS recursion and
+the view migration would only have struck under specific conditions
+on production. Staging surfaced them immediately, because a fresh
+database is merciless.
+
+**The pipeline isn't overhead, it's insurance.** Yes, it took three
+weeks. But from now on I can build features without worrying that a
+wrong push will break the production database. That's invaluable,
+especially when you're a solo developer and there's no colleague to
+catch the mistake.
+
+**Automation with control is the sweet spot.** Staging deploys fully
+automatically — fast feedback. Production is *triggered*
+automatically but *approved* manually — nothing gets forgotten, but
+nothing happens uncontrolled.
+
+**API keys don't belong in the client.** I knew that in theory, but
+in practice I had done it that way anyway because it was easier. The
+migration to edge functions was manageable and really should have
+been like that from the start.
+
+## How it looks now
+
+```
+Feature branch → PR to develop → CI checks → Merge
+                                                 ↓
+                                    develop (staging backend)
+                                    └── Supabase auto-deploy
+                                                 ↓
+                                    PR to main → CI checks → Merge
+                                                                ↓
+                                               main (production backend)
+                                               └── Supabase deploy with approval
+```
+
+| Aspect | Before | After |
+|---|---|---|
+| Branches | `main` | `develop` + `main` |
+| Supabase projects | 1 (production) | 2 (staging + production) |
+| Backend deployment | Manual via CLI | Automatic via GitHub Actions |
+| API keys | In the client binary | In edge functions (server-side) |
+| CI checks | None | Build + tests on every PR |
+| Production protection | None | Environment approval + schema backup |
+
+## What's still to come
+
+The pipeline currently only covers the backend (Supabase). App store
+deployments — Android Play Store, iOS App Store, desktop builds —
+are prepared as a workflow but waiting on the store listings. Once
+easyNGO is in the store, that will be automated too: a push to
+`develop` builds a beta, a push to `main` builds the release.
+
+But that's a story for another blog post.
+
+---
+
+*Said and done. easyNGO now has a CI/CD pipeline — and I can finally
+build features without worrying about the backend.*
