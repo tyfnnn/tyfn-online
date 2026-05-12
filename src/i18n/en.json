@@ -154,7 +154,7 @@
     "page_title": "404 — Lost in space — TAYFUN ILKER",
     "page_description": "The page you were looking for drifted off into deep space. Beam yourself back to safe orbit.",
     "eyebrow": "TRANSMISSION LOST · ERROR 404",
-    "title": "This page got<br />abducted by aliens.",
+    "title": "This page got<br />abducted by <span class=\"nf-accent\">aliens</span>.",
     "subtitle": "We searched <em>every</em> route. Even peeked at <code>/api/secret-cookies</code>. Nothing but cold, empty space.",
     "joke": "Either the URL never existed, or you just discovered a wormhole. Honestly, pretty cool either way.",
     "cta_home": "Beam me home",

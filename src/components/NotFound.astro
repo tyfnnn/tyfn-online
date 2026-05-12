@@ -20,51 +20,69 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
   <div class="nf-stars nf-stars--slow" aria-hidden="true"></div>
 
   <div class="nf-inner">
-    <p class="nf-eyebrow" data-scramble>{t('notfound.eyebrow')}</p>
+    <p class="nf-pill" data-scramble>
+      <span class="nf-pill-dot" aria-hidden="true"></span>
+      <span>{t('notfound.eyebrow')}</span>
+    </p>
 
     <div class="nf-display" aria-hidden="true">
+      <span class="nf-debris nf-debris--a">// signal lost</span>
+      <span class="nf-debris nf-debris--b">[ drift: +0.42 AU ]</span>
+      <span class="nf-debris nf-debris--c">// rerouting…</span>
+
       <span class="nf-digit nf-digit--four-l">4</span>
       <span class="nf-digit nf-digit--zero">
-        <span class="nf-zero-glyph">0</span>
-        <span class="nf-ring"></span>
+        <span class="nf-planet">
+          <span class="nf-planet-bands"></span>
+          <span class="nf-planet-ring"></span>
+        </span>
       </span>
       <span class="nf-digit nf-digit--four-r">4</span>
 
       <div class="nf-orbit">
         <div class="nf-astronaut">
-          <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <radialGradient id="visor" cx="35%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#9fd9ff" stop-opacity="0.95" />
-                <stop offset="55%" stop-color="#3a6ea5" stop-opacity="0.95" />
-                <stop offset="100%" stop-color="#0d1a2b" stop-opacity="1" />
+              <radialGradient id="nf-visor" cx="35%" cy="32%" r="85%">
+                <stop offset="0%" stop-color="#7FB3FF" />
+                <stop offset="55%" stop-color="#1E3A6B" />
+                <stop offset="100%" stop-color="#0A1426" />
               </radialGradient>
-              <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#f4f1ea" />
-                <stop offset="100%" stop-color="#c9c5ba" />
+              <linearGradient id="nf-suit" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#F4F4F6" />
+                <stop offset="100%" stop-color="#C8C8D0" />
               </linearGradient>
             </defs>
 
-            <ellipse cx="60" cy="132" rx="32" ry="4" fill="#000" opacity="0.25" />
+            <rect x="38" y="50" width="44" height="36" rx="6" fill="#A3A3AC" />
+            <rect x="42" y="54" width="6" height="12" rx="1" fill="#E5534B" />
+            <rect x="50" y="54" width="6" height="12" rx="1" fill="#3ECF8E" />
 
-            <rect x="40" y="78" width="40" height="38" rx="14" fill="url(#suit)" />
-            <rect x="20" y="84" width="22" height="12" rx="6" fill="url(#suit)" />
-            <rect x="78" y="84" width="22" height="12" rx="6" fill="url(#suit)" />
-            <rect x="46" y="112" width="12" height="20" rx="5" fill="url(#suit)" />
-            <rect x="62" y="112" width="12" height="20" rx="5" fill="url(#suit)" />
+            <path d="M 38 56 Q 38 48 46 48 L 74 48 Q 82 48 82 56 L 82 86 Q 82 96 72 96 L 48 96 Q 38 96 38 86 Z"
+                  fill="url(#nf-suit)" stroke="#9A9AA3" stroke-width="1" />
 
-            <rect x="52" y="92" width="16" height="14" rx="3" fill="#DB4A2B" />
-            <rect x="55" y="95" width="10" height="2" fill="#fff" opacity="0.9" />
-            <rect x="55" y="99" width="7" height="2" fill="#fff" opacity="0.7" />
-            <rect x="55" y="103" width="9" height="2" fill="#fff" opacity="0.5" />
+            <rect x="52" y="62" width="16" height="10" rx="2" fill="#19191C" stroke="#E5534B" stroke-width="1.2" />
+            <text x="60" y="70" font-family="Archivo Black, sans-serif" font-size="6" fill="#E5534B" text-anchor="middle" letter-spacing="0.5">404</text>
 
-            <circle cx="60" cy="50" r="32" fill="#e6e6dd" stroke="#b8b8b0" stroke-width="2" />
-            <circle cx="60" cy="50" r="26" fill="url(#visor)" />
-            <ellipse cx="50" cy="40" rx="8" ry="5" fill="#fff" opacity="0.5" />
-            <ellipse cx="68" cy="58" rx="3" ry="2" fill="#fff" opacity="0.7" />
+            <path d="M 38 60 Q 22 64 18 78 Q 16 86 22 90 L 28 84 Q 30 76 38 74 Z"
+                  fill="url(#nf-suit)" stroke="#9A9AA3" stroke-width="1" />
+            <path d="M 82 60 Q 98 60 102 50 Q 104 42 98 38 L 92 44 Q 88 52 82 54 Z"
+                  fill="url(#nf-suit)" stroke="#9A9AA3" stroke-width="1" />
+            <circle cx="22" cy="92" r="6" fill="#19191C" stroke="#E5534B" stroke-width="1" />
+            <circle cx="100" cy="36" r="6" fill="#19191C" stroke="#E5534B" stroke-width="1" />
 
-            <rect x="36" y="46" width="6" height="8" rx="2" fill="#a8a59a" />
-            <rect x="78" y="46" width="6" height="8" rx="2" fill="#a8a59a" />
+            <rect x="46" y="92" width="10" height="14" rx="3" fill="url(#nf-suit)" stroke="#9A9AA3" stroke-width="1" />
+            <rect x="64" y="92" width="10" height="14" rx="3" fill="url(#nf-suit)" stroke="#9A9AA3" stroke-width="1" />
+            <rect x="44" y="103" width="14" height="6" rx="2" fill="#19191C" />
+            <rect x="62" y="103" width="14" height="6" rx="2" fill="#19191C" />
+
+            <circle cx="60" cy="38" r="24" fill="#E8E8EE" stroke="#9A9AA3" stroke-width="1" />
+            <circle cx="60" cy="38" r="18" fill="url(#nf-visor)" />
+            <ellipse cx="53" cy="32" rx="6" ry="4" fill="#FFFFFF" opacity="0.45" />
+            <ellipse cx="66" cy="42" rx="2.5" ry="1.5" fill="#FFFFFF" opacity="0.35" />
+
+            <line x1="76" y1="22" x2="82" y2="14" stroke="#9A9AA3" stroke-width="1.5" />
+            <circle cx="82" cy="14" r="2" fill="#E5534B" />
           </svg>
         </div>
       </div>
@@ -98,9 +116,23 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     justify-content: center;
     overflow: hidden;
     background:
-      radial-gradient(ellipse at 20% 10%, rgba(219, 74, 43, 0.08), transparent 55%),
-      radial-gradient(ellipse at 80% 90%, rgba(74, 107, 102, 0.12), transparent 60%),
+      radial-gradient(1100px 700px at 78% 28%, rgba(229, 83, 75, 0.18), transparent 60%),
+      radial-gradient(900px 800px at 18% 88%, rgba(137, 87, 229, 0.16), transparent 60%),
+      radial-gradient(700px 600px at 92% 92%, rgba(33, 136, 255, 0.10), transparent 60%),
       var(--bg-primary, #2B2B2B);
+  }
+
+  .nf::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
   }
 
   .nf-stars,
@@ -151,23 +183,37 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     text-align: center;
   }
 
-  .nf-eyebrow {
-    font-family: 'Inter', sans-serif;
-    color: var(--accent-color, #DB4A2B);
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.32em;
+  .nf-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-family: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, monospace;
+    color: var(--text-secondary, #B8B8B0);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .nf-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-color, #DB4A2B);
+    box-shadow: 0 0 12px var(--accent-color, #DB4A2B);
     animation: nf-flicker 3.4s ease-in-out infinite;
   }
 
   @keyframes nf-flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% {
-      opacity: 1;
-      text-shadow: 0 0 12px rgba(219, 74, 43, 0.6);
-    }
-    20%, 24%, 55% { opacity: 0.35; text-shadow: none; }
+    0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+    20%, 24%, 55% { opacity: 0.3; }
   }
 
   .nf-display {
@@ -205,40 +251,78 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 0.72em;
+    height: 0.72em;
+    margin: 0 -0.04em;
+    font-size: clamp(7rem, 22vw, 14rem);
   }
 
-  .nf-zero-glyph {
+  .nf-planet {
     position: relative;
-    display: inline-block;
-    background: radial-gradient(circle at 35% 30%, #ffb38c 0%, #DB4A2B 35%, #6b1f10 75%, #1a0a06 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: nf-spin-slow 14s linear infinite;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #FFE4A3 0%, #F2B544 26%, #E5534B 55%, #8A2D1F 88%);
+    box-shadow:
+      inset -0.12em -0.08em 0.26em rgba(0, 0, 0, 0.55),
+      inset 0.08em 0.06em 0.18em rgba(255, 220, 160, 0.18),
+      0 0 0.28em rgba(229, 83, 75, 0.35),
+      0 0 0.55em rgba(229, 83, 75, 0.18);
+    animation: nf-planet-breathe 6s ease-in-out infinite;
   }
 
-  .nf-ring {
+  .nf-planet-bands {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      linear-gradient(110deg, transparent 38%, rgba(0, 0, 0, 0.18) 40%, transparent 44%),
+      linear-gradient(110deg, transparent 58%, rgba(0, 0, 0, 0.22) 60%, transparent 66%),
+      linear-gradient(110deg, transparent 72%, rgba(255, 220, 160, 0.12) 75%, transparent 80%);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .nf-planet-ring {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120%;
-    height: 28%;
+    width: 150%;
+    height: 30%;
     transform: translate(-50%, -50%) rotate(-18deg);
-    border: 2px solid rgba(230, 230, 221, 0.35);
     border-radius: 50%;
-    box-shadow: 0 0 20px rgba(219, 74, 43, 0.25);
+    border: 2px solid rgba(242, 181, 68, 0.55);
+    box-shadow: 0 0 12px rgba(242, 181, 68, 0.35);
+    background: linear-gradient(180deg, transparent 48%, rgba(242, 181, 68, 0.10) 50%, transparent 52%);
     pointer-events: none;
     animation: nf-ring-tilt 8s ease-in-out infinite;
   }
 
-  @keyframes nf-spin-slow {
-    from { filter: hue-rotate(0deg); }
-    to { filter: hue-rotate(360deg); }
+  @keyframes nf-planet-breathe {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.08); }
   }
 
   @keyframes nf-ring-tilt {
     0%, 100% { transform: translate(-50%, -50%) rotate(-18deg) scaleX(1); }
-    50% { transform: translate(-50%, -50%) rotate(-12deg) scaleX(0.92); }
+    50% { transform: translate(-50%, -50%) rotate(-14deg) scaleX(0.94); }
+  }
+
+  .nf-debris {
+    position: absolute;
+    font-family: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .nf-debris--a { top: 6%; left: 8%; color: #F2B544; }
+  .nf-debris--b { bottom: 4%; left: 14%; color: #3ECF8E; }
+  .nf-debris--c { top: 14%; right: 6%; color: #2188FF; }
+
+  @media (max-width: 640px) {
+    .nf-debris { display: none; }
   }
 
   .nf-orbit {
@@ -283,6 +367,13 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
     color: var(--text-light, #E6E6DD);
     margin: 0 0 1rem;
     line-height: 1.15;
+  }
+
+  .nf-title :global(.nf-accent) {
+    background: linear-gradient(96deg, #F2B544 0%, #E5534B 55%, #8957E5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .nf-subtitle {
@@ -372,11 +463,11 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
   @media (prefers-reduced-motion: reduce) {
     .nf-stars,
     .nf-stars--slow,
-    .nf-eyebrow,
+    .nf-pill-dot,
     .nf-digit--four-l,
     .nf-digit--four-r,
-    .nf-zero-glyph,
-    .nf-ring,
+    .nf-planet,
+    .nf-planet-ring,
     .nf-orbit,
     .nf-astronaut {
       animation: none !important;

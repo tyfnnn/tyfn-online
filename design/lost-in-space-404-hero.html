@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Lost in Space — 404</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0B0B12;
+      --bg-tint: #15151D;
+      --ink: #FFFFFF;
+      --ink-dim: #B5B5B8;
+      --ink-faint: #6B6B70;
+      --rule: #25252E;
+
+      --planet-a: #F2B544;   /* amber */
+      --planet-b: #E5534B;   /* red */
+      --planet-c: #8A2D1F;   /* deep oxide */
+      --signal: #3ECF8E;
+      --beacon: #2188FF;
+      --violet: #8957E5;
+
+      --sans: 'Manrope', system-ui, sans-serif;
+      --display: 'Archivo Black', 'Manrope', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Menlo', monospace;
+    }
+
+    html, body {
+      background: #06060B;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 800px;
+      background:
+        radial-gradient(1100px 700px at 78% 35%, rgba(229, 83, 75, 0.18), transparent 60%),
+        radial-gradient(900px 800px at 20% 85%, rgba(137, 87, 229, 0.18), transparent 60%),
+        radial-gradient(700px 600px at 95% 95%, rgba(33, 136, 255, 0.10), transparent 60%),
+        var(--bg);
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    /* starfield — two layers of dots */
+    .stars,
+    .stars-2 {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background-repeat: repeat;
+    }
+    .stars {
+      background-image:
+        radial-gradient(1.5px 1.5px at 12% 18%, #ffffff 50%, transparent 100%),
+        radial-gradient(1px 1px at 32% 62%, #ffffff 50%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 58% 12%, #ffffff 50%, transparent 100%),
+        radial-gradient(1px 1px at 73% 78%, #ffffff 50%, transparent 100%),
+        radial-gradient(1.4px 1.4px at 88% 38%, #ffffff 50%, transparent 100%),
+        radial-gradient(1px 1px at 6% 78%, #ffffff 50%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 44% 92%, #ffffff 50%, transparent 100%),
+        radial-gradient(1px 1px at 92% 8%, #ffffff 50%, transparent 100%),
+        radial-gradient(1.1px 1.1px at 22% 38%, #ffffff 50%, transparent 100%),
+        radial-gradient(1px 1px at 66% 48%, #ffffff 50%, transparent 100%);
+      opacity: 0.7;
+    }
+    .stars-2 {
+      background-image:
+        radial-gradient(0.8px 0.8px at 18% 48%, rgba(255,255,255,0.6) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 50% 22%, rgba(255,255,255,0.5) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 84% 64%, rgba(255,255,255,0.6) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 38% 78%, rgba(255,255,255,0.5) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 70% 30%, rgba(255,255,255,0.55) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 5% 38%, rgba(255,255,255,0.5) 50%, transparent 100%),
+        radial-gradient(0.8px 0.8px at 95% 82%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      opacity: 0.5;
+    }
+
+    /* faint scanline grid */
+    .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
+    }
+
+    /* ============== TOP BAR ============== */
+    .top {
+      position: absolute;
+      top: 44px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .top-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+    }
+    .top-tag {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      color: var(--ink-dim);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      text-transform: uppercase;
+    }
+    .top-tag .live {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--planet-b);
+      box-shadow: 0 0 12px var(--planet-b);
+    }
+
+    /* ============== BODY ============== */
+    .body {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 3;
+    }
+
+    /* ---- 404 composition ---- */
+    .four-oh-four {
+      position: absolute;
+      top: 50%; left: 56px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--display);
+      font-size: 360px;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      z-index: 4;
+    }
+    .four-oh-four .digit { display: inline-block; }
+    .four-oh-four .left  { transform: rotate(-7deg) translateY(8px); color: #F4F4F6; }
+    .four-oh-four .right { transform: rotate(7deg)  translateY(8px); color: #F4F4F6; }
+
+    /* the 0 as a tiny planet */
+    .planet {
+      position: relative;
+      width: 240px; height: 240px;
+      margin: 0 -10px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 30%, #FFE4A3 0%, var(--planet-a) 26%, var(--planet-b) 55%, var(--planet-c) 88%);
+      box-shadow:
+        inset -28px -18px 60px rgba(0,0,0,0.55),
+        inset 18px 14px 40px rgba(255, 220, 160, 0.18),
+        0 0 60px rgba(229, 83, 75, 0.35),
+        0 0 120px rgba(229, 83, 75, 0.18);
+    }
+    /* atmospheric bands */
+    .planet::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background:
+        linear-gradient(110deg, transparent 38%, rgba(0,0,0,0.18) 40%, transparent 44%),
+        linear-gradient(110deg, transparent 58%, rgba(0,0,0,0.22) 60%, transparent 66%),
+        linear-gradient(110deg, transparent 72%, rgba(255,220,160,0.12) 75%, transparent 80%);
+      mix-blend-mode: overlay;
+    }
+    /* saturn ring */
+    .planet::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 360px; height: 70px;
+      transform: translate(-50%, -50%) rotate(-18deg);
+      border-radius: 50%;
+      border: 2px solid rgba(242, 181, 68, 0.55);
+      box-shadow: 0 0 12px rgba(242, 181, 68, 0.35);
+      background: linear-gradient(180deg, transparent 48%, rgba(242, 181, 68, 0.08) 50%, transparent 52%);
+      pointer-events: none;
+    }
+
+    /* ---- RIGHT: copy block ---- */
+    .copy {
+      position: absolute;
+      top: 50%; right: 56px;
+      transform: translateY(-50%);
+      width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      z-index: 6;
+    }
+    .copy-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--planet-a);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .copy-eyebrow::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--planet-a);
+      opacity: 0.7;
+    }
+    .headline {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 56px;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+    .headline .accent {
+      background: linear-gradient(96deg, var(--planet-a) 0%, var(--planet-b) 55%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .sub {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-dim);
+      line-height: 1.55;
+    }
+
+    /* ---- Astronaut ---- */
+    .astronaut {
+      position: absolute;
+      top: 110px;
+      right: 60px;
+      width: 130px; height: 130px;
+      transform: rotate(18deg);
+      z-index: 7;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));
+    }
+    .astronaut svg { display: block; width: 100%; height: auto; }
+
+    /* small floating debris dots */
+    .debris {
+      position: absolute;
+      z-index: 5;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+    }
+    .debris.d1 { top: 200px; left: 470px; color: var(--planet-a); opacity: 0.7; }
+    .debris.d2 { bottom: 200px; left: 130px; color: var(--signal); opacity: 0.7; }
+    .debris.d3 { bottom: 250px; right: 280px; color: var(--beacon); opacity: 0.7; }
+
+    /* ============== BOTTOM ============== */
+    .bottom {
+      position: absolute;
+      bottom: 48px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+      z-index: 5;
+    }
+    .bottom .left { color: var(--ink); font-weight: 500; }
+    .bottom .left .slash { color: var(--planet-b); }
+    .bottom .signal {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--ink-faint);
+    }
+    .bottom .signal .bar {
+      width: 3px; background: var(--planet-b); border-radius: 1px;
+      box-shadow: 0 0 6px var(--planet-b);
+    }
+    .bottom .signal .b1 { height: 4px; }
+    .bottom .signal .b2 { height: 7px; opacity: 0.7; }
+    .bottom .signal .b3 { height: 10px; opacity: 0.4; }
+    .bottom .signal .b4 { height: 13px; opacity: 0.2; }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="stars"></div>
+    <div class="stars-2"></div>
+    <div class="grid"></div>
+
+    <!-- ============== TOP BAR ============== -->
+    <header class="top">
+      <span class="top-eyebrow">/blog/lost-in-space-404</span>
+      <div class="top-tag">
+        <span class="live"></span>
+        <span>TRANSMISSION LOST · ERROR 404</span>
+      </div>
+    </header>
+
+    <!-- ============== BODY ============== -->
+    <div class="body">
+      <div class="four-oh-four">
+        <span class="digit left">4</span>
+        <span class="planet" aria-hidden="true"></span>
+        <span class="digit right">4</span>
+      </div>
+
+      <span class="debris d1">// signal lost</span>
+      <span class="debris d2">[ drift: +0.42 AU ]</span>
+      <span class="debris d3">// rerouting…</span>
+
+      <div class="copy">
+        <span class="copy-eyebrow">Lost in space</span>
+        <h1 class="headline">
+          Abducted by <span class="accent">aliens</span>.
+        </h1>
+        <p class="sub">
+          A CSS-only 404 with tilting digits, an orbiting astronaut and one job — don't make the dead end feel dead.
+        </p>
+      </div>
+
+      <!-- floating astronaut -->
+      <div class="astronaut" aria-hidden="true">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="visor" cx="0.35" cy="0.32" r="0.85">
+              <stop offset="0%" stop-color="#7FB3FF"/>
+              <stop offset="55%" stop-color="#1E3A6B"/>
+              <stop offset="100%" stop-color="#0A1426"/>
+            </radialGradient>
+            <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F4F4F6"/>
+              <stop offset="100%" stop-color="#C8C8D0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- backpack -->
+          <rect x="38" y="50" width="44" height="36" rx="6" fill="#A3A3AC"/>
+          <rect x="42" y="54" width="6" height="12" rx="1" fill="#E5534B"/>
+          <rect x="50" y="54" width="6" height="12" rx="1" fill="#3ECF8E"/>
+
+          <!-- body / torso -->
+          <path d="M 38 56 Q 38 48 46 48 L 74 48 Q 82 48 82 56 L 82 86 Q 82 96 72 96 L 48 96 Q 38 96 38 86 Z"
+                fill="url(#suit)" stroke="#9A9AA3" stroke-width="1"/>
+          <!-- chest patch -->
+          <rect x="52" y="62" width="16" height="10" rx="2" fill="#19191C" stroke="#E5534B" stroke-width="1.2"/>
+          <text x="60" y="70" font-family="Archivo Black, sans-serif" font-size="6" fill="#E5534B" text-anchor="middle" letter-spacing="0.5">404</text>
+
+          <!-- arms -->
+          <path d="M 38 60 Q 22 64 18 78 Q 16 86 22 90 L 28 84 Q 30 76 38 74 Z"
+                fill="url(#suit)" stroke="#9A9AA3" stroke-width="1"/>
+          <path d="M 82 60 Q 98 60 102 50 Q 104 42 98 38 L 92 44 Q 88 52 82 54 Z"
+                fill="url(#suit)" stroke="#9A9AA3" stroke-width="1"/>
+          <!-- gloves -->
+          <circle cx="22" cy="92" r="6" fill="#19191C" stroke="#E5534B" stroke-width="1"/>
+          <circle cx="100" cy="36" r="6" fill="#19191C" stroke="#E5534B" stroke-width="1"/>
+
+          <!-- legs (small, peek beneath) -->
+          <rect x="46" y="92" width="10" height="14" rx="3" fill="url(#suit)" stroke="#9A9AA3" stroke-width="1"/>
+          <rect x="64" y="92" width="10" height="14" rx="3" fill="url(#suit)" stroke="#9A9AA3" stroke-width="1"/>
+          <rect x="44" y="103" width="14" height="6" rx="2" fill="#19191C"/>
+          <rect x="62" y="103" width="14" height="6" rx="2" fill="#19191C"/>
+
+          <!-- helmet -->
+          <circle cx="60" cy="38" r="24" fill="#E8E8EE" stroke="#9A9AA3" stroke-width="1"/>
+          <!-- visor -->
+          <circle cx="60" cy="38" r="18" fill="url(#visor)"/>
+          <!-- visor reflection -->
+          <ellipse cx="53" cy="32" rx="6" ry="4" fill="#FFFFFF" opacity="0.45"/>
+          <ellipse cx="66" cy="42" rx="2.5" ry="1.5" fill="#FFFFFF" opacity="0.35"/>
+          <!-- antenna -->
+          <line x1="76" y1="22" x2="82" y2="14" stroke="#9A9AA3" stroke-width="1.5"/>
+          <circle cx="82" cy="14" r="2" fill="#E5534B"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ============== BOTTOM ============== -->
+    <footer class="bottom">
+      <span class="left">tyfn<span class="slash">/</span>online</span>
+      <span class="signal">
+        <span class="bar b1"></span>
+        <span class="bar b2"></span>
+        <span class="bar b3"></span>
+        <span class="bar b4"></span>
+        <span>NO SIGNAL</span>
+      </span>
+      <span>Tayfun Ilker · 2026</span>
+    </footer>
+  </article>
+</body>
+</html>
