@@ -633,6 +633,12 @@ const accents = [
         </div>
       </div>
 
+      <div class="ipad-cursor" data-ipad-cursor aria-hidden="true">
+        <div class="ipad-cursor_inner">
+          <img src="/assets/hand-cursor.svg" alt="" width="36" height="36" />
+        </div>
+      </div>
+
       <div class="ipad-header" data-ipad-header>
         <div class="ipad-eyebrow">
           <span class="ipad-eyebrow_rule" aria-hidden="true"></span>
@@ -664,6 +670,94 @@ const accents = [
     margin: 0 auto;
     perspective: 1600px;
     position: relative;
+  }
+
+  /* Hand cursor for the iPad area */
+  .ipad-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    pointer-events: none;
+    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    z-index: 9999;
+    /* anchor the fingertip near the path's top */
+    transform-origin: 30% 26%;
+  }
+  .ipad-cursor.is-active { opacity: 1; }
+
+  .ipad-cursor_inner {
+    width: 100%;
+    height: 100%;
+    transform-origin: 30% 26%;
+    animation: ipadHandIdle 2.6s ease-in-out infinite;
+  }
+  .ipad-cursor img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* invert the black SVG to a white pointer with a soft dark outline+shadow */
+    filter:
+      invert(1) brightness(1.05)
+      drop-shadow(0 0 1px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 2px 5px rgba(0, 0, 0, 0.45));
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Idle: gentle bob + tilt */
+  @keyframes ipadHandIdle {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    50%      { transform: rotate(2deg)  translateY(-3px); }
+  }
+
+  /* Wave: one-shot when the hand appears */
+  .ipad-cursor.is-wave .ipad-cursor_inner {
+    animation: ipadHandWave 0.7s ease-out;
+  }
+  @keyframes ipadHandWave {
+    0%   { transform: rotate(-22deg); }
+    25%  { transform: rotate(18deg); }
+    55%  { transform: rotate(-12deg); }
+    80%  { transform: rotate(8deg); }
+    100% { transform: rotate(-4deg); }
+  }
+
+  /* Hover over interactive: livelier wiggle */
+  .ipad-cursor.is-hover .ipad-cursor_inner {
+    animation: ipadHandWiggle 0.7s ease-in-out infinite;
+  }
+  .ipad-cursor.is-hover img {
+    transform: scale(1.08);
+    filter:
+      invert(1) brightness(1.1)
+      drop-shadow(0 0 1px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 3px 8px rgba(255, 154, 110, 0.55))
+      drop-shadow(0 0 12px rgba(255, 154, 110, 0.35));
+  }
+  @keyframes ipadHandWiggle {
+    0%, 100% { transform: rotate(-8deg) translateY(0); }
+    50%      { transform: rotate(10deg) translateY(-1px); }
+  }
+
+  /* Press: punch down */
+  .ipad-cursor.is-down img {
+    transform: scale(0.78);
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .ipad-cursor.is-down .ipad-cursor_inner {
+    animation-play-state: paused;
+  }
+
+  /* Hide on touch / reduced motion */
+  @media (pointer: coarse), (hover: none) {
+    .ipad-cursor { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ipad-cursor_inner { animation: none; }
+    .ipad-cursor img { transition: none; }
   }
 
   /* Editorial frame markers */
@@ -2547,6 +2641,66 @@ const accents = [
       });
     }
 
+    // ---------- Custom hand cursor inside the iPad ----------
+    function initHandCursor(stage, frame) {
+      var cursor = stage.querySelector('[data-ipad-cursor]');
+      if (!cursor || !frame) return;
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+
+      var w = cursor.offsetWidth || 36;
+      var h = cursor.offsetHeight || 36;
+      // hot-spot offset (where the fingertip sits inside the 36×36 box)
+      var hotX = w * 0.32;
+      var hotY = h * 0.30;
+
+      var targetX = 0, targetY = 0;
+      var x = 0, y = 0;
+      var raf = null;
+      var inside = false;
+
+      function tick() {
+        x += (targetX - x) * 0.32;
+        y += (targetY - y) * 0.32;
+        cursor.style.transform = 'translate3d(' + (x - hotX) + 'px, ' + (y - hotY) + 'px, 0)';
+        raf = inside ? requestAnimationFrame(tick) : null;
+      }
+
+      frame.addEventListener('mouseenter', function (e) {
+        targetX = x = e.clientX;
+        targetY = y = e.clientY;
+        cursor.classList.add('is-active', 'is-wave');
+        setTimeout(function () { cursor.classList.remove('is-wave'); }, 720);
+        inside = true;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      frame.addEventListener('mouseleave', function () {
+        inside = false;
+        cursor.classList.remove('is-active', 'is-hover', 'is-down');
+      });
+      frame.addEventListener('mousemove', function (e) {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        if (!raf && inside) raf = requestAnimationFrame(tick);
+      });
+
+      var interactiveSel = 'a, button, [role="button"], input, textarea, label, [data-tooltip]';
+      frame.addEventListener('mouseover', function (e) {
+        if (e.target instanceof Element && e.target.closest(interactiveSel)) {
+          cursor.classList.add('is-hover');
+        }
+      });
+      frame.addEventListener('mouseout', function (e) {
+        if (e.target instanceof Element && e.target.closest(interactiveSel)) {
+          if (!e.relatedTarget || !(e.relatedTarget instanceof Element) || !e.relatedTarget.closest(interactiveSel)) {
+            cursor.classList.remove('is-hover');
+          }
+        }
+      });
+
+      frame.addEventListener('mousedown', function () { cursor.classList.add('is-down'); });
+      frame.addEventListener('mouseup',   function () { cursor.classList.remove('is-down'); });
+    }
+
     function init() {
       var stage = document.querySelector('[data-ipad-stage]');
       if (!stage) return;
@@ -2555,6 +2709,7 @@ const accents = [
       var app = stage.querySelector('[data-ipad-app]');
 
       if (frame && header) initScroll(stage, frame, header);
+      if (frame) initHandCursor(stage, frame);
       if (app) {
         initClock(app);
         initBattery(app);
