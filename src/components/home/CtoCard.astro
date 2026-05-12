@@ -2095,22 +2095,129 @@ const accents = [
     .ipad-item_thumb { width: 48px; height: 48px; }
     .ipad-item_accent { height: 48px; }
   }
+
+  /* ============== TABLET / SMALL DESKTOP ============== */
   @media (max-width: 768px) {
-    .ipad-heading { font-size: 2.1rem; }
-    .ipad-subheading { font-size: 0.98rem; }
-    .ipad-frame { border-radius: 30px; padding: 8px; aspect-ratio: 3 / 4; }
-    .ipad-frame_inner { border-radius: 22px; }
-    .ipad-app_body { grid-template-columns: 1fr; }
-    .ipad-app { padding: 12px; gap: 10px; }
-    .ipad-col { padding: 10px; }
-    .ipad-item { padding: 8px; gap: 10px; }
-    .ipad-item_title { font-size: 0.85rem; }
-    .ipad-dock { gap: 8px; padding: 6px 12px; }
-    .ipad-dock_app { width: 30px; height: 30px; border-radius: 9px; }
+    /* Hide editorial framing — no room on phones */
+    .ipad-margin { display: none; }
+
+    /* Header below iPad */
+    .ipad-header { margin-top: clamp(36px, 8vw, 56px); }
+    .ipad-heading { gap: 8px; }
+    .ipad-heading_kicker { font-size: 0.7rem; }
+    .ipad-heading_main { font-size: clamp(1.8rem, 7.5vw, 2.4rem); }
+    .ipad-subheading { font-size: 0.98rem; max-width: 90%; }
+    .ipad-eyebrow { gap: 10px; margin-bottom: 18px; }
+    .ipad-eyebrow_rule { width: clamp(28px, 8vw, 48px); }
+    .ipad-eyebrow_text { font-size: 0.62rem; letter-spacing: 0.22em; }
+
+    /* iPad frame: square is more compact than 3/4 on phones */
+    .ipad-frame { aspect-ratio: 1 / 1; border-radius: 26px; padding: 8px; }
+    .ipad-frame_inner { border-radius: 20px; }
+
+    /* Status bar — strip mono date, tighten */
+    .ipad-statusbar { padding: 8px 14px 4px; gap: 8px; font-size: 11px; }
+    .ipad-date { display: none; }
+    .ipad-battery_pct { display: none; }
+
+    /* App container */
+    .ipad-app { padding: 10px; gap: 8px; }
+
+    /* App header: drop the project title + sort + kbd hint;
+       keep tabs and search, allow them to wrap to two rows */
+    .ipad-app_head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 6px;
+      padding: 6px 8px;
+    }
+    .ipad-app_title { display: none; }
+    .ipad-sort { display: none; }
+    .ipad-searchbar_kbd { display: none; }
+    .ipad-tabs { padding: 2px; }
+    .ipad-tab { padding: 4px 9px; font-size: 10.5px; }
+    .ipad-searchbar { flex: 1; min-width: 140px; padding: 5px 9px; }
+    .ipad-searchbar_input { font-size: 11.5px; }
+
+    /* Lists stack 1-column */
+    .ipad-app_body { grid-template-columns: 1fr; gap: 10px; }
+    .ipad-col { padding: 10px; gap: 6px; }
+    .ipad-col_head { gap: 8px; padding-bottom: 6px; }
+    .ipad-col_index { font-size: 1.4rem; padding-right: 4px; }
+    .ipad-col_title-main { font-size: 0.68rem; letter-spacing: 0.14em; }
+    .ipad-col_title-meta { font-size: 0.58rem; }
+    .ipad-col_all { font-size: 0.62rem; }
+
+    .ipad-item { padding: 8px; gap: 10px; grid-template-columns: auto auto 1fr auto; }
+    .ipad-item_title { font-size: 0.85rem; -webkit-line-clamp: 2; }
+    .ipad-item_thumb { width: 44px; height: 44px; }
+    .ipad-item_accent { height: 44px; }
+    .ipad-item_index { font-size: 0.6rem; min-width: 14px; }
+    .ipad-item_meta { font-size: 0.62rem; gap: 6px; }
+
+    /* Dock — 7 icons fit on phones */
+    .ipad-dock { gap: 6px; padding: 5px 10px; }
+    .ipad-dock_app { width: clamp(28px, 7.4vw, 34px); height: clamp(28px, 7.4vw, 34px); border-radius: 9px; }
+
+    /* App windows — tighten inset & chrome */
+    .ipad-win { inset: 28px 6px 56px; border-radius: 10px; font-size: 11px; }
+    .ipad-win_chrome { padding: 6px 10px; gap: 8px; flex-wrap: wrap; }
+    .ipad-light { width: 9px; height: 9px; }
+    .xc-status, .as-status, .ws-status { display: none; }
+    .xc-toolbar, .as-toolbar, .ws-toolbar, .fg-toolbar, .ob-toolbar { font-size: 10.5px; flex-wrap: wrap; gap: 6px; }
+    .xc-tabbar, .as-tabbar, .ws-tabbar { overflow-x: auto; }
+    .xc-tab, .as-tab, .ws-tab { padding: 4px 10px; font-size: 10px; white-space: nowrap; }
+    .xc-code, .as-code, .ws-code { font-size: 10.5px; padding: 10px 12px; }
+    .xc-note, .as-note, .ws-note, .fg-note { font-size: 12px; padding: 8px 12px; }
+    .ob-editor { padding: 14px 16px; }
+    .ob-doc h1 { font-size: 22px; }
   }
+
+  /* ============== PHONE PORTRAIT ============== */
   @media (max-width: 479px) {
-    .ipad-heading { font-size: 1.7rem; }
-    .ipad-statusbar { padding: 8px 16px 4px; font-size: 11px; }
+    .ipad-stage { padding: 0; }
+    .ipad-heading_main { font-size: clamp(1.5rem, 8vw, 2rem); }
+    .ipad-subheading { font-size: 0.9rem; }
+    .ipad-eyebrow_text { font-size: 0.58rem; }
+
+    .ipad-frame { aspect-ratio: 3 / 4; padding: 6px; border-radius: 22px; }
+    .ipad-frame_inner { border-radius: 18px; }
+    .ipad-camera { top: 3px; width: 5px; height: 5px; }
+
+    .ipad-statusbar { padding: 7px 12px 3px; font-size: 10.5px; }
+    .ipad-battery { width: 22px; height: 10px; }
+    .ipad-time { font-size: 10.5px; }
+
+    .ipad-app { padding: 8px; gap: 6px; }
+    .ipad-app_head { padding: 5px 6px; gap: 5px; }
+    .ipad-tab { padding: 3px 7px; font-size: 9.5px; }
+    .ipad-searchbar { padding: 4px 8px; min-width: 120px; }
+    .ipad-searchbar_input { font-size: 11px; }
+
+    .ipad-col { padding: 8px; }
+    .ipad-col_index { font-size: 1.2rem; }
+    .ipad-item { padding: 6px; gap: 8px; }
+    .ipad-item_title { font-size: 0.8rem; }
+    .ipad-item_thumb { width: 38px; height: 38px; border-radius: 8px; }
+    .ipad-item_accent { height: 38px; width: 5px; }
+    .ipad-item_index { font-size: 0.58rem; min-width: 12px; }
+    .ipad-item_meta { font-size: 0.58rem; }
+
+    .ipad-dock { gap: 5px; padding: 4px 8px; border-radius: 18px; }
+    .ipad-dock_app { width: 26px; height: 26px; border-radius: 7px; }
+    .ipad-dock_app::after { font-size: 9.5px; padding: 3px 7px; }
+    .ipad-dock_app--badge::before { min-width: 13px; height: 13px; font-size: 8px; top: -2px; right: -2px; }
+
+    .ipad-home-indicator { width: 90px; height: 3px; }
+
+    .ipad-win { inset: 22px 5px 48px; font-size: 10.5px; }
+    .ipad-win_chrome { padding: 5px 8px; }
+    .xc-code, .as-code, .ws-code { font-size: 9.5px; line-height: 1.45; padding: 8px 10px; }
+    .xc-note, .as-note, .ws-note, .fg-note { font-size: 11px; padding: 7px 10px; }
+    .ob-editor { padding: 12px 14px; }
+    .ob-doc h1 { font-size: 19px; }
+    .ob-doc p, .ob-doc li { font-size: 12px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
