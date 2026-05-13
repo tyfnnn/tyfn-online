@@ -130,7 +130,7 @@
     "msg_b1_user": "Hey — what can you do?",
     "msg_b1_bot": "👋 I'm Tayfun's assistant. Ask me anything about his projects, his process, or his availability.",
     "msg_b2_user": "Which apps has he shipped?",
-    "msg_b2_bot": "Live right now: **Zentrik** (Android, NGO management) and **Stellar Horizon** (iOS, astronomy). Both are in the portfolio.",
+    "msg_b2_bot": "Live right now: **easyNGO** (iOS & Android, NGO management) and **Stellar Horizon** (iOS, astronomy). Both are in the portfolio.",
     "msg_b3_user": "Is he free for a new project?",
     "msg_b3_bot": "Q3 2026 is open. Want me to draft an email?",
     "win_obsidian_title": "Obsidian",
@@ -153,16 +153,16 @@
       "cross_link_cta": "Read the blog"
     },
     "zentrik": {
-      "page_title": "Zentrik NGO Management App — TAYFUN ILKER",
-      "page_description": "Android app for NGO management: project management, finance tracking, donation management, and receipt handling.",
-      "card_title": "Zentrik NGO Management",
-      "card_description": "Professional Android app for NGO management with project management, finance tracking, donation management, and receipt handling. A complete solution for non-profit organizations.",
-      "tag_1": "Kotlin",
-      "tag_2": "Jetpack Compose",
-      "tag_3": "Android",
+      "page_title": "easyNGO – NGO management app — TAYFUN ILKER",
+      "page_description": "Multiplatform app (iOS, Android & Desktop) for NGO management: GoBD-compliant four-sphere accounting, DATEV export, donation tracking, and receipt handling.",
+      "card_title": "easyNGO",
+      "card_description": "Multiplatform app for NGOs and non-profit associations: GoBD-compliant four-sphere accounting, DATEV export, multi-currency receipts with OCR, and multi-level approvals — on iOS, Android, and Desktop.",
+      "tag_1": "Kotlin Multiplatform",
+      "tag_2": "Compose Multiplatform",
+      "tag_3": "iOS · Android · Desktop",
       "tag_4": "Supabase",
       "tag_5": "NGO Management",
-      "status": "In production"
+      "status": "Beta phase"
     },
     "stellar": {
       "page_title": "Stellar Horizon — Explore the Universe — TAYFUN ILKER",
@@ -175,6 +175,19 @@
       "tag_4": "Firebase",
       "tag_5": "iOS",
       "tag_6": "3D Visualization",
+      "status": "App Store"
+    },
+    "redact": {
+      "page_title": "Redact – Faces off — TAYFUN ILKER",
+      "page_description": "Native macOS and iOS app that automatically pixelates faces in your photos — locally, cloud-free, account-free. YOLOv11m-face via Core ML on the Apple Neural Engine.",
+      "card_title": "Redact",
+      "card_description": "Native macOS and iOS app that pixelates faces automatically — on-device via Core ML & the Apple Neural Engine, no cloud, no account. Free on the App Store.",
+      "tag_1": "Swift",
+      "tag_2": "SwiftUI",
+      "tag_3": "Core ML",
+      "tag_4": "YOLOv11m",
+      "tag_5": "macOS · iOS",
+      "tag_6": "Privacy-First",
       "status": "App Store"
     }
   },

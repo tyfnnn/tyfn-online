@@ -1,0 +1,15 @@
+---
+import type { Lang } from '../../i18n/t';
+import PortfolioNav from './PortfolioNav.astro';
+import bodyEn from '../../snippets/portfolio/redact-detail-en.html?raw';
+import bodyDe from '../../snippets/portfolio/redact-detail-de.html?raw';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const body = lang === 'de' ? bodyDe : bodyEn;
+---
+<PortfolioNav lang={lang} pathname="/portfolio/redact/" back="portfolio" />
+<Fragment set:html={body} />

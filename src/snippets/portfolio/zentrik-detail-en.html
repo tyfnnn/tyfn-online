@@ -1,19 +1,23 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <div class="hero-badge"><span class="project-status" data-scramble>In production</span></div>
-            <h1 class="hero-title">Zentrik NGO Management</h1>
+            <div class="hero-badge"><span class="project-status" data-scramble>Beta phase</span></div>
+            <h1 class="hero-title">easyNGO</h1>
             <p class="hero-subtitle">
-                The first accounting and management app built specifically for NGOs and non-profit associations.
-                Designed by and for the NGO community.
+                The specialised accounting and management app for NGOs and non-profit associations —
+                now as a Multiplatform app for iOS, Android, and Desktop. GoBD-compliant, with DATEV export for tax advisors.
             </p>
             <div class="hero-image" id="heroImage"></div>
             <div class="hero-tags">
-                <span class="hero-tag primary">Kotlin</span>
-                <span class="hero-tag primary">Jetpack Compose</span>
+                <span class="hero-tag primary">Kotlin Multiplatform</span>
+                <span class="hero-tag primary">Compose Multiplatform</span>
+                <span class="hero-tag">iOS</span>
                 <span class="hero-tag">Android</span>
+                <span class="hero-tag">Desktop</span>
                 <span class="hero-tag">Supabase</span>
-                <span class="hero-tag">PostgreSQL</span>
+                <span class="hero-tag">Edge Functions</span>
+                <span class="hero-tag">GoBD</span>
+                <span class="hero-tag">DATEV</span>
                 <span class="hero-tag">NGO Management</span>
             </div>
         </div>
@@ -26,17 +30,20 @@
                 <div class="info-section">
                     <h3>The challenge</h3>
                     <p>
-                        For my final project I took on a special challenge: a specialised accounting app for NGOs and non-profit associations.
+                        What started as a final project has grown into a serious product for the non-profit sector: easyNGO — the specialised accounting and management app for NGOs.
                         <span class="highlight">Why do NGOs need a dedicated solution?</span> Conventional accounting apps are built for profit-oriented companies and don't account for the specific demands of the non-profit sector.
                     </p>
                     <p>
                         NGOs have to keep their finances separated across the <span class="highlight">four spheres</span> (non-profit sphere, asset management, special-purpose operation, and commercial operation) and often work with international partners in multiple currencies.
                     </p>
                     <p>
-                        As a volunteer at a humanitarian association I know the <span class="highlight">pain points</span> of conventional solutions firsthand. One of the biggest problems: no way to automatically convert receipts into the relevant daily exchange rate. <span class="highlight">I solved that problem.</span>
+                        As a volunteer at a humanitarian association I know the <span class="highlight">pain points</span> of conventional solutions firsthand. One of the biggest problems: no way to automatically convert receipts into the relevant daily exchange rate. <span class="highlight">I solved that problem</span> — combined with AI-powered receipt recognition (OCR) and a multi-level approval workflow.
                     </p>
                     <p>
-                        The NGO-specific member structure and automatic currency conversion allow NGOs to <span class="highlight">save hundreds of hours of work</span> — time that can go into the association's actual mission instead.
+                        The original Android app has grown into a <span class="highlight">true Multiplatform solution</span> for iOS, Android, and Desktop (macOS, Windows, Linux) — with a shared codebase on Kotlin Multiplatform and Compose Multiplatform. The work of an association happens on every device: snap receipts on a phone in the field, then handle the bookkeeping at the desktop and generate the <span class="highlight">DATEV export</span> for the tax advisor.
+                    </p>
+                    <p>
+                        easyNGO takes <span class="highlight">GoBD compliance</span> seriously: an immutable audit log records every change to financial data — who created, approved, or rejected which receipt and when. This satisfies the German "principles for the proper management and retention of books" (GoBD) in their digital form.
                     </p>
                 </div>
                 <div class="project-details">
@@ -47,19 +54,19 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Development time</span>
-                        <span class="detail-value">1 month (intensive)</span>
+                        <span class="detail-value">Several months, ongoing</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Platform</span>
-                        <span class="detail-value">Android (cross-platform planned)</span>
+                        <span class="detail-value">iOS, Android & Desktop (Kotlin Multiplatform)</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Backend</span>
-                        <span class="detail-value">Supabase (PostgreSQL)</span>
+                        <span class="detail-value">Supabase + Edge Functions</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Technologies</span>
-                        <span class="detail-value">Kotlin, Jetpack Compose</span>
+                        <span class="detail-value">Kotlin, Compose Multiplatform, Ktor, Koin</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Target group</span>
@@ -67,7 +74,7 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Status</span>
-                        <span class="detail-value">Production & ongoing development</span>
+                        <span class="detail-value">Beta phase, store release in preparation</span>
                     </div>
                 </div>
             </div>
@@ -124,7 +131,14 @@
                     <span class="feature-icon">🌍</span>
                     <h3 class="feature-title">Multi-currency system</h3>
                     <p class="feature-description">
-                        Automatic conversion of receipts into current exchange rates. Ideal for international NGOs and partnerships.
+                        Automatic conversion of receipts into current exchange rates through a Supabase Edge Function. Ideal for international NGOs and partnerships.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <h3 class="feature-title">AI-powered receipt OCR</h3>
+                    <p class="feature-description">
+                        Mistral OCR via a server-side Edge Function automatically reads totals, dates, and merchants from receipt photos — API keys stay safe in the backend.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -143,30 +157,37 @@
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📱</span>
-                    <h3 class="feature-title">Mobile receipt management</h3>
+                    <h3 class="feature-title">Multiplatform</h3>
                     <p class="feature-description">
-                        Camera integration for capturing receipts on the spot, with automatic text recognition and categorisation.
+                        A shared codebase for iOS, Android, and Desktop (macOS, Windows, Linux), powered by Kotlin Multiplatform and Compose Multiplatform — consistent UX across all three platforms.
                     </p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">🎯</span>
-                    <h3 class="feature-title">Donation tracking</h3>
+                    <span class="feature-icon">📒</span>
+                    <h3 class="feature-title">GoBD-compliant audit log</h3>
                     <p class="feature-description">
-                        Comprehensive donation management with automatic donation receipts and donor-relationship management.
+                        An immutable log of every financial change: who created, approved, or rejected which receipt and when. Full traceability in line with the German GoBD principles for proper bookkeeping.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🧾</span>
+                    <h3 class="feature-title">DATEV EXTF export</h3>
+                    <p class="feature-description">
+                        Generate booking batches in the official DATEV format (data category 21) — directly importable into DATEV Kanzlei-Rechnungswesen. Makes the hand-off to the tax advisor seamless.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🔐</span>
                     <h3 class="feature-title">GDPR-compliant</h3>
                     <p class="feature-description">
-                        EU hosting via Supabase with full GDPR compliance and privacy-by-design.
+                        EU hosting via Supabase with full GDPR compliance, secure token storage (iOS Keychain / Android EncryptedSharedPreferences), and privacy-by-design.
                     </p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">💡</span>
-                    <h3 class="feature-title">Cost-optimised</h3>
+                    <span class="feature-icon">🚀</span>
+                    <h3 class="feature-title">CI/CD pipeline</h3>
                     <p class="feature-description">
-                        An open-source backend with PostgreSQL gives NGOs better cost control than proprietary alternatives.
+                        Separate staging and production environments, automated tests on every PR, and schema backups before production deploys — safety for sensitive financial data.
                     </p>
                 </div>
             </div>
@@ -204,8 +225,8 @@
                     <div class="impact-label">Supported currencies</div>
                 </div>
                 <div class="impact-stat">
-                    <div class="impact-number">1</div>
-                    <div class="impact-label">Month of development</div>
+                    <div class="impact-number">3</div>
+                    <div class="impact-label">Platforms from one codebase</div>
                 </div>
             </div>
         </div>
@@ -225,23 +246,23 @@
                 </div>
                 <div class="process-step">
                     <div class="step-number">02</div>
-                    <h3 class="step-title">Technology choice</h3>
+                    <h3 class="step-title">Multiplatform architecture</h3>
                     <p class="step-description">
-                        A deliberate choice of Supabase as an NGO-friendly, cost-effective, GDPR-compliant backend.
+                        Migration from a pure Android app to Kotlin Multiplatform and Compose Multiplatform — iOS, Android, and Desktop from a single codebase.
                     </p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">03</div>
-                    <h3 class="step-title">Rapid development</h3>
+                    <h3 class="step-title">Backend hardening</h3>
                     <p class="step-description">
-                        Intensive development phase using Kotlin and Jetpack Compose for a native Android experience.
+                        OCR and currency API keys moved out of the client and into Supabase Edge Functions — secure auth flow, robust row-level security.
                     </p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">04</div>
-                    <h3 class="step-title">NGO testing</h3>
+                    <h3 class="step-title">CI/CD & beta</h3>
                     <p class="step-description">
-                        Real-world testing with actual NGO use cases and feedback from the non-profit community.
+                        Building a full CI/CD pipeline with staging and production, followed by real-world testing with actual NGO use cases.
                     </p>
                 </div>
             </div>
@@ -253,11 +274,11 @@
         <div class="container">
             <h2 class="cta-title">Interested in NGO technology?</h2>
             <p class="cta-description">
-                Find out more about how Zentrik was built, or let's talk about your NGO project.
-                I plan to develop this solution further as a cross-platform app.
+                Find out more about how easyNGO was built, or let's talk about your NGO project.
+                The app is heading for the App Store and Play Store soon — beta testers from the non-profit sector are very welcome.
             </p>
             <div class="cta-buttons">
-                <a href="mailto:tyfn.ilkr@gmail.com?subject=Zentrik%20NGO%20App%20Inquiry" class="btn btn-primary">
+                <a href="mailto:tyfn.ilkr@gmail.com?subject=easyNGO%20Inquiry" class="btn btn-primary">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>

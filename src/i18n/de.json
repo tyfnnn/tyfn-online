@@ -130,7 +130,7 @@
     "msg_b1_user": "Hey — was kannst du?",
     "msg_b1_bot": "👋 Ich bin Tayfuns Assistent. Frag mich alles über seine Projekte, seinen Prozess oder seine Verfügbarkeit.",
     "msg_b2_user": "Welche Apps hat er gebaut?",
-    "msg_b2_bot": "Aktuell live: **Zentrik** (Android, NGO-Management) und **Stellar Horizon** (iOS, Astronomie). Beide im Portfolio.",
+    "msg_b2_bot": "Aktuell live: **easyNGO** (iOS & Android, NGO-Management) und **Stellar Horizon** (iOS, Astronomie). Beide im Portfolio.",
     "msg_b3_user": "Ist er für ein neues Projekt frei?",
     "msg_b3_bot": "Q3 2026 ist offen. Soll ich eine E-Mail entwerfen?",
     "win_obsidian_title": "Obsidian",
@@ -153,16 +153,16 @@
       "cross_link_cta": "Zum Blog"
     },
     "zentrik": {
-      "page_title": "Zentrik NGO Management App — TAYFUN ILKER",
-      "page_description": "Android-App für NGO-Management mit Projektmanagement, Finanzverwaltung, Spenden-Tracking und Beleg-Management.",
-      "card_title": "Zentrik NGO Management",
-      "card_description": "Professionelle Android-App für NGO-Management mit Projektmanagement, Finanzverwaltung, Spenden-Tracking und Beleg-Management. Vollständige Lösung für gemeinnützige Organisationen.",
-      "tag_1": "Kotlin",
-      "tag_2": "Jetpack Compose",
-      "tag_3": "Android",
+      "page_title": "easyNGO – NGO-Management-App — TAYFUN ILKER",
+      "page_description": "Multiplatform-App (iOS, Android & Desktop) für NGO-Management mit GoBD-konformer 4-Sphären-Buchhaltung, DATEV-Export, Spenden-Tracking und Beleg-Management.",
+      "card_title": "easyNGO",
+      "card_description": "Multiplatform-App für NGOs und gemeinnützige Vereine: GoBD-konforme 4-Sphären-Buchhaltung, DATEV-Export, Multi-Währungs-Belege mit OCR und mehrstufige Genehmigungen – auf iOS, Android und Desktop.",
+      "tag_1": "Kotlin Multiplatform",
+      "tag_2": "Compose Multiplatform",
+      "tag_3": "iOS · Android · Desktop",
       "tag_4": "Supabase",
       "tag_5": "NGO Management",
-      "status": "In Produktion"
+      "status": "Beta-Phase"
     },
     "stellar": {
       "page_title": "Stellar Horizon — Das Universum erkunden — TAYFUN ILKER",
@@ -175,6 +175,19 @@
       "tag_4": "Firebase",
       "tag_5": "iOS",
       "tag_6": "3D Visualization",
+      "status": "App Store"
+    },
+    "redact": {
+      "page_title": "Redact – Faces off — TAYFUN ILKER",
+      "page_description": "Native macOS- und iOS-App, die Gesichter in Fotos automatisch verpixelt – lokal, ohne Cloud, ohne Account. YOLOv11m-face via Core ML auf der Apple Neural Engine.",
+      "card_title": "Redact",
+      "card_description": "Native macOS- und iOS-App, die Gesichter automatisch verpixelt – on-device über Core ML & Apple Neural Engine, ohne Cloud, ohne Account. Kostenlos im App Store.",
+      "tag_1": "Swift",
+      "tag_2": "SwiftUI",
+      "tag_3": "Core ML",
+      "tag_4": "YOLOv11m",
+      "tag_5": "macOS · iOS",
+      "tag_6": "Privacy-First",
       "status": "App Store"
     }
   },

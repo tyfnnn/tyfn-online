@@ -1,0 +1,297 @@
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-eyebrow">№ 03 — Redact</div>
+            <div class="hero-badge"><span class="project-status" data-scramble>App Store</span></div>
+            <h1 class="hero-title">Faces <span class="accent">off.</span></h1>
+            <p class="hero-subtitle">
+                Native macOS- und iOS-App, die Gesichter in Fotos automatisch verpixelt –
+                lokal, ohne Cloud, ohne Setup, ohne Account.
+            </p>
+
+            <!-- Hero Image (purely HTML/CSS, in the style of the Redact website) -->
+            <div class="hero-image" role="img" aria-label="Redact – Faces off">
+                <div class="hero-image__grid" aria-hidden="true"></div>
+                <div class="hero-image__pixels" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="hero-image__corner hero-image__corner--tl">INTERFACE v2.1</span>
+                <span class="hero-image__corner hero-image__corner--tr">DECRYPT_MODULE</span>
+                <span class="hero-image__corner hero-image__corner--bl">YOLOv11m · ANE</span>
+                <span class="hero-image__corner hero-image__corner--br">0 BYTES SENT</span>
+                <div class="hero-image__plate">
+                    <img class="hero-image__logo" src="/portfolio/redact/redact-logo.png" alt="Redact Logo" />
+                    <div class="hero-image__wordmark">Faces <span class="accent">off.</span></div>
+                    <div class="hero-image__meta">
+                        <span>On-Device</span>
+                        <span>Zero Cloud</span>
+                        <span>Privacy-First</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-tags">
+                <span class="hero-tag primary">Swift</span>
+                <span class="hero-tag primary">SwiftUI</span>
+                <span class="hero-tag">Core ML</span>
+                <span class="hero-tag">YOLOv11m-face</span>
+                <span class="hero-tag">Apple Neural Engine</span>
+                <span class="hero-tag">macOS</span>
+                <span class="hero-tag">iOS</span>
+                <span class="hero-tag">iPadOS</span>
+                <span class="hero-tag">Privacy-First</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Info -->
+    <section class="project-info">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>Die Herausforderung</h3>
+                    <p>
+                        Demo-Fotos veröffentlichen, ohne die Persönlichkeitsrechte der Teilnehmer\*innen zu verletzen –
+                        das klingt simpel, ist es aber nicht. Bestehende Lösungen sind entweder
+                        <span class="highlight">CLI-Tools wie deface oder uniface</span> ohne grafische Oberfläche, oder
+                        App-Store-Apps, die unter der Haube als WebView-Wrapper über eine Cloud-API laufen.
+                    </p>
+                    <p>
+                        Beides taugt nicht für Workshop- oder Konferenzfotos, die schnell, lokal und
+                        <span class="highlight">ohne Datenabfluss</span> anonymisiert werden müssen.
+                    </p>
+                    <p>
+                        <span class="highlight">Redact</span> ist eine echte native App – mit erstklassiger Gesichtserkennung
+                        durch ein fine-getuntes YOLOv11m-Modell, das vollständig auf dem Gerät läuft. Keine Cloud,
+                        kein Account, kein Setup. Drag &amp; Drop, Knopfdruck, fertig.
+                    </p>
+                    <p>
+                        Das Modell läuft über Core ML auf der <span class="highlight">Apple Neural Engine</span>,
+                        Bilder werden über Core Image verpixelt, geblurrt, mit einem schwarzen Balken oder einem
+                        Emoji überlagert. EXIF-Daten lassen sich auf Wunsch entfernen – GPS, Kamera-Info, Zeitstempel.
+                        Originale bleiben dabei unangetastet, die anonymisierten Versionen landen in einem
+                        <span class="highlight">anonymized/</span>-Unterordner.
+                    </p>
+                    <p>
+                        Was als kleines Tool für den eigenen Bedarf begann, wuchs zu einer ausgereiften
+                        Multi-Plattform-App: macOS für die produktive Batch-Verarbeitung am Schreibtisch,
+                        iOS und iPadOS für die schnelle Anonymisierung unterwegs.
+                    </p>
+                </div>
+                <div class="project-details">
+                    <h3>Projekt Details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Rolle</span>
+                        <span class="detail-value">Solo-Entwickler, Design & ML-Integration</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Entwicklungszeit</span>
+                        <span class="detail-value">Mehrere Monate, laufende Entwicklung</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Plattform</span>
+                        <span class="detail-value">macOS 14+ · iOS 18+ · iPadOS 18+</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Erkennung</span>
+                        <span class="detail-value">YOLOv11m-face via Core ML</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Runtime</span>
+                        <span class="detail-value">Core ML · Apple Neural Engine</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Datenschutz</span>
+                        <span class="detail-value">100% on-device, keine Cloud</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Preis</span>
+                        <span class="detail-value">Kostenlos</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">Im App Store verfügbar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Was Redact kann</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🧠</span>
+                    <h3 class="feature-title">YOLOv11m-face Modell</h3>
+                    <p class="feature-description">
+                        Fine-Tune des YOLO11m-Modells speziell für Gesichtserkennung – ~20M Parameter,
+                        Bounding Boxes mit Confidence, eingebettetes NMS. Läuft als .mlpackage direkt in der App.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡️</span>
+                    <h3 class="feature-title">Apple Neural Engine</h3>
+                    <p class="feature-description">
+                        Inferenz über Core ML auf der ANE – schnell genug für Batch-Verarbeitung
+                        ganzer Foto-Ordner. Kein Internet nötig, keine GPU-Auslastung, kein Lüfter.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3 class="feature-title">100 % on-device</h3>
+                    <p class="feature-description">
+                        Keine Cloud, keine Telemetrie, kein Account. Bilder verlassen das Gerät nicht –
+                        die gesamte Verarbeitung passiert lokal auf der Apple Neural Engine.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Vier Anonymisierungs-Modi</h3>
+                    <p class="feature-description">
+                        Mosaik, Gaussian Blur, schwarzer Balken oder Emoji-Overlay – einstellbar in
+                        Stärke und Padding, mit Rechteck- oder Ellipsen-Maske.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">✋</span>
+                    <h3 class="feature-title">Manuelle Korrekturen</h3>
+                    <p class="feature-description">
+                        Erkannte Gesichter per Klick de-/aktivieren, übersehene per Drag selbst hinzufügen.
+                        Confidence-Schwelle ist einstellbar – volle Kontrolle über das Ergebnis.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📁</span>
+                    <h3 class="feature-title">Batch & Drag &amp; Drop</h3>
+                    <p class="feature-description">
+                        Einzelne Bilder oder ganze Ordner reinziehen – JPG, PNG, HEIC, TIFF.
+                        Ergebnisse landen in einem <span class="highlight">anonymized/</span>-Unterordner,
+                        Originale bleiben unangetastet.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🧭</span>
+                    <h3 class="feature-title">Vorher / Nachher</h3>
+                    <p class="feature-description">
+                        Direkter Side-by-Side-Vergleich mit Face-Overlay. Hover-Vorschau in der
+                        Dateiliste, Tastenkürzel ⌘↵ zum Verarbeiten, ⌘E zum Exportieren.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🧹</span>
+                    <h3 class="feature-title">EXIF-Daten entfernen</h3>
+                    <p class="feature-description">
+                        Optional GPS-Koordinaten, Kamera-Modell und Zeitstempel beim Export entfernen –
+                        nützlich, wenn anonymisierte Bilder wirklich anonym sein sollen.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌐</span>
+                    <h3 class="feature-title">Mehrsprachig</h3>
+                    <p class="feature-description">
+                        Deutsch und Englisch über Apple String Catalog (xcstrings). Dark Mode, Splash-Screen,
+                        Privacy Manifest – alles native, alles Apple.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process">
+        <div class="container">
+            <h2 class="section-title">Entwicklungsprozess</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Modell-Evaluation</h3>
+                    <p class="step-description">
+                        YOLOv11m-face als beste Balance aus Genauigkeit und Geschwindigkeit identifiziert,
+                        mit coremltools nach Core ML konvertiert und auf das MLProgram-Format gebracht.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">macOS-Prototyp</h3>
+                    <p class="step-description">
+                        SwiftUI-App mit NavigationSplitView, Drag &amp; Drop, Core-Image-Pipeline und
+                        TaskGroup-basierter Batch-Verarbeitung. Erste Version: lokales Verpixeln eines Ordners.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">iOS-Portierung</h3>
+                    <p class="step-description">
+                        Geteilter Code in RedactCore-Package, plattformspezifische UI für iOS/iPadOS,
+                        Memory-Crashes bei großen Fotos via ImageIO-Downsampling behoben.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3 class="step-title">App-Store-Release</h3>
+                    <p class="step-description">
+                        Lokalisierung (DE/EN) via xcstrings, Privacy Manifest, App Icons,
+                        Splash-Font – und schließlich der Launch im App Store.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact">
+        <div class="container">
+            <h2 class="section-title">Kennzahlen</h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-number">0</div>
+                    <div class="impact-label">Bytes, die das Gerät verlassen</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">~38&nbsp;MB</div>
+                    <div class="impact-label">Eingebettetes ML-Modell</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">4</div>
+                    <div class="impact-label">Anonymisierungs-Modi</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">3</div>
+                    <div class="impact-label">Plattformen (macOS, iOS, iPadOS)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Privatsphäre by Design.</h2>
+            <p class="cta-description">
+                Redact gibt es kostenlos im App Store – komplett on-device, ohne Cloud, ohne Account.
+                Wenn du eine ähnliche on-device-Lösung für dein Projekt suchst oder Feedback zur App hast,
+                schreib mir gerne.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://apps.apple.com/de/app/redact-faces-off/id6762188914" target="_blank" rel="noopener" class="btn btn-primary">
+                    <svg fill="currentColor" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                        <path d="M17.564 12.876c-.025-2.518 2.057-3.732 2.151-3.793-1.171-1.712-2.993-1.946-3.642-1.973-1.55-.157-3.024.913-3.811.913-.787 0-1.998-.89-3.286-.866-1.69.025-3.247.983-4.116 2.497-1.755 3.04-.449 7.541 1.26 10.01.833 1.21 1.826 2.567 3.127 2.519 1.255-.051 1.728-.812 3.245-.812 1.517 0 1.943.812 3.27.785 1.349-.024 2.205-1.232 3.03-2.446.954-1.401 1.348-2.756 1.371-2.825-.03-.014-2.628-1.008-2.6-4.009zM15.05 5.477c.695-.842 1.164-2.012 1.036-3.177-1.001.041-2.212.666-2.931 1.508-.644.745-1.208 1.938-1.057 3.078 1.118.086 2.258-.568 2.952-1.409z"/>
+                    </svg>
+                    Im App Store laden
+                </a>
+                <a href="https://redact.vortex-labs.de/" target="_blank" rel="noopener" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"></path>
+                    </svg>
+                    Zur Website
+                </a>
+                <a href="/de/portfolio/" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4 4m4-4l-4-4"></path>
+                    </svg>
+                    Weitere Projekte
+                </a>
+            </div>
+        </div>
+    </section>

@@ -12,6 +12,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const zentrikHref = getRelativeLocaleUrl(lang, '/portfolio/zentrik/');
 const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
+const redactHref = getRelativeLocaleUrl(lang, '/portfolio/redact/');
 const blogHref = getRelativeLocaleUrl(lang, '/blog/');
 ---
 <PortfolioNav lang={lang} pathname="/portfolio/" back="home" />
@@ -42,6 +43,41 @@ const blogHref = getRelativeLocaleUrl(lang, '/blog/');
             <span class="project-tag">{t('portfolio.zentrik.tag_3')}</span>
             <span class="project-tag">{t('portfolio.zentrik.tag_4')}</span>
             <span class="project-tag">{t('portfolio.zentrik.tag_5')}</span>
+          </div>
+          <div class="project-link" data-scramble>
+            {t('portfolio.index.view_project')}
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <a href={redactHref} class="project-card">
+        <div class="project-image redact-preview" aria-hidden="true">
+          <div class="redact-preview__grid"></div>
+          <div class="redact-preview__pixels">
+            {Array.from({ length: 96 }).map(() => <span></span>)}
+          </div>
+          <div class="redact-preview__plate">
+            <img src="/portfolio/redact/redact-logo.png" alt="" class="redact-preview__logo" />
+            <div class="redact-preview__wordmark">Faces <span class="accent">off.</span></div>
+          </div>
+          <span class="redact-preview__corner redact-preview__corner--tl">YOLOv11m · ANE</span>
+          <span class="redact-preview__corner redact-preview__corner--br">0 BYTES SENT</span>
+        </div>
+        <div class="project-content">
+          <h3 class="project-title" data-scramble>{t('portfolio.redact.card_title')}</h3>
+          <p class="project-description" data-scramble>
+            {t('portfolio.redact.card_description')}
+          </p>
+          <div class="project-tags">
+            <span class="project-tag">{t('portfolio.redact.tag_1')}</span>
+            <span class="project-tag">{t('portfolio.redact.tag_2')}</span>
+            <span class="project-tag">{t('portfolio.redact.tag_3')}</span>
+            <span class="project-tag">{t('portfolio.redact.tag_4')}</span>
+            <span class="project-tag">{t('portfolio.redact.tag_5')}</span>
+            <span class="project-tag">{t('portfolio.redact.tag_6')}</span>
           </div>
           <div class="project-link" data-scramble>
             {t('portfolio.index.view_project')}
@@ -89,3 +125,84 @@ const blogHref = getRelativeLocaleUrl(lang, '/blog/');
     />
   </div>
 </section>
+
+<style is:global>
+  .project-image.redact-preview {
+    background:
+      radial-gradient(20rem 12rem at 75% 25%, rgba(107, 159, 255, 0.35), transparent 70%),
+      linear-gradient(180deg, #0E0E14 0%, #0A0A0C 100%);
+    overflow: hidden;
+  }
+
+  .redact-preview__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(244, 244, 246, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 244, 246, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+  }
+
+  .redact-preview__pixels {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 3px;
+    padding: 14px;
+    opacity: 0.6;
+    -webkit-mask-image: radial-gradient(ellipse 45% 75% at 88% 50%, black 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 45% 75% at 88% 50%, black 30%, transparent 80%);
+  }
+
+  .redact-preview__pixels span {
+    background: rgba(107, 159, 255, 0.10);
+    border-radius: 2px;
+  }
+  .redact-preview__pixels span:nth-child(3n)   { background: rgba(107, 159, 255, 0.24); }
+  .redact-preview__pixels span:nth-child(5n)   { background: rgba(244, 244, 246, 0.07); }
+  .redact-preview__pixels span:nth-child(7n+1) { background: rgba(107, 159, 255, 0.38); }
+  .redact-preview__pixels span:nth-child(11n)  { background: rgba(244, 244, 246, 0.14); }
+  .redact-preview__pixels span:nth-child(13n)  { background: rgba(107, 159, 255, 0.50); }
+
+  .redact-preview__plate {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    z-index: 2;
+  }
+
+  .redact-preview__logo {
+    width: 64px;
+    height: auto;
+    filter: drop-shadow(0 8px 24px rgba(107, 159, 255, 0.45));
+  }
+
+  .redact-preview__wordmark {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.035em;
+    color: #FFFFFF;
+  }
+  .redact-preview__wordmark .accent { color: #6B9FFF; }
+
+  .redact-preview__corner {
+    position: absolute;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244, 244, 246, 0.45);
+    z-index: 2;
+  }
+  .redact-preview__corner--tl { top: 10px; left: 14px; }
+  .redact-preview__corner--br { bottom: 10px; right: 14px; }
+</style>

@@ -1,0 +1,37 @@
+---
+import PortfolioLayout from '../../../layouts/PortfolioLayout.astro';
+import RedactDetail from '../../../components/portfolio/RedactDetail.astro';
+import { useTranslations } from '../../../i18n/t';
+import { SITE_URL, PERSON_NAME } from '../../../i18n/site';
+import head from '../../../snippets/portfolio/redact-head.html?raw';
+
+const lang = 'de' as const;
+const t = useTranslations(lang);
+const pathname = '/portfolio/redact/';
+const image = `${SITE_URL}/portfolio/redact/redact-logo.png`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: t('portfolio.redact.card_title'),
+  description: t('portfolio.redact.card_description'),
+  url: `${SITE_URL}/de${pathname}`,
+  image,
+  applicationCategory: 'PhotoApplication',
+  operatingSystem: 'macOS, iOS, iPadOS',
+  author: { '@type': 'Person', name: PERSON_NAME, url: `${SITE_URL}/` },
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+};
+---
+<PortfolioLayout
+  lang={lang}
+  pathname={pathname}
+  title={t('portfolio.redact.page_title')}
+  description={t('portfolio.redact.page_description')}
+  image={image}
+  imageAlt={t('portfolio.redact.card_title')}
+  jsonLd={jsonLd}
+>
+  <Fragment slot="head-extra" set:html={head} />
+  <RedactDetail lang={lang} />
+</PortfolioLayout>
