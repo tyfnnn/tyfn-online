@@ -23,6 +23,8 @@ const { title, description = '', lang, pathname, image, imageAlt, jsonLd } = Ast
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const enHref = new URL(getRelativeLocaleUrl('en', pathname), Astro.site).toString();
 const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toString();
+const rssHref = getRelativeLocaleUrl(lang, '/rss.xml');
+const rssTitle = lang === 'de' ? 'Tayfun Ilker — Blog (DE)' : 'Tayfun Ilker — Blog (EN)';
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -45,6 +47,7 @@ const deHref = new URL(getRelativeLocaleUrl('de', pathname), Astro.site).toStrin
   <link rel="alternate" hreflang="en" href={enHref} />
   <link rel="alternate" hreflang="de" href={deHref} />
   <link rel="alternate" hreflang="x-default" href={enHref} />
+  <link rel="alternate" type="application/rss+xml" title={rssTitle} href={rssHref} />
 
   <link href="/assets/t-icon.png" rel="shortcut icon" type="image/x-icon" />
 

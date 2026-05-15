@@ -20,6 +20,7 @@ const posts = await getBlogPosts(lang);
 const readMore = t('blog.index.read_more');
 const readingTimeTemplate = t('blog.reading_time');
 const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+const rssHref = getRelativeLocaleUrl(lang, '/rss.xml');
 ---
 <PortfolioNav lang={lang} pathname="/blog/" back="home" />
 
@@ -47,6 +48,17 @@ const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
           data-sort="asc"
           aria-pressed="false"
         >{t('blog.index.sort_oldest')}</button>
+        <a
+          class="blog-rss-link"
+          href={rssHref}
+          aria-label={t('blog.index.rss_label')}
+          title={t('blog.index.rss_label')}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M6.18 17.82a2.18 2.18 0 1 1-4.36 0 2.18 2.18 0 0 1 4.36 0zM4 4.44v3.18A12.38 12.38 0 0 1 16.38 20h3.18A15.56 15.56 0 0 0 4 4.44zM4 10.1v3.18a6.72 6.72 0 0 1 6.72 6.72h3.18A9.9 9.9 0 0 0 4 10.1z"/>
+          </svg>
+          <span>{t('blog.index.rss_short')}</span>
+        </a>
       </div>
     )}
 

@@ -219,6 +219,8 @@
       "sort_label": "Sort",
       "sort_newest": "Newest first",
       "sort_oldest": "Oldest first",
+      "rss_label": "Subscribe via RSS",
+      "rss_short": "RSS",
       "cross_link_kicker": "Also building",
       "cross_link_title": "Selected projects",
       "cross_link_body": "A selection of my best work in UX/UI design, app development, and creative design.",

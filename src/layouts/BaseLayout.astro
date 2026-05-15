@@ -79,6 +79,12 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
   <link rel="alternate" hreflang="en" href={enHref} />
   <link rel="alternate" hreflang="de" href={deHref} />
   <link rel="alternate" hreflang="x-default" href={enHref} />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title={lang === 'de' ? 'Tayfun Ilker — Blog (DE)' : 'Tayfun Ilker — Blog (EN)'}
+    href={getRelativeLocaleUrl(lang, '/rss.xml')}
+  />
 
   <link href="/style.css" rel="stylesheet" type="text/css" />
   <link href="/assets/t-icon.png" rel="shortcut icon" type="image/x-icon" />
