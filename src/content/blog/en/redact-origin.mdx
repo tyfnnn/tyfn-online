@@ -1,0 +1,231 @@
+---
+title: Faces off — how a Photoshop annoyance became a native macOS app
+description: How shooting events as a hobby photographer turned into hours of manual face-blurring, why CLI tools didn't cut it, and why I ended up building my own native app for macOS and iOS — with Core ML, YOLOv11m, and zero cloud.
+pubDate: 2026-05-15
+lang: en
+tags:
+  - swift
+  - swiftui
+  - core-ml
+  - macos
+  - ios
+  - photography
+  - privacy
+translationKey: redact-origin
+heroImage: /assets/redact-origin-hero.png?v=1
+draft: false
+---
+
+There's a moment that repeats itself at almost every event I shoot at.
+At some point someone from the organising team walks up and says
+something along the lines of: "The person back there would rather not
+be recognisable." Sometimes it's two people, sometimes twenty. I nod,
+take the shot, briefly think about my evening's photo selection — and
+already know that this one sentence is going to cost me hours.
+
+Redact is the app that gives those hours back. This article isn't the
+feature pitch — that lives in the
+[portfolio entry](/portfolio/redact/). Here I want to talk about *why*
+the app exists, why it ended up being a native Apple app of all things,
+and which paths I deliberately turned away from.
+
+## The workflow nobody wants to watch
+
+A typical evening after an event used to look like this: 150 to 300
+photos, maybe 40 of them usable for publication, a healthy share of
+those with faces that need to go. Open Photoshop, grab the brush, blur
+or mosaic, next image, next image. It's tedious and error-prone — miss
+one face in the background of a group shot and that single data point
+is exactly the one you should never have published.
+
+At some point, as a developer, I took the obvious path and looked at
+CLI tools. The two candidates were
+[**deface**](https://github.com/ORB-HD/deface) and
+[**uniface**](https://github.com/yakhyo/uniface): Python scripts that
+read a folder, detect every face, write the pixelated image back.
+From a developer's perspective: great. One command, one folder, done.
+
+Two problems remained.
+
+**First: detection wasn't up to scratch any more.** `deface` uses
+CenterFace, which lands around 64 % AP on the WIDER FACE benchmark —
+very usable in 2019, marginal today. The weakness showed up exactly in
+the situation where anonymisation matters most: a dense crowd. Third
+row back, a few heads turned slightly in profile — and the tool simply
+stopped finding faces. The model gave up precisely where I needed the
+guarantee.
+
+**Second: none of my photographer friends would ever touch it.** We're
+a small bubble where many people make excellent images but have no
+appetite for opening a terminal. If the solution starts with "please
+install Python 3.11, then pip install, then a few flags", then it's
+solved for me and lost for everyone else.
+
+At that point it was clear: this is going to be an app.
+
+## Why native Apple — and not multiplatform
+
+My previous larger project
+([Zentrik / easyNGO](https://github.com/tyfnnn/easyNGO)) is
+Kotlin Multiplatform with shared UI. I genuinely enjoy multiplatform
+work. For Redact I deliberately stepped off that track, for three
+reasons.
+
+**I wanted Core ML.** On my list for years, never the right project.
+Real-time face detection on the Apple Neural Engine is exactly the
+showcase this API was built for — and I wanted to seriously get to
+know it, not just run the hello-world from Apple's docs.
+
+**On the KMP side, the ML story was unclear to me.** There are
+ONNX-Runtime wrappers, TensorFlow-Lite bindings, various
+community solutions — but nothing that gave me the same level of
+confidence as "drop the `.mlpackage` into the Xcode project and the
+system routes inference to the ANE on its own." I briefly considered
+KMP with native UI, so I could use Core ML on iOS/macOS and TF-Lite
+or similar on Android. I dropped the idea quickly: maintaining two
+parallel ML pipelines, writing two UIs, sharing a domain layer that
+stays thin for an image-processing app anyway — the payoff didn't
+justify the cost.
+
+**The audience is Apple.** That sounds like an excuse but it's
+empirical. Practically every photographer I know works on a MacBook.
+Not out of brand loyalty, but because the display is colour-accurate,
+bright enough, calibrated, and above all **comparable**. If you
+retouch on a MacBook Pro 16", you have a rough idea what the image
+will look like on a colleague's MacBook Air. With Windows laptops
+that predictability only starts at significantly higher price
+brackets. I'm also a macOS and iPhone user myself — and I wanted to
+build an app I could actually use every day, not one that fits
+loosely on every platform.
+
+The result is a pure Apple app: macOS for batch processing at the
+desk, iOS and iPadOS for quick anonymisation on the go. Shared code
+in an internal `RedactCore` package, platform-specific UI on top.
+
+## The model: YOLOv11m-face instead of CenterFace
+
+The single biggest technical lever was the model itself. If the tool
+fails in exactly the crowd I need it for, nothing else matters.
+
+I landed on
+[**YOLOv11m-face**](https://github.com/akanametov/yolo-face) — a fine
+tune of the YOLO11m model on the WIDER FACE dataset. ~20 M
+parameters, bounding boxes with confidence, NMS baked directly into
+the model. Converted via `coremltools` to the `.mlpackage` format
+(MLProgram), ~38 MB, embedded in the app bundle. No download, no
+setup, no account.
+
+A non-trivial practical detail: the YOLO export with built-in NMS
+does not emit `VNRecognizedObjectObservation`, but raw
+`MLMultiArray` tensors (`confidence [N, 80]`, `coordinates [N, 4]`).
+That means the comfortable Vision-Framework path
+(`VNCoreMLRequest`) is closed. Instead inference runs through
+`MLModel.prediction()` directly, and I parse the tensors myself.
+More code, but full control over post-processing.
+
+Another hurdle: on macOS 15 there are known MPS/ANE bugs with
+exported YOLOv11 CoreML models — certain input sizes lead to
+crashes or NaN results. The workaround is pragmatic for now:
+`computeUnits = .cpuOnly`. On Apple Silicon that's still fast enough
+to push through 200 photos in reasonable time, and stable. Once the
+upstream bugs settle I'll move back to `.all`.
+
+## What sets the app apart from a "Photoshop action"
+
+If Redact were just "detect faces, slap a mosaic on top" it wouldn't
+survive an App Store review. The places where it actually becomes
+useful as a tool are the unspectacular ones.
+
+**Manual corrections.** No model is perfect. If the tool misses a
+face, I drag the box myself. If it detects a face that shouldn't be
+anonymised (mine, for example), I click it off. Confidence threshold
+is its own slider — when you want to play it safe in a crowd you
+turn it down, take some false positives, and deselect them by hand.
+
+**Four anonymisation modes.** Mosaic (classic), Gaussian blur (for
+softer image looks), black bar (formal, documentary), emoji overlay
+(for social media). Mask shape rectangle or ellipse. Strength and
+padding tunable per image.
+
+**EXIF stripping as an option.** If you actually want to publish
+images anonymously, there's a second problem: GPS coordinates and
+camera serial numbers in the EXIF block. The exporter strips all of
+that optionally, without touching visible image content.
+
+**Originals stay untouched.** Anonymised images land in an
+`anonymized/` subfolder next to the originals. No overwrites, no
+backup drama.
+
+## What happened technically along the way
+
+The Apple platform rewards you for committing to it. Three things
+that would have been noticeably more work in a multiplatform setup:
+
+**Swift Concurrency was an immediate win.** `FaceDetectionService`
+and `BatchProcessingService` are actors, `AppState` is a
+`@MainActor` ObservableObject, batch processing runs through
+`TaskGroup` with controlled parallelism. That's exactly the
+programming model you want for an app that pushes 200 images through
+an ML pipeline and a Core Image filter in the background while the
+UI stays alive.
+
+**Core Image for the pixelation.** `CIFilter.pixellate` and Gaussian
+blur are hardware-accelerated without you ever touching a GPU
+pipeline yourself. That's the nice thing about Apple's frameworks —
+the boring defaults are already fast.
+
+**Memory crashes on large photos.** Only surfaced during the iOS
+port: loading a 50 MP photo fully into memory just isn't feasible
+on iPhones. Fix: downsampling via `ImageIO` with
+`kCGImageSourceCreateThumbnailFromImageAlways` and
+`kCGImageSourceThumbnailMaxPixelSize`. The model only sees 640×640
+anyway — it doesn't need the rest.
+
+## Where the app stands today
+
+Redact is in the App Store, free. The trust promise "runs fully
+locally, your images never leave the device" rests on the App
+Sandbox and the Privacy Manifest: no network entitlements, no
+telemetry, no analytics SDKs. What isn't built in can't leak out.
+
+On the roadmap: Finder Quick Actions, licence-plate detection via
+the Vision Framework, and longer term video — frame-by-frame
+anonymisation with face tracking across frames. First steps toward
+video already live in the `feature/video-anonymization` branch,
+with AVFoundation for frame extraction and a manual track editor
+with a scrubber.
+
+## What I took away
+
+Three things, mostly noted for myself.
+
+**Sometimes multiplatform is the wrong answer.** It took me a while
+to admit. For Redact the shared layer would have been thin (a bit
+of settings, a bit of image model), the UI would have needed to be
+platform-specific anyway, and the ML-story risk on Android wasn't
+fun. An Apple-only app was the honest answer to a question I hadn't
+even been asking: *who* am I actually building this for?
+
+**CLI frustration is a valid product-idea source.** When you, as a
+developer, use an open-source tool and think "non-technical people
+could never operate this, even though they need it", that isn't a
+critique of the tool. It's a market observation. CLI communities do
+the research work (models, algorithms, benchmarks); the app is the
+bridge into the everyday lives of people with the same problem.
+
+**Privacy by design is cheap if you commit to it early.** "100 %
+on-device" as a feature would be expensive if you had to rip out a
+cloud path retroactively. As a starting point it's free: no backend,
+no account system, no GDPR slide deck, no logging stack. The app
+starts, loads the model, done.
+
+## Wrapping up
+
+I've been shooting as a hobby for a few years now, and Redact is the
+app I would have wished for a few years back. It solves exactly one
+problem that exactly I have — and, as it turned out, a couple of
+friends too. If you also shoot at events and recognise the problem,
+grab the app on the
+[App Store](https://apps.apple.com/de/app/redact-faces-off/id6762188914)
+or check out the [website](https://redact.vortex-labs.de/). Feedback
+comes straight to me.

@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Redact — Faces off</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0E0E12;
+      --bg-tint: #16161C;
+      --ink: #FFFFFF;
+      --ink-dim: #B5B5B8;
+      --ink-faint: #6B6B70;
+      --rule: #25252E;
+
+      --accent-a: #FF6B5B;   /* coral */
+      --accent-b: #FFB347;   /* amber */
+      --accent-c: #4F8CFF;   /* sky */
+      --signal:   #3ECF8E;
+
+      --sans: 'Manrope', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Menlo', monospace;
+    }
+
+    html, body {
+      background: #06060B;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 800px;
+      background:
+        radial-gradient(900px 700px at 18% 22%, rgba(255, 107, 91, 0.22), transparent 55%),
+        radial-gradient(900px 700px at 85% 80%, rgba(79, 140, 255, 0.18), transparent 55%),
+        radial-gradient(700px 600px at 50% 50%, rgba(255, 179, 71, 0.08), transparent 60%),
+        var(--bg);
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    /* dot grid */
+    .grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%);
+    }
+
+    /* ============== TOP BAR ============== */
+    .top {
+      position: absolute;
+      top: 44px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .top-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+    }
+    .top-tag {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      color: var(--ink-dim);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      text-transform: uppercase;
+    }
+    .top-tag .live {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 12px var(--signal);
+    }
+
+    /* ============== BODY ============== */
+    .body {
+      position: absolute;
+      top: 130px;
+      left: 56px;
+      right: 56px;
+      bottom: 88px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: stretch;
+      z-index: 4;
+    }
+
+    /* ---- LEFT: HEADLINE ---- */
+    .copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .copy-top { display: flex; flex-direction: column; gap: 22px; }
+
+    .copy-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-a);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .copy-eyebrow::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--accent-a);
+      opacity: 0.7;
+    }
+
+    .headline {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 88px;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .headline .row { display: block; }
+    .headline .accent {
+      background: linear-gradient(96deg, var(--accent-a) 0%, var(--accent-b) 50%, var(--accent-c) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .headline .dot { color: var(--accent-a); }
+
+    .sub {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-dim);
+      max-width: 500px;
+      line-height: 1.55;
+    }
+
+    /* feature chips */
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      padding-top: 4px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+    }
+    .chip .d {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent-b);
+      box-shadow: 0 0 8px var(--accent-b);
+    }
+    .chip:nth-child(2) .d { background: var(--accent-c); box-shadow: 0 0 8px var(--accent-c); }
+    .chip:nth-child(3) .d { background: var(--signal); box-shadow: 0 0 8px var(--signal); }
+
+    /* ---- RIGHT: PIXELATED PORTRAIT ---- */
+    .stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 18px;
+    }
+
+    .stage::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 460px; height: 460px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 107, 91, 0.32), transparent 65%);
+      filter: blur(20px);
+      transform: translate(-50%, -55%);
+      z-index: 0;
+    }
+
+    .portrait {
+      position: relative;
+      z-index: 2;
+      width: 360px;
+      height: 360px;
+      filter: drop-shadow(0 24px 60px rgba(255, 107, 91, 0.25));
+    }
+
+    /* the pixelated portrait composed of CSS blocks */
+    .px {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+      gap: 3px;
+      padding: 6px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .px span {
+      border-radius: 3px;
+      background: rgba(255,255,255,0.025);
+    }
+    /* hair / top — coral */
+    .px .h { background: linear-gradient(160deg, #2A1410, #4A1F1A); }
+    /* skin — warm */
+    .px .s { background: linear-gradient(140deg, #E8A88B, #C77F62); }
+    /* shadow side of face */
+    .px .sd { background: linear-gradient(140deg, #B07458, #8C5742); }
+    /* eyes/mask — accent */
+    .px .e  { background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); box-shadow: 0 0 10px rgba(255, 107, 91, 0.6); }
+    /* shirt — deep */
+    .px .sh { background: linear-gradient(180deg, #1B2A4A, #0F1A30); }
+    /* highlight glint */
+    .px .hl { background: linear-gradient(140deg, #FFD9B5, #E8B493); }
+
+    /* scanning brackets */
+    .brackets {
+      position: absolute;
+      inset: -14px;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .brackets span {
+      position: absolute;
+      width: 28px; height: 28px;
+      border: 2px solid var(--accent-a);
+      filter: drop-shadow(0 0 6px rgba(255, 107, 91, 0.5));
+    }
+    .brackets .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+    .brackets .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+    .brackets .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+    .brackets .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+    /* tag below */
+    .stage-tag {
+      position: relative;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    .stage-tag .conf { color: var(--signal); }
+
+    /* ============== BOTTOM ============== */
+    .bottom {
+      position: absolute;
+      bottom: 48px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+      z-index: 5;
+    }
+    .bottom .left { color: var(--ink); font-weight: 500; }
+    .bottom .left .slash { color: var(--accent-a); }
+    .bottom .center {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--ink-faint);
+    }
+    .bottom .center .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--signal); box-shadow: 0 0 8px var(--signal);
+    }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="grid"></div>
+
+    <header class="top">
+      <span class="top-eyebrow">/blog/redact-origin</span>
+      <div class="top-tag">
+        <span class="live"></span>
+        <span>On-device · Core ML · YOLOv11m</span>
+      </div>
+    </header>
+
+    <div class="body">
+      <section class="copy">
+        <div class="copy-top">
+          <span class="copy-eyebrow">Redact · faces off</span>
+          <h1 class="headline">
+            <span class="row">Aus dem</span>
+            <span class="row"><span class="accent">Photoshop-Frust</span><span class="dot">.</span></span>
+            <span class="row">eine App.</span>
+          </h1>
+
+          <p class="sub">
+            Wie aus stundenlangem Pinsel-Mosaik in Photoshop eine native macOS- &amp; iOS-App wurde — Gesichter weg, Bilder bleiben lokal.
+          </p>
+        </div>
+
+        <div class="chips">
+          <span class="chip"><span class="d"></span>SwiftUI</span>
+          <span class="chip"><span class="d"></span>Core ML · ANE</span>
+          <span class="chip"><span class="d"></span>100 % on-device</span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="portrait">
+          <div class="px">
+            <!-- row 1 -->
+            <span></span><span></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span></span><span></span>
+            <!-- row 2 -->
+            <span></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span class="h"></span><span></span>
+            <!-- row 3 -->
+            <span></span><span class="h"></span><span class="h"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="sd"></span><span class="h"></span><span></span>
+            <!-- row 4 -->
+            <span></span><span class="h"></span><span class="s"></span><span class="s"></span><span class="hl"></span><span class="s"></span><span class="s"></span><span class="hl"></span><span class="s"></span><span class="sd"></span><span class="sd"></span><span></span>
+            <!-- row 5 — eyes (mask) -->
+            <span></span><span class="h"></span><span class="s"></span><span class="e"></span><span class="e"></span><span class="s"></span><span class="s"></span><span class="e"></span><span class="e"></span><span class="sd"></span><span class="sd"></span><span></span>
+            <!-- row 6 -->
+            <span></span><span class="h"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="sd"></span><span class="sd"></span><span></span>
+            <!-- row 7 -->
+            <span></span><span></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="hl"></span><span class="hl"></span><span class="s"></span><span class="s"></span><span class="sd"></span><span></span><span></span>
+            <!-- row 8 — mouth -->
+            <span></span><span></span><span class="s"></span><span class="s"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="s"></span><span class="sd"></span><span></span><span></span>
+            <!-- row 9 -->
+            <span></span><span></span><span></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="s"></span><span class="sd"></span><span></span><span></span><span></span>
+            <!-- row 10 — shirt start -->
+            <span></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span></span>
+            <!-- row 11 -->
+            <span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span>
+            <!-- row 12 -->
+            <span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span><span class="sh"></span>
+          </div>
+          <div class="brackets">
+            <span class="tl"></span><span class="tr"></span>
+            <span class="bl"></span><span class="br"></span>
+          </div>
+        </div>
+        <div class="stage-tag">
+          <span>FACE · 0,97 <span class="conf">conf</span></span>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bottom">
+      <span class="left">tyfn<span class="slash">/</span>online</span>
+      <span class="center"><span class="dot"></span>NO NETWORK · IMAGES STAY LOCAL</span>
+      <span>Tayfun Ilker · 2026</span>
+    </footer>
+  </article>
+</body>
+</html>
