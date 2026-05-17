@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Redact — Vier Runden bis zur Freigabe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0E0E12;
+      --bg-tint: #16161C;
+      --ink: #FFFFFF;
+      --ink-dim: #B5B5B8;
+      --ink-faint: #6B6B70;
+      --rule: #25252E;
+
+      --accent-a: #FF6B5B;   /* coral — rejections */
+      --accent-b: #FFB347;   /* amber — in-progress */
+      --accent-c: #4F8CFF;   /* sky — info */
+      --signal:   #3ECF8E;   /* green — approved */
+      --red-light: #FF5F57;
+      --yellow-light: #FEBC2E;
+      --green-light: #28C840;
+
+      --sans: 'Manrope', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Menlo', monospace;
+    }
+
+    html, body {
+      background: #06060B;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 800px;
+      background:
+        radial-gradient(900px 700px at 18% 22%, rgba(62, 207, 142, 0.18), transparent 55%),
+        radial-gradient(900px 700px at 85% 80%, rgba(79, 140, 255, 0.16), transparent 55%),
+        radial-gradient(700px 600px at 50% 50%, rgba(255, 107, 91, 0.06), transparent 60%),
+        var(--bg);
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    /* dot grid */
+    .grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 60%, transparent 100%);
+    }
+
+    /* ============== TOP BAR ============== */
+    .top {
+      position: absolute;
+      top: 44px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .top-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+    }
+    .top-tag {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      color: var(--ink-dim);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      text-transform: uppercase;
+    }
+    .top-tag .live {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 12px var(--signal);
+    }
+
+    /* ============== BODY ============== */
+    .body {
+      position: absolute;
+      top: 130px;
+      left: 56px;
+      right: 56px;
+      bottom: 88px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: stretch;
+      z-index: 4;
+    }
+
+    /* ---- LEFT ---- */
+    .copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .copy-top { display: flex; flex-direction: column; gap: 22px; }
+
+    .copy-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--signal);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .copy-eyebrow::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--signal);
+      opacity: 0.7;
+    }
+
+    .headline {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 88px;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .headline .row { display: block; }
+    .headline .accent {
+      background: linear-gradient(96deg, var(--accent-a) 0%, var(--accent-b) 50%, var(--signal) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .headline .dot { color: var(--signal); }
+
+    .sub {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink-dim);
+      max-width: 500px;
+      line-height: 1.55;
+    }
+
+    /* feature chips */
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      padding-top: 4px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+    }
+    .chip .d {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent-a);
+      box-shadow: 0 0 8px var(--accent-a);
+    }
+    .chip:nth-child(2) .d { background: var(--accent-b); box-shadow: 0 0 8px var(--accent-b); }
+    .chip:nth-child(3) .d { background: var(--signal); box-shadow: 0 0 8px var(--signal); }
+
+    /* ---- RIGHT: macOS window stack ---- */
+    .stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 18px;
+    }
+
+    .stage::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(62, 207, 142, 0.28), transparent 65%);
+      filter: blur(24px);
+      transform: translate(-50%, -52%);
+      z-index: 0;
+    }
+
+    .stack {
+      position: relative;
+      z-index: 2;
+      width: 420px;
+      height: 360px;
+    }
+
+    .win {
+      position: absolute;
+      width: 360px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #1E1E26, #14141A);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+      padding: 14px 16px 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink-dim);
+    }
+    .win .tl-row {
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 12px;
+    }
+    .win .tl {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #3a3a44;
+      border: 0.5px solid rgba(0,0,0,0.3);
+    }
+    .win .tl.r { background: var(--red-light); }
+    .win .tl.y { background: var(--yellow-light); }
+    .win .tl.g { background: var(--green-light); }
+    .win .title {
+      flex: 1; text-align: center;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+      margin-right: 33px; /* visually balance traffic lights */
+    }
+    .win .line {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      letter-spacing: 0.02em;
+    }
+    .win .line:last-child { border-bottom: 0; }
+    .win .line .k { color: var(--ink-dim); }
+    .win .line .v { color: var(--ink); font-weight: 500; }
+    .win .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .badge.rej {
+      color: var(--accent-a);
+      background: rgba(255, 107, 91, 0.10);
+      border: 1px solid rgba(255, 107, 91, 0.35);
+    }
+    .badge.app {
+      color: var(--signal);
+      background: rgba(62, 207, 142, 0.12);
+      border: 1px solid rgba(62, 207, 142, 0.45);
+    }
+    .badge .d {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    /* stacked windows */
+    .win.w1 {
+      top: 0; left: 0;
+      transform: rotate(-5deg);
+      opacity: 0.62;
+      filter: saturate(0.8);
+    }
+    .win.w2 {
+      top: 28px; left: 28px;
+      transform: rotate(-2deg);
+      opacity: 0.78;
+    }
+    .win.w3 {
+      top: 56px; left: 56px;
+      transform: rotate(1deg);
+      z-index: 3;
+      box-shadow: 0 30px 70px rgba(62, 207, 142, 0.22), 0 18px 50px rgba(0,0,0,0.6);
+      border-color: rgba(62, 207, 142, 0.3);
+    }
+
+    /* tag below */
+    .stage-tag {
+      position: relative;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      padding: 8px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      margin-top: 18px;
+    }
+    .stage-tag .conf { color: var(--signal); }
+
+    /* ============== BOTTOM ============== */
+    .bottom {
+      position: absolute;
+      bottom: 48px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+      z-index: 5;
+    }
+    .bottom .left { color: var(--ink); font-weight: 500; }
+    .bottom .left .slash { color: var(--signal); }
+    .bottom .center {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--ink-faint);
+    }
+    .bottom .center .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--signal); box-shadow: 0 0 8px var(--signal);
+    }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="grid"></div>
+
+    <header class="top">
+      <span class="top-eyebrow">/blog/redact-macos-review</span>
+      <div class="top-tag">
+        <span class="live"></span>
+        <span>Approved · Mac App Store</span>
+      </div>
+    </header>
+
+    <div class="body">
+      <section class="copy">
+        <div class="copy-top">
+          <span class="copy-eyebrow">Redact · macOS · review notes</span>
+          <h1 class="headline">
+            <span class="row">Vier Runden.</span>
+            <span class="row">Drei Builds.</span>
+            <span class="row"><span class="accent">Eine Mac-App</span><span class="dot">.</span></span>
+          </h1>
+
+          <p class="sub">
+            Was mir die iOS-Version nicht beigebracht hat — vom Window-Lifecycle über Icon Composer bis zur Frage, was bei Apple eigentlich als „Face Data" zählt.
+          </p>
+        </div>
+
+        <div class="chips">
+          <span class="chip"><span class="d"></span>SwiftUI · AppKit</span>
+          <span class="chip"><span class="d"></span>App Review · Guideline 2.1 / 4</span>
+          <span class="chip"><span class="d"></span>1.0 (3) · Approved</span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="stack">
+          <!-- Rejection #1 -->
+          <div class="win w1">
+            <div class="tl-row">
+              <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
+              <span class="title">Submission · 1.0 (1)</span>
+            </div>
+            <div class="line"><span class="k">Guideline</span><span class="v">2.1</span></div>
+            <div class="line"><span class="k">Status</span>
+              <span class="badge rej"><span class="d"></span>Rejected</span>
+            </div>
+          </div>
+
+          <!-- Rejection #2 -->
+          <div class="win w2">
+            <div class="tl-row">
+              <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
+              <span class="title">Submission · 1.0 (2)</span>
+            </div>
+            <div class="line"><span class="k">Guideline</span><span class="v">4 · Design</span></div>
+            <div class="line"><span class="k">Status</span>
+              <span class="badge rej"><span class="d"></span>Rejected</span>
+            </div>
+          </div>
+
+          <!-- Approved -->
+          <div class="win w3">
+            <div class="tl-row">
+              <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
+              <span class="title">Submission · 1.0 (3)</span>
+            </div>
+            <div class="line"><span class="k">Icon</span><span class="v">Icon Composer</span></div>
+            <div class="line"><span class="k">Window</span><span class="v">Single · reopen</span></div>
+            <div class="line"><span class="k">Status</span>
+              <span class="badge app"><span class="d"></span>Approved</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-tag">
+          <span>BUILD 3 · <span class="conf">approved</span></span>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bottom">
+      <span class="left">tyfn<span class="slash">/</span>online</span>
+      <span class="center"><span class="dot"></span>FROM IOS TO MACOS · LESSONS LEARNED</span>
+      <span>Tayfun Ilker · 2026</span>
+    </footer>
+  </article>
+</body>
+</html>

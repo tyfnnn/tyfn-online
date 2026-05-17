@@ -1,0 +1,253 @@
+---
+title: Four rounds to approval — what shipping Redact for iOS didn't teach me about macOS
+description: My first macOS app is live. Getting there took four App Review rounds, three builds, and a series of small realisations I simply didn't have on my radar as an iOS developer — from window lifecycle to Icon Composer to what Apple actually counts as "face data".
+pubDate: 2026-05-17
+lang: en
+tags:
+  - swift
+  - swiftui
+  - macos
+  - app-store
+  - app-review
+  - redact
+translationKey: redact-macos-review
+heroImage: /assets/redact-macos-review-hero.png?v=1
+draft: false
+---
+
+Redact for macOS got approved today. My first macOS app on the App
+Store, and I'm enjoying that more than I expected to for a 1.0
+submission. The iOS version has been out for a while and went through
+review surprisingly smoothly back then — almost too smoothly, in
+hindsight. Because the macOS submission cost me four review rounds,
+three builds, and a fairly concrete crash course in "this is how
+macOS actually works".
+
+This post is the honest version of that journey: what I got wrong,
+where I actually had to change code, and what I'd do differently
+next time. If you haven't come across Redact yet, the backstory of
+the app itself lives in the [Redact origin post](/blog/redact-origin/) —
+this one is purely about the path into the Mac App Store.
+
+## The iOS approval was a misleading data point
+
+Before I even got to the macOS submission, I'd shipped the iOS
+version and honestly convinced myself I knew how App Review worked.
+That's true for a narrow slice of it: I know the tone of the
+replies, I know how to set up demo accounts, I know that a short
+answer is usually fine.
+
+What I didn't know: the bar for macOS sits noticeably differently.
+Not higher in the sense of "stricter" — more like *differently
+calibrated*. The review team seems to test Mac apps more manually,
+asks for context more explicitly, and has its own checklist of
+things-that-jump-out-as-a-reviewer. I land on that checklist twice
+in a row.
+
+## Round 1 and 2 — "Information Needed"
+
+The first two rejections were both under **Guideline 2.1 — App
+Completeness**, but neither was a real bug. Apple simply wanted
+more context in the App Review notes: a screen recording on a
+physical device, a description of the app's purpose, a list of the
+external services it uses, a statement on regional differences, and
+explicit justifications for any sensitive data.
+
+My mistake: I'd more or less reused the notes from the iOS
+submission. "Works like the iOS version, same code path, same
+privacy policy." That was enough for iOS. For macOS, apparently
+not — and in hindsight that makes sense. A reviewer testing the
+Mac app on a MacBook Pro has no direct memory of what I uploaded
+to iOS a few weeks earlier. They expect a self-contained explanation of
+*this* build.
+
+The fix wasn't a code change, it was a discipline thing: rewrite
+the macOS review notes from scratch, as if explaining the app to
+someone who has never heard of the brand. Concrete user flow,
+concrete clicks, concrete features. Six answers to six questions,
+better too verbose than too terse.
+
+By the time I'd figured that out, I'd burned two weeks.
+
+## Round 3, part 1 — Guideline 4: the window that wouldn't come back
+
+Round three is where I actually had to touch code. The first
+finding was so trivial that it kind of hurts to write it down — and
+for an experienced Mac developer probably the prototypical
+"iOS-brain mistake".
+
+> *"We found that when the user closes the main application window
+> there is no menu item to re-open it."*
+
+There is no "close window" on iOS. The lifecycle model is entirely
+different — there's an active screen, the app state runs in the
+background, that's it. I'd built the Mac target from the iOS code
+and given it a perfectly normal `WindowGroup` scene:
+
+```swift
+var body: some Scene {
+    WindowGroup {
+        ContentView()
+    }
+}
+```
+
+It works. Looks correct while developing. Except: the user clicks
+the red traffic light, the window disappears, the app keeps running
+in the Dock, and there's no item under the **Window** menu to bring
+it back. Dead end. And apparently that's exactly the kind of thing
+reviewers are trained to try first.
+
+The fix was conceptually tiny but worth understanding:
+
+```swift
+// Single-window app: `Window` (rather than `WindowGroup`) creates
+// a singleton scene that macOS automatically lists under the
+// Window menu, so a closed window can be reopened at any time.
+Window("Redact", id: "main") {
+    ContentView()
+        .preferredColorScheme(.dark)
+}
+```
+
+`WindowGroup` is the scene for apps with potentially multiple
+document windows — anything that smells like a multi-document
+editor. `Window` is the scene for classic single-window apps, and
+it has the side effect that AppKit registers the window in the
+**Window** menu automatically. Closed, one click, back.
+
+Plus the second standard path: the Dock icon.
+
+```swift
+func applicationShouldHandleReopen(
+    _ sender: NSApplication,
+    hasVisibleWindows flag: Bool
+) -> Bool {
+    return true
+}
+```
+
+That's the behaviour every native Mac app has — Finder, Mail,
+Notes, you name it: no visible window, Dock click brings it back.
+Completely natural for long-time Mac users. For someone who has
+spent most of their time on mobile, simply not in the reflex.
+
+## Round 3, part 2 — Guideline 2.1: what counts as "face data"?
+
+The second finding wasn't a bug content-wise, but it was annoying
+to argue. Apple explicitly wanted answers to:
+
+- What face data does the app collect?
+- How is it used?
+- Is it shared with third parties? Where is it stored?
+- How long is it retained?
+- Where in the privacy policy is this documented?
+- Quote the relevant passage from the policy verbatim.
+
+My first reflex was defensive: "All of this is in the privacy
+policy, and the iOS version was approved with the same one."
+Wrong reflex. For sensitive data — and face data counts as
+sensitive at Apple — reviewers want the answers *in the chat*, not
+behind a link. They want to see it immediately, without switching
+tabs. Which is fair: privacy manifests look mostly the same from
+the outside, and the bundle alone doesn't tell you what the app
+actually does.
+
+What I learned: you have to draw a very explicit line between
+"face data in the privacy sense" and what Redact actually
+produces. The model computes **no** face embeddings, no biometric
+templates, no identity vectors, no FaceID-style descriptors. What
+the Core ML model spits out are rectangular pixel coordinates —
+bounding boxes. I need them to pixelate or blur the corresponding
+regions. The moment the document is closed or the app quits,
+they're gone.
+
+This distinction has to be in the response, explicitly. If I just
+write "we do face detection", the app instantly lands in the
+"does something with faces → needs more scrutiny" reflex bucket.
+If I write "we compute bounding boxes, no embeddings, all
+ephemeral, all on-device", what was a vague concern becomes a set
+of clear, answerable questions.
+
+My response ended up being half a page of text, with the privacy
+policy URL, section numbers, and verbatim quotes of the relevant
+passages. It feels like overkill to copy all of that into the
+reviewer chat manually when there's a link right there. But that
+overkill feeling is apparently the right amount.
+
+## Round 4 — the upload errors that have nothing to do with review
+
+Between the reject and the resubmit, the next build wouldn't even
+upload. App Store Connect threw two validator errors that had
+nothing to do with App Review at all — they're a pre-flight gate
+you don't really hit on iOS in the same way.
+
+**Error 90236 — missing 512pt@2x icon in the ICNS.** On iOS the
+icon story has recently become pretty elegant with **Icon
+Composer**: one vector/layer file, all sizes generated for you. I
+still had the old `AppIcon.appiconset` lying around for the Mac
+target, with a handful of PNGs in it — and the critical
+1024×1024 variant was missing because I'd only included the iOS
+sizes when I designed the icon. The Mac validator doesn't accept
+that.
+
+The fix was to throw out the asset set entirely and use an
+`Redact.icon` file via Icon Composer instead. One source, one
+layer file, all sizes generated, and both platforms use the same
+icon. Which I could have done from day one — had I known the Mac
+side has that requirement.
+
+**Error 90242 — missing `LSApplicationCategoryType`.** Wasn't in
+the `Info.plist` at all. There is no such field on iOS; the store
+category is set entirely in App Store Connect. On macOS the
+upload validator wants the App Store category UTI in the bundle
+itself:
+
+```xml
+<key>LSApplicationCategoryType</key>
+<string>public.app-category.photography</string>
+```
+
+Three lines, a new build, bump the build number to 3, upload.
+Something that should be in every Mac starter template, and that
+I only learned about via the validator.
+
+## What I'd do differently next time
+
+Five points, mostly for my own future reference.
+
+**Don't think of macOS as "iOS with a mouse".** Window lifecycle,
+menu bar, Dock behaviour, icon pipeline, Info.plist keys — all of
+that is its own discipline, not a reskin. I'll budget time for it
+*before* I submit, not *while* a reviewer points it out.
+
+**Rewrite the macOS App Review notes from scratch.** What's enough
+on iOS isn't enough here. Explain the user flow, proactively answer
+the six sensitive-data questions, list all external services (even
+if the answer is "none" — then I write "none").
+
+**Cmd-W test before submitting.** Close the main window, see if I
+can get it back without relaunching the app. If not, I'm in the
+same trap as this time.
+
+**Icon Composer from the start.** Saves the asset-set drama. One
+file, one source, both platforms.
+
+**`LSApplicationCategoryType` belongs in the macOS Info.plist.**
+Trivial, but if you forget it you waste a whole build.
+
+## Wrap-up
+
+Four rounds, three builds, roughly a month between first submission
+and approval. Looking back: not a single problem was technically
+hard. They were all things an experienced Mac developer would
+probably have caught in the first half hour — and I walked into
+each one in turn as an iOS person.
+
+Which is exactly why it was useful. My first Mac app icon is now
+sitting in the store, and next time I'll know what to fix before
+Apple has to tell me. If you're on the same iOS-to-macOS path, I
+hope this saves you two or three review rounds. Redact itself, if
+you're curious, lives on the
+[Mac App Store](https://apps.apple.com/de/app/redact-faces-off/id6762188914?platform=mac)
+and the [website](https://redact.vortex-labs.de/).
