@@ -1,3 +1,5 @@
+import { statSync } from 'node:fs';
+import { extname, join } from 'node:path';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import type { Lang } from '../i18n/t';
@@ -66,4 +68,68 @@ export function formatDate(date: Date, lang: Lang): string {
     month: 'long',
     day: 'numeric',
   });
+}
+
+const HERO_MIME_TYPES: Record<string, string> = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+};
+
+export interface HeroEnclosure {
+  url: string;
+  length: number;
+  type: string;
+}
+
+export function heroEnclosure(
+  heroImage: string | undefined,
+  site: URL,
+): HeroEnclosure | undefined {
+  if (!heroImage) return undefined;
+  const [pathname] = heroImage.split('?');
+  const type =
+    HERO_MIME_TYPES[extname(pathname).toLowerCase()] ??
+    'application/octet-stream';
+  const length = statSync(join(process.cwd(), 'public', pathname)).size;
+  return {
+    url: new URL(heroImage, site).toString(),
+    length,
+    type,
+  };
+}
+
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function heroMediaXml(
+  enclosure: HeroEnclosure | undefined,
+  title: string,
+): string {
+  if (!enclosure) return '';
+  const url = escapeXml(enclosure.url);
+  const type = escapeXml(enclosure.type);
+  const alt = escapeXml(title);
+  return (
+    `<media:content medium="image" url="${url}" type="${type}" fileSize="${enclosure.length}">` +
+    `<media:title type="plain">${alt}</media:title>` +
+    `</media:content>` +
+    `<media:thumbnail url="${url}" />`
+  );
+}
+
+export function heroImageHtml(
+  enclosure: HeroEnclosure | undefined,
+  title: string,
+): string {
+  if (!enclosure) return '';
+  return `<p><img src="${escapeXml(enclosure.url)}" alt="${escapeXml(title)}" /></p>`;
 }
