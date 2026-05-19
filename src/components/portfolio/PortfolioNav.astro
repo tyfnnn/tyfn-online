@@ -24,6 +24,7 @@ const otherLocale: Lang = lang === 'en' ? 'de' : 'en';
 const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
 ---
 <nav class="pnav">
+  <span class="pnav-glass" aria-hidden="true"></span>
   <div class="pnav-grid">
     <a href={backHref} class="pnav-back">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,9 +46,44 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
     z-index: 100;
     padding: 1.5rem 0;
     background: transparent;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
   }
+
+  /* Glass layer — fades in once the page is scrolled. */
+  .pnav-glass {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: color-mix(in srgb, var(--bg-primary, #1A1A1A) 62%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),   /* top edge highlight */
+      inset 0 -1px 0 rgba(0, 0, 0, 0.10),         /* bottom hairline */
+      0 10px 30px -18px rgba(0, 0, 0, 0.30);      /* soft drop */
+    transition: opacity 0.28s ease;
+  }
+
+  /* Faint diagonal sheen — gives the surface a "glass" highlight band. */
+  .pnav-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 38%,
+      rgba(255, 255, 255, 0.10) 50%,
+      rgba(255, 255, 255, 0.04) 62%,
+      transparent 100%
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .pnav.scrolled .pnav-glass { opacity: 1; }
+
+  .pnav-grid { position: relative; }
 
   .pnav-grid {
     max-width: 1200px;
@@ -137,3 +173,13 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
     .pnav-back svg { margin-right: 0; width: 20px; height: 20px; }
   }
 </style>
+
+<script is:inline>
+  (() => {
+    const nav = document.querySelector('.pnav');
+    if (!nav) return;
+    const sync = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    sync();
+    window.addEventListener('scroll', sync, { passive: true });
+  })();
+</script>
