@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>easyNGO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* easyNGO Material 3 tokens (Light) — easyngo.de/style-guide */
+      --bg:               #F9FAFB;
+      --surface:          #FFFFFF;
+      --surface-variant:  #F1F5F9;
+      --outline-variant:  #E2E8F0;
+      --on-bg:            #0F172A;
+      --on-surface-variant: #475569;
+      --primary:          #0D9488;   /* teal-600 */
+
+      --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      background: var(--surface-variant);
+      font-family: var(--font);
+      color: var(--on-bg);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 800px;
+      overflow: hidden;
+      border-radius: 16px;
+      background:
+        radial-gradient(900px 700px at 50% 50%, rgba(13, 148, 136, 0.14), transparent 60%),
+        radial-gradient(600px 500px at 12% 88%, rgba(245, 158, 11, 0.08), transparent 70%),
+        linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* subtle grid overlay */
+    .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%);
+    }
+
+    /* the single wordmark, centred */
+    .wordmark {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 232px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--on-bg);
+      text-align: center;
+    }
+    .wordmark .accent { color: var(--primary); }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="grid"></div>
+    <h1 class="wordmark">easy<span class="accent">NGO</span></h1>
+  </article>
+</body>
+</html>

@@ -10,7 +10,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const zentrikHref = getRelativeLocaleUrl(lang, '/portfolio/zentrik/');
+const easyngoHref = getRelativeLocaleUrl(lang, '/portfolio/easyngo/');
 const stellarHref = getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/');
 const redactHref = getRelativeLocaleUrl(lang, '/portfolio/redact/');
 const blogHref = getRelativeLocaleUrl(lang, '/blog/');
@@ -27,22 +27,22 @@ const blogHref = getRelativeLocaleUrl(lang, '/blog/');
     </div>
 
     <div class="portfolio-grid">
-      <a href={zentrikHref} class="project-card">
-        <div
-          class="project-image app-dev"
-          style="background-image: url('https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png'); background-size: cover; background-position: center;"
-        ></div>
+      <a href={easyngoHref} class="project-card">
+        <div class="project-image easyngo-preview" aria-hidden="true">
+          <div class="easyngo-preview__grid"></div>
+          <div class="easyngo-preview__wordmark">easy<span class="accent">NGO</span></div>
+        </div>
         <div class="project-content">
-          <h3 class="project-title" data-scramble>{t('portfolio.zentrik.card_title')}</h3>
+          <h3 class="project-title" data-scramble>{t('portfolio.easyngo.card_title')}</h3>
           <p class="project-description" data-scramble>
-            {t('portfolio.zentrik.card_description')}
+            {t('portfolio.easyngo.card_description')}
           </p>
           <div class="project-tags">
-            <span class="project-tag">{t('portfolio.zentrik.tag_1')}</span>
-            <span class="project-tag">{t('portfolio.zentrik.tag_2')}</span>
-            <span class="project-tag">{t('portfolio.zentrik.tag_3')}</span>
-            <span class="project-tag">{t('portfolio.zentrik.tag_4')}</span>
-            <span class="project-tag">{t('portfolio.zentrik.tag_5')}</span>
+            <span class="project-tag">{t('portfolio.easyngo.tag_1')}</span>
+            <span class="project-tag">{t('portfolio.easyngo.tag_2')}</span>
+            <span class="project-tag">{t('portfolio.easyngo.tag_3')}</span>
+            <span class="project-tag">{t('portfolio.easyngo.tag_4')}</span>
+            <span class="project-tag">{t('portfolio.easyngo.tag_5')}</span>
           </div>
           <div class="project-link" data-scramble>
             {t('portfolio.index.view_project')}
@@ -127,6 +127,43 @@ const blogHref = getRelativeLocaleUrl(lang, '/blog/');
 </section>
 
 <style is:global>
+  /* ── easyNGO preview card (light, easyngo.de style) ──────────── */
+  .project-image.easyngo-preview {
+    position: relative;
+    background:
+      radial-gradient(22rem 14rem at 50% 50%, rgba(13, 148, 136, 0.16), transparent 65%),
+      linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .easyngo-preview__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 45%, transparent 90%);
+    mask-image: radial-gradient(ellipse at center, black 45%, transparent 90%);
+  }
+
+  .easyngo-preview__wordmark {
+    position: relative;
+    z-index: 2;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #0F172A;
+    text-align: center;
+  }
+  .easyngo-preview__wordmark .accent { color: #0D9488; }
+
+  /* ── Redact preview card ──────────────────────────────────────── */
   .project-image.redact-preview {
     background:
       radial-gradient(20rem 12rem at 75% 25%, rgba(107, 159, 255, 0.35), transparent 70%),

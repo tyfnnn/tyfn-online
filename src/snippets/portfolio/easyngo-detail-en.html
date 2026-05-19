@@ -1,13 +1,19 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
+            <div class="hero-eyebrow">The project</div>
             <div class="hero-badge"><span class="project-status" data-scramble>Beta phase</span></div>
-            <h1 class="hero-title">easyNGO</h1>
+            <h1 class="hero-title">Books. <span class="accent">Off your back.</span></h1>
             <p class="hero-subtitle">
                 The specialised accounting and management app for NGOs and non-profit associations —
-                now as a Multiplatform app for iOS, Android, and Desktop. GoBD-compliant, with DATEV export for tax advisors.
+                now Multiplatform on iOS, Android, and Desktop. GoBD-compliant, with DATEV export for tax advisors.
             </p>
-            <div class="hero-image" id="heroImage"></div>
+
+            <!-- Hero Image: just the easyNGO wordmark -->
+            <div class="hero-image" role="img" aria-label="easyNGO">
+                <div class="hero-image__wordmark">easy<span class="accent">NGO</span></div>
+            </div>
+
             <div class="hero-tags">
                 <span class="hero-tag primary">Kotlin Multiplatform</span>
                 <span class="hero-tag primary">Compose Multiplatform</span>
@@ -50,65 +56,35 @@
                     <h3>Project details</h3>
                     <div class="detail-item">
                         <span class="detail-label">Role</span>
-                        <span class="detail-value">Full-Stack Developer & UX Designer</span>
+                        <span class="detail-value">Full-Stack Developer &amp; UX Designer</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Development time</span>
+                        <span class="detail-label">Timeline</span>
                         <span class="detail-value">Several months, ongoing</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Platform</span>
-                        <span class="detail-value">iOS, Android & Desktop (Kotlin Multiplatform)</span>
+                        <span class="detail-value">iOS · Android · Desktop (KMP)</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Backend</span>
                         <span class="detail-value">Supabase + Edge Functions</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Technologies</span>
+                        <span class="detail-label">Stack</span>
                         <span class="detail-value">Kotlin, Compose Multiplatform, Ktor, Koin</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Target group</span>
+                        <span class="detail-label">Compliance</span>
+                        <span class="detail-value">GoBD · GDPR · DATEV EXTF</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Audience</span>
                         <span class="detail-value">NGOs, associations, foundations</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Status</span>
-                        <span class="detail-value">Beta phase, store release in preparation</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Video Demo -->
-    <section class="video-demo">
-        <div class="container">
-            <h2 class="section-title">App in action</h2>
-            <div class="video-container">
-                <div class="player-container">
-                    <div class="video-wrapper">
-                        <video id="videoPlayer" preload="metadata">
-                            <source src="https://res.cloudinary.com/dmokvj08w/video/upload/v1752611510/Zentrik_ci9nlp.mov" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-
-                    <div class="video-controls">
-                        <button class="play-pause-btn" id="playPauseBtn">▶</button>
-
-                        <div class="progress-container" id="progressContainer">
-                            <div class="progress-bar" id="progressBar"></div>
-                        </div>
-
-                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
-
-                        <div class="volume-container">
-                            <button class="volume-btn" id="volumeBtn">🔊</button>
-                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
-                        </div>
-
-                        <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+                        <span class="detail-value">Beta phase · store release in prep</span>
                     </div>
                 </div>
             </div>
@@ -118,20 +94,20 @@
     <!-- Features -->
     <section class="features">
         <div class="container">
-            <h2 class="section-title">NGO-specific features</h2>
+            <h2 class="section-title">What easyNGO does</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <span class="feature-icon">💰</span>
                     <h3 class="feature-title">Four-sphere accounting</h3>
                     <p class="feature-description">
-                        Automatic separation of non-profit sphere, asset management, special-purpose operation, and commercial operation in line with German non-profit law.
+                        Automatic separation of <span class="highlight">non-profit sphere</span>, asset management, special-purpose operation, and commercial operation — in line with German non-profit law.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🌍</span>
-                    <h3 class="feature-title">Multi-currency system</h3>
+                    <h3 class="feature-title">Multi-currency receipts</h3>
                     <p class="feature-description">
-                        Automatic conversion of receipts into current exchange rates through a Supabase Edge Function. Ideal for international NGOs and partnerships.
+                        Automatic conversion of receipts into the relevant daily exchange rate via a Supabase Edge Function. Ideal for international NGOs and partnerships.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -145,42 +121,42 @@
                     <span class="feature-icon">✅</span>
                     <h3 class="feature-title">Multi-level approvals</h3>
                     <p class="feature-description">
-                        Flexible approval system for receipts, including members from partner organisations abroad.
+                        Flexible approval system for receipts, including members from partner organisations abroad. Submit, review, approve, reject — fully auditable.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📊</span>
                     <h3 class="feature-title">Project management</h3>
                     <p class="feature-description">
-                        Full project management with budget tracking, deadline management, and progress monitoring.
+                        Full project management with <span class="highlight">budget tracking</span>, deadline management, and live progress monitoring per project.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📱</span>
-                    <h3 class="feature-title">Multiplatform</h3>
+                    <h3 class="feature-title">One codebase, three homes</h3>
                     <p class="feature-description">
-                        A shared codebase for iOS, Android, and Desktop (macOS, Windows, Linux), powered by Kotlin Multiplatform and Compose Multiplatform — consistent UX across all three platforms.
+                        Shared codebase for iOS, Android, and Desktop (macOS, Windows, Linux) on <span class="highlight">Kotlin Multiplatform</span> and Compose Multiplatform — consistent UX everywhere.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📒</span>
                     <h3 class="feature-title">GoBD-compliant audit log</h3>
                     <p class="feature-description">
-                        An immutable log of every financial change: who created, approved, or rejected which receipt and when. Full traceability in line with the German GoBD principles for proper bookkeeping.
+                        Immutable log of every financial change: who created, approved, or rejected which receipt and when. Full traceability under German bookkeeping principles.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🧾</span>
                     <h3 class="feature-title">DATEV EXTF export</h3>
                     <p class="feature-description">
-                        Generate booking batches in the official DATEV format (data category 21) — directly importable into DATEV Kanzlei-Rechnungswesen. Makes the hand-off to the tax advisor seamless.
+                        Generate booking batches in the official DATEV format (data category 21) — directly importable into <span class="highlight">DATEV Kanzlei-Rechnungswesen</span>. Hand-off to the tax advisor in one click.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🔐</span>
-                    <h3 class="feature-title">GDPR-compliant</h3>
+                    <h3 class="feature-title">GDPR by design</h3>
                     <p class="feature-description">
-                        EU hosting via Supabase with full GDPR compliance, secure token storage (iOS Keychain / Android EncryptedSharedPreferences), and privacy-by-design.
+                        EU hosting via Supabase with full GDPR compliance, secure token storage (iOS Keychain · Android EncryptedSharedPreferences), and privacy-by-design.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -189,44 +165,6 @@
                     <p class="feature-description">
                         Separate staging and production environments, automated tests on every PR, and schema backups before production deploys — safety for sensitive financial data.
                     </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="gallery">
-        <div class="container">
-            <h2 class="section-title">App insights</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">📊</div>
-                <div class="gallery-item">💰</div>
-                <div class="gallery-item">📱</div>
-                <div class="gallery-item">🎯</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Impact -->
-    <section class="impact">
-        <div class="container">
-            <h2 class="section-title">Project impact</h2>
-            <div class="impact-stats">
-                <div class="impact-stat">
-                    <div class="impact-number">100+</div>
-                    <div class="impact-label">Hours of work saved</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">4</div>
-                    <div class="impact-label">NGO spheres covered</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">20+</div>
-                    <div class="impact-label">Supported currencies</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">3</div>
-                    <div class="impact-label">Platforms from one codebase</div>
                 </div>
             </div>
         </div>
@@ -241,7 +179,7 @@
                     <div class="step-number">01</div>
                     <h3 class="step-title">Problem analysis</h3>
                     <p class="step-description">
-                        Identifying pain points from my own experience in NGO work and researching existing solutions.
+                        Identifying pain points from my own experience in NGO work and researching existing solutions in the non-profit sector.
                     </p>
                 </div>
                 <div class="process-step">
@@ -260,10 +198,35 @@
                 </div>
                 <div class="process-step">
                     <div class="step-number">04</div>
-                    <h3 class="step-title">CI/CD & beta</h3>
+                    <h3 class="step-title">CI/CD &amp; beta</h3>
                     <p class="step-description">
-                        Building a full CI/CD pipeline with staging and production, followed by real-world testing with actual NGO use cases.
+                        Full CI/CD pipeline with staging and production, schema backups, and real-world testing with actual NGO use cases.
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact">
+        <div class="container">
+            <h2 class="section-title">Numbers</h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-number">4</div>
+                    <div class="impact-label">NGO spheres covered</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">3</div>
+                    <div class="impact-label">Platforms from one codebase</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">20+</div>
+                    <div class="impact-label">Supported currencies</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">100+</div>
+                    <div class="impact-label">Hours of bookkeeping saved</div>
                 </div>
             </div>
         </div>
@@ -272,14 +235,21 @@
     <!-- CTA -->
     <section class="cta">
         <div class="container">
-            <h2 class="cta-title">Interested in NGO technology?</h2>
+            <h2 class="cta-title">Built for people in volunteer roles.</h2>
             <p class="cta-description">
-                Find out more about how easyNGO was built, or let's talk about your NGO project.
-                The app is heading for the App Store and Play Store soon — beta testers from the non-profit sector are very welcome.
+                easyNGO is heading for the App Store and Play Store soon — beta testers from the non-profit sector are very welcome.
+                Curious about the build, or want to talk about your NGO's stack? I'd love to hear from you.
             </p>
             <div class="cta-buttons">
-                <a href="mailto:tyfn.ilkr@gmail.com?subject=easyNGO%20Inquiry" class="btn btn-primary">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <a href="https://easyngo.de/" target="_blank" rel="noopener" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"></path>
+                    </svg>
+                    Visit easyngo.de
+                </a>
+                <a href="mailto:tyfn.ilkr@gmail.com?subject=easyNGO%20Inquiry" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
                     Discuss your project

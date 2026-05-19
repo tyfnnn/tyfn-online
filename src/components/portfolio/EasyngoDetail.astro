@@ -1,8 +1,8 @@
 ---
 import type { Lang } from '../../i18n/t';
 import PortfolioNav from './PortfolioNav.astro';
-import bodyEn from '../../snippets/portfolio/zentrik-detail-en.html?raw';
-import bodyDe from '../../snippets/portfolio/zentrik-detail-de.html?raw';
+import bodyEn from '../../snippets/portfolio/easyngo-detail-en.html?raw';
+import bodyDe from '../../snippets/portfolio/easyngo-detail-de.html?raw';
 
 interface Props {
   lang: Lang;
@@ -11,5 +11,5 @@ interface Props {
 const { lang } = Astro.props;
 const body = lang === 'de' ? bodyDe : bodyEn;
 ---
-<PortfolioNav lang={lang} pathname="/portfolio/zentrik/" back="portfolio" />
+<PortfolioNav lang={lang} pathname="/portfolio/easyngo/" back="portfolio" />
 <Fragment set:html={body} />

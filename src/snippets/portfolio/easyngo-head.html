@@ -1,0 +1,549 @@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* easyNGO Material 3 tokens (Light) — from easyngo.de/style-guide */
+            --bg:               #F9FAFB;
+            --surface:          #FFFFFF;
+            --surface-variant:  #F1F5F9;
+            --outline:          #CBD5E1;
+            --outline-variant:  #E2E8F0;
+
+            --on-bg:            #0F172A;
+            --on-surface:       #0F172A;
+            --on-surface-variant: #475569;
+
+            --primary:          #0D9488;   /* teal-600 */
+            --on-primary:       #FFFFFF;
+            --primary-container: #CCFBF1;  /* derived for soft tint */
+            --on-primary-container: #134E4A;
+
+            --secondary:        #10B981;   /* emerald-500 */
+            --on-secondary:     #FFFFFF;
+            --secondary-container: #D1FAE5;
+            --on-secondary-container: #064E3B;
+
+            --tertiary:         #EA580C;   /* orange-600 */
+            --on-tertiary:      #FFFFFF;
+            --tertiary-container: #FFEDD5;
+            --on-tertiary-container: #7C2D12;
+
+            --error:            #DC2626;
+            --on-error:         #FFFFFF;
+
+            --amber:            #F59E0B;
+            --income:           #14B8A6;
+            --expense:          #F43F5E;
+
+            /* Aliases kept for backwards compatibility with the existing class names */
+            --bg-primary:       var(--bg);
+            --bg-elev:          var(--surface);
+            --card-bg:          var(--surface);
+            --hover-color:      var(--surface-variant);
+            --border-color:     var(--outline-variant);
+            --border-strong:    var(--outline);
+            --text-light:       var(--on-surface);
+            --text-strong:      var(--on-bg);
+            --text-secondary:   var(--on-surface-variant);
+            --text-mute:        #64748B;
+
+            --ngo-primary:      var(--primary);
+            --ngo-soft:         #2DD4BF;
+            --ngo-deep:         #0D9488;
+            --ngo-glow:         rgba(13, 148, 136, 0.20);
+            --ngo-warm:         var(--amber);
+            --ngo-pop:          var(--tertiary);
+            --accent-color:     var(--primary);
+            --ngo-success:      var(--secondary);
+
+            /* Material 3 shape scale */
+            --shape-xs: 2px;
+            --shape-sm: 4px;
+            --shape-md: 6px;
+            --shape-lg: 12px;
+            --shape-xl: 16px;
+            --shape-2xl: 24px;
+
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            color: var(--on-bg);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        main, header, footer, section { position: relative; z-index: 1; }
+
+        /* PortfolioNav keeps its own typography (Inter + Archivo Black). */
+        .pnav, .pnav-back, .pnav-lang { font-family: 'Inter', sans-serif; }
+        .pnav-logo { font-family: 'Archivo Black', sans-serif; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ── Status badge (Material 3 "container"-style chip) ─────── */
+        .project-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--shape-xs);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-family: var(--font-sans);
+        }
+
+        .project-status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .hero-badge { margin-bottom: 1.25rem; }
+
+        /* ── Hero ─────────────────────────────────────────────────── */
+        .hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-eyebrow::before {
+            content: "";
+            width: 24px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 1px;
+        }
+
+        /* Display Medium scale (45sp / Bold) */
+        .hero-title {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: clamp(2.5rem, 7vw, 3.75rem);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--on-bg);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title .accent {
+            color: var(--primary);
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: 1.0625rem;
+            color: var(--on-surface-variant);
+            margin: 0 auto 2.5rem;
+            max-width: 62ch;
+            line-height: 1.65;
+        }
+
+        /* ── Hero Image — just the easyNGO wordmark ──────────────── */
+        .hero-image {
+            position: relative;
+            width: 100%;
+            max-width: 980px;
+            margin: 2.5rem auto;
+            min-height: 360px;
+            padding: 4rem 2rem;
+            border-radius: var(--shape-2xl);
+            border: 1px solid var(--outline-variant);
+            background:
+                radial-gradient(48rem 30rem at 50% 50%, rgba(13, 148, 136, 0.12), transparent 70%),
+                linear-gradient(180deg, var(--surface) 0%, var(--surface-variant) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-image__wordmark {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: clamp(3.5rem, 12vw, 8rem);
+            letter-spacing: -0.04em;
+            line-height: 1;
+            color: var(--on-bg);
+        }
+        .hero-image__wordmark .accent { color: var(--primary); }
+
+        /* ── Hero tags ─────────────────────────────────────────────── */
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .hero-tag {
+            background: var(--surface);
+            color: var(--on-surface-variant);
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .hero-tag.primary {
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            border-color: transparent;
+        }
+
+        /* ── Project Info ──────────────────────────────────────────── */
+        .project-info {
+            padding: 4rem 0;
+            border-top: 1px solid var(--outline-variant);
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        .info-section h3 {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 1rem;
+            color: var(--on-bg);
+        }
+
+        .info-section p {
+            color: var(--on-surface-variant);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .project-details {
+            background: var(--surface);
+            padding: 1.75rem;
+            border-radius: var(--shape-lg);
+            border: 1px solid var(--outline-variant);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid var(--outline-variant);
+            gap: 1rem;
+        }
+
+        .detail-item:last-child { border-bottom: none; }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--on-surface);
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            color: var(--on-surface-variant);
+            text-align: right;
+            font-size: 0.92rem;
+        }
+
+        /* ── Section title (Headline Large) ────────────────────────── */
+        .section-title {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            letter-spacing: -0.015em;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--on-bg);
+            line-height: 1.15;
+        }
+
+        /* ── Features ──────────────────────────────────────────────── */
+        .features {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--outline-variant);
+            background: var(--surface-variant);
+            margin: 0 calc(-1 * max(0px, calc((100vw - 1200px) / 2)));
+        }
+        /* keep section-title centered when bg expands */
+        .features > .container { background: transparent; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--shape-lg);
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--outline-variant);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px -16px rgba(15, 23, 42, 0.18);
+        }
+
+        .feature-icon {
+            font-size: 1.4rem;
+            margin-bottom: 0.85rem;
+            display: inline-flex;
+            width: 40px; height: 40px;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--shape-md);
+            background: var(--primary-container);
+        }
+
+        .feature-title {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+            color: var(--on-bg);
+        }
+
+        .feature-description {
+            color: var(--on-surface-variant);
+            line-height: 1.6;
+            font-size: 0.92rem;
+        }
+
+        /* ── Process (numbered steps) ─────────────────────────────── */
+        .process {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .process-step {
+            position: relative;
+            text-align: left;
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--shape-lg);
+            border: 1px solid var(--outline-variant);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .process-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 32px -22px rgba(15, 23, 42, 0.22);
+            border-color: rgba(13, 148, 136, 0.35);
+        }
+
+        /* Tonal circular step badge (Material 3 stepper) */
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 1rem;
+            box-shadow: inset 0 0 0 1px rgba(13, 148, 136, 0.18);
+        }
+
+        .step-title {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+            color: var(--on-bg);
+            letter-spacing: -0.01em;
+        }
+
+        .step-description {
+            color: var(--on-surface-variant);
+            line-height: 1.6;
+            font-size: 0.92rem;
+        }
+
+        /* ── Impact ────────────────────────────────────────────────── */
+        .impact {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--outline-variant);
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .impact-stat {
+            text-align: left;
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--shape-lg);
+            border: 1px solid var(--outline-variant);
+        }
+
+        .impact-number {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .impact-label {
+            color: var(--on-surface-variant);
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        /* ── CTA ───────────────────────────────────────────────────── */
+        .cta {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+            letter-spacing: -0.015em;
+            margin-bottom: 1rem;
+            color: var(--on-bg);
+            line-height: 1.15;
+        }
+
+        .cta-description {
+            color: var(--on-surface-variant);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.65;
+            font-size: 1.0625rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ── Buttons (Material 3 filled / outline / ghost) ────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            height: 44px;
+            padding: 0 1.1rem;
+            border-radius: var(--shape-md);
+            text-decoration: none;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 0;
+            text-transform: none;
+            border: 1px solid transparent;
+            transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+        .btn-primary:hover {
+            background: #0F766E; /* primary darker */
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px -14px rgba(13, 148, 136, 0.55);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--on-surface);
+            border-color: var(--outline);
+        }
+        .btn-secondary:hover {
+            background: var(--surface-variant);
+            transform: translateY(-1px);
+        }
+
+        /* ── Mobile ────────────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .info-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .hero-image { padding: 3rem 1.25rem; min-height: 280px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 3rem 0 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .process-steps { grid-template-columns: 1fr; }
+            .impact-stats { grid-template-columns: repeat(2, 1fr); }
+            .cta-buttons { flex-direction: column; align-items: stretch; }
+            .cta-buttons .btn { width: 100%; }
+            .container { padding: 0 1rem; }
+        }
+    </style>

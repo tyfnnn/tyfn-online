@@ -25,4 +25,10 @@ export default defineConfig({
     },
   },
   build: { format: 'directory' },
+  redirects: {
+    '/portfolio/zentrik': '/portfolio/easyngo/',
+    '/portfolio/zentrik/': '/portfolio/easyngo/',
+    '/de/portfolio/zentrik': '/de/portfolio/easyngo/',
+    '/de/portfolio/zentrik/': '/de/portfolio/easyngo/',
+  },
 });

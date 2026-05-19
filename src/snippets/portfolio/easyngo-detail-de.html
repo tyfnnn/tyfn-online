@@ -1,13 +1,19 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
+            <div class="hero-eyebrow">Das Projekt</div>
             <div class="hero-badge"><span class="project-status" data-scramble>Beta-Phase</span></div>
-            <h1 class="hero-title">easyNGO</h1>
+            <h1 class="hero-title">Kassenbücher. <span class="accent">Vom Tisch.</span></h1>
             <p class="hero-subtitle">
-                Die spezialisierte Buchhaltungs- und Verwaltungsapp für NGOs und gemeinnützige Vereine –
-                jetzt als Multiplatform-App für iOS, Android und Desktop. GoBD-konform, mit DATEV-Export für Steuerberater\*innen.
+                Die spezialisierte Buchhaltungs- und Verwaltungsapp für NGOs und gemeinnützige Vereine —
+                jetzt als Multiplatform-App für iOS, Android und Desktop. GoBD-konform, mit DATEV-Export für die Steuerberatung.
             </p>
-            <div class="hero-image" id="heroImage"></div>
+
+            <!-- Hero Image: nur das easyNGO-Wordmark -->
+            <div class="hero-image" role="img" aria-label="easyNGO">
+                <div class="hero-image__wordmark">easy<span class="accent">NGO</span></div>
+            </div>
+
             <div class="hero-tags">
                 <span class="hero-tag primary">Kotlin Multiplatform</span>
                 <span class="hero-tag primary">Compose Multiplatform</span>
@@ -47,26 +53,30 @@
                     </p>
                 </div>
                 <div class="project-details">
-                    <h3>Projekt Details</h3>
+                    <h3>Projekt-Details</h3>
                     <div class="detail-item">
                         <span class="detail-label">Rolle</span>
-                        <span class="detail-value">Full-Stack Developer & UX Designer</span>
+                        <span class="detail-value">Full-Stack Developer &amp; UX Designer</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Entwicklungszeit</span>
+                        <span class="detail-label">Zeitraum</span>
                         <span class="detail-value">Mehrere Monate, laufende Entwicklung</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Plattform</span>
-                        <span class="detail-value">iOS, Android & Desktop (Kotlin Multiplatform)</span>
+                        <span class="detail-value">iOS · Android · Desktop (KMP)</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Backend</span>
                         <span class="detail-value">Supabase + Edge Functions</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Technologien</span>
+                        <span class="detail-label">Stack</span>
                         <span class="detail-value">Kotlin, Compose Multiplatform, Ktor, Koin</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Compliance</span>
+                        <span class="detail-value">GoBD · DSGVO · DATEV EXTF</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Zielgruppe</span>
@@ -74,41 +84,7 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Status</span>
-                        <span class="detail-value">Beta-Phase, Store-Release in Vorbereitung</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Video Demo -->
-    <section class="video-demo">
-        <div class="container">
-            <h2 class="section-title">App in Aktion</h2>
-            <div class="video-container">
-                <div class="player-container">
-                    <div class="video-wrapper">
-                        <video id="videoPlayer" preload="metadata">
-                            <source src="https://res.cloudinary.com/dmokvj08w/video/upload/v1752611510/Zentrik_ci9nlp.mov" type="video/mp4">
-                            Ihr Browser unterstützt das Video-Tag nicht.
-                        </video>
-                    </div>
-
-                    <div class="video-controls">
-                        <button class="play-pause-btn" id="playPauseBtn">▶</button>
-
-                        <div class="progress-container" id="progressContainer">
-                            <div class="progress-bar" id="progressBar"></div>
-                        </div>
-
-                        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
-
-                        <div class="volume-container">
-                            <button class="volume-btn" id="volumeBtn">🔊</button>
-                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
-                        </div>
-
-                        <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+                        <span class="detail-value">Beta-Phase · Store-Release in Vorbereitung</span>
                     </div>
                 </div>
             </div>
@@ -118,18 +94,18 @@
     <!-- Features -->
     <section class="features">
         <div class="container">
-            <h2 class="section-title">NGO-spezifische Features</h2>
+            <h2 class="section-title">Was easyNGO kann</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <span class="feature-icon">💰</span>
                     <h3 class="feature-title">4-Sphären-Buchhaltung</h3>
                     <p class="feature-description">
-                        Automatische Trennung nach ideellem Bereich, Vermögensverwaltung, Zweckbetrieb und wirtschaftlichem Geschäftsbetrieb gemäß deutschem Gemeinnützigkeitsrecht.
+                        Automatische Trennung nach <span class="highlight">ideellem Bereich</span>, Vermögensverwaltung, Zweckbetrieb und wirtschaftlichem Geschäftsbetrieb – gemäß deutschem Gemeinnützigkeitsrecht.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🌍</span>
-                    <h3 class="feature-title">Multi-Währungs-System</h3>
+                    <h3 class="feature-title">Mehrwährungs-Belege</h3>
                     <p class="feature-description">
                         Automatische Umrechnung von Belegen in tagesaktuelle Währungen über eine Supabase Edge Function. Perfekt für internationale NGOs und Partnerschaften.
                     </p>
@@ -145,21 +121,21 @@
                     <span class="feature-icon">✅</span>
                     <h3 class="feature-title">Mehrstufige Genehmigungen</h3>
                     <p class="feature-description">
-                        Flexibles Approval-System für Belege, auch für Mitglieder aus Partnerorganisationen im Ausland.
+                        Flexibles Approval-System für Belege – auch für Mitglieder aus Partnerorganisationen im Ausland. Einreichen, prüfen, genehmigen, ablehnen – lückenlos nachvollziehbar.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📊</span>
                     <h3 class="feature-title">Projekt-Management</h3>
                     <p class="feature-description">
-                        Vollständige Projektverwaltung mit Budget-Tracking, Deadline-Management und Fortschrittsüberwachung.
+                        Vollständige Projektverwaltung mit <span class="highlight">Budget-Tracking</span>, Deadline-Management und Live-Fortschrittsüberwachung pro Projekt.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📱</span>
-                    <h3 class="feature-title">Multiplatform</h3>
+                    <h3 class="feature-title">Eine Codebasis, drei Welten</h3>
                     <p class="feature-description">
-                        Eine geteilte Codebasis für iOS, Android und Desktop (macOS, Windows, Linux) dank Kotlin Multiplatform und Compose Multiplatform – konsistente UX auf allen drei Plattformen.
+                        Geteilte Codebasis für iOS, Android und Desktop (macOS, Windows, Linux) auf <span class="highlight">Kotlin Multiplatform</span> und Compose Multiplatform – konsistente UX überall.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -171,16 +147,16 @@
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🧾</span>
-                    <h3 class="feature-title">DATEV EXTF-Export</h3>
+                    <h3 class="feature-title">DATEV-EXTF-Export</h3>
                     <p class="feature-description">
-                        Buchungsstapel im offiziellen DATEV-Format (Datenkategorie 21) generieren – direkt importierbar in DATEV Kanzlei-Rechnungswesen. Macht den Übergang zur Steuerberatung reibungslos.
+                        Buchungsstapel im offiziellen DATEV-Format (Datenkategorie 21) generieren – direkt importierbar in <span class="highlight">DATEV Kanzlei-Rechnungswesen</span>. Übergabe an die Steuerberatung mit einem Klick.
                     </p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🔐</span>
-                    <h3 class="feature-title">DSGVO-Konform</h3>
+                    <h3 class="feature-title">DSGVO by design</h3>
                     <p class="feature-description">
-                        EU-Hosting über Supabase mit vollständiger DSGVO-Konformität, sicherem Token-Storage (iOS Keychain / Android EncryptedSharedPreferences) und Datenschutz-by-Design.
+                        EU-Hosting über Supabase mit vollständiger DSGVO-Konformität, sicherem Token-Storage (iOS Keychain · Android EncryptedSharedPreferences) und Datenschutz-by-Design.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -189,44 +165,6 @@
                     <p class="feature-description">
                         Getrennte Staging- und Production-Umgebungen, automatisierte Tests auf jedem PR und Schema-Backups vor Production-Deploys – Sicherheit für sensible Finanzdaten.
                     </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="gallery">
-        <div class="container">
-            <h2 class="section-title">App Einblicke</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">📊</div>
-                <div class="gallery-item">💰</div>
-                <div class="gallery-item">📱</div>
-                <div class="gallery-item">🎯</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Impact -->
-    <section class="impact">
-        <div class="container">
-            <h2 class="section-title">Projektauswirkungen</h2>
-            <div class="impact-stats">
-                <div class="impact-stat">
-                    <div class="impact-number">100+</div>
-                    <div class="impact-label">Gesparte Arbeitsstunden</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">4</div>
-                    <div class="impact-label">NGO-Sphären abgedeckt</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">20+</div>
-                    <div class="impact-label">Unterstützte Währungen</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">3</div>
-                    <div class="impact-label">Plattformen aus einer Codebasis</div>
                 </div>
             </div>
         </div>
@@ -241,7 +179,7 @@
                     <div class="step-number">01</div>
                     <h3 class="step-title">Problem-Analyse</h3>
                     <p class="step-description">
-                        Identifikation der Pain Points durch eigene Erfahrung in der NGO-Arbeit und Recherche bestehender Lösungen.
+                        Identifikation der Pain Points durch eigene Erfahrung in der NGO-Arbeit und Recherche bestehender Lösungen im gemeinnützigen Sektor.
                     </p>
                 </div>
                 <div class="process-step">
@@ -260,10 +198,35 @@
                 </div>
                 <div class="process-step">
                     <div class="step-number">04</div>
-                    <h3 class="step-title">CI/CD & Beta</h3>
+                    <h3 class="step-title">CI/CD &amp; Beta</h3>
                     <p class="step-description">
-                        Aufbau einer vollständigen CI/CD-Pipeline mit Staging und Production, gefolgt von Praxistests mit echten NGO-Anwendungsfällen.
+                        Vollständige CI/CD-Pipeline mit Staging und Production, Schema-Backups und Praxistests mit echten NGO-Anwendungsfällen.
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="impact">
+        <div class="container">
+            <h2 class="section-title">Zahlen</h2>
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-number">4</div>
+                    <div class="impact-label">NGO-Sphären abgedeckt</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">3</div>
+                    <div class="impact-label">Plattformen aus einer Codebasis</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">20+</div>
+                    <div class="impact-label">Unterstützte Währungen</div>
+                </div>
+                <div class="impact-stat">
+                    <div class="impact-number">100+</div>
+                    <div class="impact-label">Gesparte Buchhaltungsstunden</div>
                 </div>
             </div>
         </div>
@@ -272,14 +235,21 @@
     <!-- CTA -->
     <section class="cta">
         <div class="container">
-            <h2 class="cta-title">Interessiert an NGO-Technologie?</h2>
+            <h2 class="cta-title">Gemacht für Menschen im Ehrenamt.</h2>
             <p class="cta-description">
-                Erfahren Sie mehr über die Entwicklung von easyNGO oder lassen Sie uns über Ihr NGO-Projekt sprechen.
-                Die App geht in Kürze in den App Store und Play Store – Beta-Tester\*innen aus dem gemeinnützigen Sektor sind herzlich willkommen.
+                easyNGO geht bald in den App Store und Play Store – Beta-Tester aus dem gemeinnützigen Sektor sind herzlich willkommen.
+                Neugierig auf die Entwicklung, oder Lust, über euren NGO-Stack zu sprechen? Schreib mir gern.
             </p>
             <div class="cta-buttons">
-                <a href="mailto:tyfn.ilkr@gmail.com?subject=easyNGO%20Anfrage" class="btn btn-primary">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <a href="https://easyngo.de/" target="_blank" rel="noopener" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke-width="2"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"></path>
+                    </svg>
+                    easyngo.de besuchen
+                </a>
+                <a href="mailto:tyfn.ilkr@gmail.com?subject=easyNGO%20Anfrage" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
                     Projekt besprechen

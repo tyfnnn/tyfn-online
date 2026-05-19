@@ -1,21 +1,20 @@
 ---
 import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
-import ZentrikDetail from '../../components/portfolio/ZentrikDetail.astro';
+import EasyngoDetail from '../../components/portfolio/EasyngoDetail.astro';
 import { useTranslations } from '../../i18n/t';
 import { SITE_URL, PERSON_NAME } from '../../i18n/site';
-import head from '../../snippets/portfolio/zentrik-head.html?raw';
-import scripts from '../../snippets/portfolio/zentrik-scripts.html?raw';
+import head from '../../snippets/portfolio/easyngo-head.html?raw';
 
 const lang = 'en' as const;
 const t = useTranslations(lang);
-const pathname = '/portfolio/zentrik/';
+const pathname = '/portfolio/easyngo/';
 const image = 'https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png';
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: t('portfolio.zentrik.card_title'),
-  description: t('portfolio.zentrik.card_description'),
+  name: t('portfolio.easyngo.card_title'),
+  description: t('portfolio.easyngo.card_description'),
   url: `${SITE_URL}${pathname}`,
   image,
   applicationCategory: 'BusinessApplication',
@@ -26,13 +25,12 @@ const jsonLd = {
 <PortfolioLayout
   lang={lang}
   pathname={pathname}
-  title={t('portfolio.zentrik.page_title')}
-  description={t('portfolio.zentrik.page_description')}
+  title={t('portfolio.easyngo.page_title')}
+  description={t('portfolio.easyngo.page_description')}
   image={image}
-  imageAlt={t('portfolio.zentrik.card_title')}
+  imageAlt={t('portfolio.easyngo.card_title')}
   jsonLd={jsonLd}
 >
   <Fragment slot="head-extra" set:html={head} />
-  <ZentrikDetail lang={lang} />
-  <Fragment slot="scripts-after" set:html={scripts} />
+  <EasyngoDetail lang={lang} />
 </PortfolioLayout>
