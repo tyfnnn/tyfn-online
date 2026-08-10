@@ -179,15 +179,16 @@
     },
     "redact": {
       "page_title": "Redact – Faces off — TAYFUN ILKER",
-      "page_description": "Native macOS- und iOS-App, die Gesichter in Fotos automatisch verpixelt – lokal, ohne Cloud, ohne Account. YOLOv11m-face via Core ML auf der Apple Neural Engine.",
+      "page_description": "Native macOS- und iOS-App, die Gesichter und Kfz-Kennzeichen in Fotos und Videos automatisch unkenntlich macht – lokal, ohne Cloud, ohne Account. YOLOv11m-face via Core ML auf der Apple Neural Engine.",
       "card_title": "Redact",
-      "card_description": "Native macOS- und iOS-App, die Gesichter automatisch verpixelt – on-device über Core ML & Apple Neural Engine, ohne Cloud, ohne Account. Kostenlos im App Store.",
+      "card_description": "Native macOS- und iOS-App, die Gesichter und Kennzeichen in Fotos und Videos automatisch unkenntlich macht – on-device über Core ML & Apple Neural Engine, ohne Cloud, ohne Account.",
       "tag_1": "Swift",
       "tag_2": "SwiftUI",
       "tag_3": "Core ML",
       "tag_4": "YOLOv11m",
       "tag_5": "macOS · iOS",
       "tag_6": "Privacy-First",
+      "tag_7": "Video-Tracking",
       "status": "App Store"
     }
   },

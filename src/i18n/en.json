@@ -179,15 +179,16 @@
     },
     "redact": {
       "page_title": "Redact – Faces off — TAYFUN ILKER",
-      "page_description": "Native macOS and iOS app that automatically pixelates faces in your photos — locally, cloud-free, account-free. YOLOv11m-face via Core ML on the Apple Neural Engine.",
+      "page_description": "Native macOS and iOS app that redacts faces and licence plates in photos and video — locally, cloud-free, account-free. YOLOv11m-face via Core ML on the Apple Neural Engine.",
       "card_title": "Redact",
-      "card_description": "Native macOS and iOS app that pixelates faces automatically — on-device via Core ML & the Apple Neural Engine, no cloud, no account. Free on the App Store.",
+      "card_description": "Native macOS and iOS app that redacts faces and licence plates in photos and video — on-device via Core ML & the Apple Neural Engine, no cloud, no account.",
       "tag_1": "Swift",
       "tag_2": "SwiftUI",
       "tag_3": "Core ML",
       "tag_4": "YOLOv11m",
       "tag_5": "macOS · iOS",
       "tag_6": "Privacy-First",
+      "tag_7": "Video tracking",
       "status": "App Store"
     }
   },
