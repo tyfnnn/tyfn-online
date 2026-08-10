@@ -5,27 +5,21 @@
             <div class="hero-badge"><span class="project-status" data-scramble>App Store</span></div>
             <h1 class="hero-title">Faces <span class="accent">off.</span></h1>
             <p class="hero-subtitle">
-                Native macOS and iOS app that pixelates faces in your photos —
-                automatically, locally, entirely without the cloud — and without an account.
+                Native macOS and iOS app that redacts faces and licence plates in photos <em>and video</em> —
+                automatically, entirely on-device, without the cloud and without an account.
             </p>
 
-            <!-- Hero Image (purely HTML/CSS, in the style of the Redact website) -->
-            <div class="hero-image" role="img" aria-label="Redact – Faces off">
-                <div class="hero-image__grid" aria-hidden="true"></div>
-                <div class="hero-image__pixels" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                <span class="hero-image__corner hero-image__corner--tl">INTERFACE v2.1</span>
-                <span class="hero-image__corner hero-image__corner--tr">DECRYPT_MODULE</span>
-                <span class="hero-image__corner hero-image__corner--bl">YOLOv11m · ANE</span>
-                <span class="hero-image__corner hero-image__corner--br">0 BYTES SENT</span>
-                <div class="hero-image__plate">
-                    <img class="hero-image__logo" src="/portfolio/redact/redact-logo.png" alt="Redact logo" />
-                    <div class="hero-image__wordmark">Faces <span class="accent">off.</span></div>
-                    <div class="hero-image__meta">
-                        <span>On-Device</span>
-                        <span>Zero Cloud</span>
-                        <span>Privacy-First</span>
-                    </div>
-                </div>
+            <!-- Hero: the real app on macOS, detection with a before/after slider -->
+            <div class="hero-shot">
+                <img src="/portfolio/redact/shot-mac-photos.webp"
+                     alt="Redact on macOS: detected faces in a group photo, pixelated, with a slider for the before/after comparison"
+                     width="1560" height="997" fetchpriority="high" />
+            </div>
+            <div class="hero-meta">
+                <span>On-Device</span>
+                <span>YOLOv11m · ANE</span>
+                <span>Photo &amp; Video</span>
+                <span>0 Bytes Sent</span>
             </div>
 
             <div class="hero-tags">
@@ -33,6 +27,10 @@
                 <span class="hero-tag primary">SwiftUI</span>
                 <span class="hero-tag">Core ML</span>
                 <span class="hero-tag">YOLOv11m-face</span>
+                <span class="hero-tag">Vision</span>
+                <span class="hero-tag">Core Image</span>
+                <span class="hero-tag">AVFoundation</span>
+                <span class="hero-tag">StoreKit 2</span>
                 <span class="hero-tag">Apple Neural Engine</span>
                 <span class="hero-tag">macOS</span>
                 <span class="hero-tag">iOS</span>
@@ -55,23 +53,29 @@
                         or App Store apps that secretly run as WebView wrappers around a cloud API.
                     </p>
                     <p>
-                        Neither is fit for workshop or conference photos that need to be anonymised
+                        Neither is fit for workshop or conference material that needs to be anonymised
                         <span class="highlight">fast, locally, and without any data leaving the device</span>.
                     </p>
                     <p>
-                        <span class="highlight">Redact</span> is a real native app — with first-class face detection
+                        <span class="highlight">Redact</span> is a real native app — with first-class detection
                         powered by a fine-tuned YOLOv11m model running fully on-device. No cloud, no account, no setup.
                         Drag, drop, done.
                     </p>
                     <p>
-                        The model runs through Core ML on the <span class="highlight">Apple Neural Engine</span>,
-                        images are pixelated, blurred, overlaid with a black bar or an emoji using Core Image.
-                        EXIF data can optionally be stripped — GPS, camera info, timestamps. Originals stay untouched;
-                        anonymised versions land in an <span class="highlight">anonymized/</span> subfolder.
+                        The model runs through Core ML on the <span class="highlight">Apple Neural Engine</span>.
+                        Because the YOLO export is strongest on frontal views, its hits are merged by IoU with Apple's
+                        <span class="highlight">Vision framework</span>, which covers profiles and partial occlusion.
+                        Large images additionally run through the model as overlapping tiles, so small faces don't
+                        shrink below the detection threshold. A second detector finds
+                        <span class="highlight">licence plates</span>.
                     </p>
                     <p>
-                        What started as a small tool for personal use grew into a polished multi-platform app:
-                        macOS for productive batch processing at the desk, iOS and iPadOS for quick anonymisation on the go.
+                        The real leap came with <span class="highlight">video</span>: detection per frame or adaptively
+                        with object tracking in between, boxes consolidated into identity-based tracks with gap bridging
+                        and interpolation — editable in a timeline before AVFoundation re-renders the file. What began
+                        as a photo tool became a
+                        <span class="highlight">multi-platform app for both media types</span>: macOS for batch work at
+                        the desk, iOS and iPadOS for anonymising on the go.
                     </p>
                 </div>
                 <div class="project-details">
@@ -82,15 +86,19 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Timeline</span>
-                        <span class="detail-value">Several months, ongoing development</span>
+                        <span class="detail-value">Ongoing development, several release cycles</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Platform</span>
-                        <span class="detail-value">macOS 14+ · iOS 18+ · iPadOS 18+</span>
+                        <span class="detail-value">macOS 26+ · iOS 18+ · iPadOS 18+</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Media</span>
+                        <span class="detail-value">Photos (JPG, PNG, HEIC, TIFF) &amp; video (H.264, HEVC)</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Detection</span>
-                        <span class="detail-value">YOLOv11m-face via Core ML</span>
+                        <span class="detail-value">YOLOv11m-face + Vision · faces &amp; licence plates</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Runtime</span>
@@ -101,14 +109,85 @@
                         <span class="detail-value">100% on-device, zero cloud</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Price</span>
-                        <span class="detail-value">Free</span>
+                        <span class="detail-label">Model</span>
+                        <span class="detail-value">Free to use, Redact Pro via StoreKit 2</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Status</span>
                         <span class="detail-value">Available on the App Store</span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screens -->
+    <section class="screens">
+        <div class="container">
+            <h2 class="section-title">The app</h2>
+            <p class="section-lead">
+                The same engine on three platforms — at the desk for entire folders,
+                on the go for the one photo that's about to hit the group chat.
+            </p>
+
+            <div class="screens-grid">
+                <figure class="shot">
+                    <img src="/portfolio/redact/shot-mac-video.webp" loading="lazy" decoding="async"
+                         alt="Redact's video tab on macOS with the track timeline; the children's faces are covered by flower stickers"
+                         width="1600" height="960" />
+                    <figcaption>
+                        <b>Video · macOS</b>
+                        Every person becomes its own track on the timeline — individually
+                        toggled, corrected and given its own effect.
+                    </figcaption>
+                </figure>
+                <figure class="shot">
+                    <img src="/portfolio/redact/shot-mac-plates.webp" loading="lazy" decoding="async"
+                         alt="Redact on macOS showing a street scene with the face and the licence plate redacted"
+                         width="1600" height="960" />
+                    <figcaption>
+                        <b>Plates &amp; EXIF · macOS</b>
+                        A second detector finds licence plates; on export, GPS coordinates
+                        and camera metadata can go with them.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="screens-grid">
+                <figure class="shot shot--phone">
+                    <img src="/portfolio/redact/shot-ios-effects.webp" loading="lazy" decoding="async"
+                         alt="Redact on iPhone: the effect and sticker pack picker below the image"
+                         width="728" height="1500" />
+                    <figcaption>
+                        <b>Effects · iOS</b>
+                        Mosaic, blur, black bar or overlay — with a single emoji or one of
+                        eleven emoji and sticker packs.
+                    </figcaption>
+                </figure>
+                <figure class="shot shot--tablet">
+                    <img src="/portfolio/redact/shot-ipad-video.webp" loading="lazy" decoding="async"
+                         alt="Redact on iPad: a video with its track timeline and the effect picker open"
+                         width="1010" height="1400" />
+                    <figcaption>
+                        <b>Video · iPadOS</b>
+                        Live preview instead of a render queue: effects sit on top of the
+                        player, and only the export writes a file.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="screens-grid screens-grid--single">
+                <figure class="shot">
+                    <img src="/portfolio/redact/shot-mac-crowd.webp" loading="lazy" decoding="async"
+                         alt="Redact on macOS with a densely packed concert crowd; the toolbar counter reads 1,015 of 1,015 faces detected"
+                         width="1500" height="959" />
+                    <figcaption>
+                        <b>Scale</b>
+                        1,015 faces in a single image. Large photos additionally run through
+                        the model as overlapping tiles, so the back rows don't shrink below
+                        the detection threshold.
+                    </figcaption>
+                </figure>
             </div>
         </div>
     </section>
@@ -120,10 +199,53 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <span class="feature-icon">🧠</span>
-                    <h3 class="feature-title">YOLOv11m-face model</h3>
+                    <h3 class="feature-title">YOLOv11m-face + Vision</h3>
                     <p class="feature-description">
                         Fine-tune of the YOLO11m model trained specifically for face detection — ~20M parameters,
-                        bounding boxes with confidence, embedded NMS. Ships as an .mlpackage inside the app.
+                        bounding boxes with confidence, embedded NMS. Its hits are greedy-IoU merged with Apple's
+                        Vision framework, which covers profiles and occlusion.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎬</span>
+                    <h3 class="feature-title">Video anonymisation</h3>
+                    <p class="feature-description">
+                        A two-phase pipeline: detection across all frames first — either per frame or adaptively with
+                        object tracking between keyframes — then rendering via AVAssetReader/Writer.
+                        The audio track passes through untouched.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🧵</span>
+                    <h3 class="feature-title">Identity-based tracks</h3>
+                    <p class="feature-description">
+                        Individual boxes are linked into per-person tracks by IoU matching — including gap bridging,
+                        re-identification, and linear interpolation between the stored keyframes.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎚️</span>
+                    <h3 class="feature-title">Timeline editor</h3>
+                    <p class="feature-description">
+                        Tracks can be toggled, corrected, and given their own effect in a timeline. A live preview
+                        shows the result; the file is only re-rendered on export.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🚗</span>
+                    <h3 class="feature-title">Licence plates</h3>
+                    <p class="feature-description">
+                        A separate detector finds number plates in photos and video — essential for street scenes,
+                        car parks, and anything published with a vehicle in frame.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Four effects, eleven packs</h3>
+                    <p class="feature-description">
+                        Mosaic, Gaussian blur, black bar, or an overlay — the latter with a single emoji or one of
+                        eleven emoji and sticker packs. Strength, padding, and rectangular or elliptical masks
+                        are all adjustable.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -138,16 +260,8 @@
                     <span class="feature-icon">🔒</span>
                     <h3 class="feature-title">100% on-device</h3>
                     <p class="feature-description">
-                        No cloud, no telemetry, no account. Images never leave the device —
-                        all processing happens locally on the Apple Neural Engine.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🎨</span>
-                    <h3 class="feature-title">Four anonymisation modes</h3>
-                    <p class="feature-description">
-                        Mosaic, Gaussian blur, black bar, or emoji overlay — adjustable strength and padding,
-                        with rectangular or elliptical masks.
+                        No cloud, no telemetry, no account. Photos and video never leave the device —
+                        all processing happens locally.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -162,17 +276,9 @@
                     <span class="feature-icon">📁</span>
                     <h3 class="feature-title">Batch &amp; drag &amp; drop</h3>
                     <p class="feature-description">
-                        Drop single images or entire folders — JPG, PNG, HEIC, TIFF.
+                        Drop single images or entire folders — on macOS even straight from a Finder right-click.
                         Results land in an <span class="highlight">anonymized/</span> subfolder,
                         originals stay untouched.
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🧭</span>
-                    <h3 class="feature-title">Before / After</h3>
-                    <p class="feature-description">
-                        Side-by-side comparison with face overlay. Hover preview in the file list,
-                        ⌘↵ to process, ⌘E to export.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -185,10 +291,11 @@
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🌐</span>
-                    <h3 class="feature-title">Localised</h3>
+                    <h3 class="feature-title">Native details</h3>
                     <p class="feature-description">
-                        German and English via Apple String Catalog (xcstrings). Dark mode, splash screen,
-                        privacy manifest — all native, all Apple.
+                        German and English via Apple String Catalog (xcstrings), switchable inside the app.
+                        Light and dark theme, onboarding, project library, privacy manifest —
+                        all native, all Apple.
                     </p>
                 </div>
             </div>
@@ -232,6 +339,38 @@
                         and finally the App Store launch.
                     </p>
                 </div>
+                <div class="process-step">
+                    <div class="step-number">05</div>
+                    <h3 class="step-title">Video pipeline</h3>
+                    <p class="step-description">
+                        Frame extraction, detection modes, and track building in RedactCore; rendering via
+                        AVAssetReader/Writer with audio passthrough — the same services power both apps.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">06</div>
+                    <h3 class="step-title">Tracking &amp; memory</h3>
+                    <p class="step-description">
+                        Where the real work went: keeping tracks stable, bridging gaps — and keeping memory in check
+                        so iOS doesn't kill the app on 4K footage.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">07</div>
+                    <h3 class="step-title">Live preview &amp; editor</h3>
+                    <p class="step-description">
+                        Effects are composited over the player in real time instead of being written to a file.
+                        Rendering happens on export only — plus a timeline and per-track effects.
+                    </p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">08</div>
+                    <h3 class="step-title">Redact Pro</h3>
+                    <p class="step-description">
+                        Monetisation via StoreKit 2 with a subscription and a one-off lifetime option. The entitlement
+                        is runtime state, and the render paths check it themselves — not the UI.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -250,8 +389,8 @@
                     <div class="impact-label">Embedded ML model</div>
                 </div>
                 <div class="impact-stat">
-                    <div class="impact-number">4</div>
-                    <div class="impact-label">Anonymisation modes</div>
+                    <div class="impact-number">2</div>
+                    <div class="impact-label">Media types (photos &amp; video)</div>
                 </div>
                 <div class="impact-stat">
                     <div class="impact-number">3</div>
@@ -266,7 +405,8 @@
         <div class="container">
             <h2 class="cta-title">Privacy by design.</h2>
             <p class="cta-description">
-                Redact is free on the App Store — fully on-device, no cloud, no account.
+                Redact is free on the App Store — face and licence-plate detection, mosaic and blur,
+                unlimited photo export. Redact Pro unlocks the remaining effects and full video export.
                 If you're looking for a similar on-device solution for your project, or have feedback,
                 I'd love to hear from you.
             </p>

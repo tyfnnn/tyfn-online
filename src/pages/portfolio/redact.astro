@@ -8,7 +8,7 @@ import head from '../../snippets/portfolio/redact-head.html?raw';
 const lang = 'en' as const;
 const t = useTranslations(lang);
 const pathname = '/portfolio/redact/';
-const image = `${SITE_URL}/portfolio/redact/redact-logo.png`;
+const image = `${SITE_URL}/portfolio/redact/redact-og.jpg`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -17,7 +17,7 @@ const jsonLd = {
   description: t('portfolio.redact.card_description'),
   url: `${SITE_URL}${pathname}`,
   image,
-  applicationCategory: 'PhotoApplication',
+  applicationCategory: 'MultimediaApplication',
   operatingSystem: 'macOS, iOS, iPadOS',
   author: { '@type': 'Person', name: PERSON_NAME, url: `${SITE_URL}/` },
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
