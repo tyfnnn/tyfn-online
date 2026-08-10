@@ -183,11 +183,11 @@
             max-width: 1080px;
         }
 
+        /* Kein CSS-Schatten: das Mac-Mockup bringt seinen eigenen mit. */
         .hero-shot img {
             display: block;
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 32px 64px rgba(51, 36, 28, 0.16));
         }
 
         .hero-meta {
@@ -347,11 +347,12 @@
 
         .shot { margin: 0; }
 
+        /* Mac- und iPhone-Mockups bringen ihren Schatten selbst mit; ein
+           zusätzlicher CSS-Schatten legte einen zweiten Halo darüber. */
         .shot img {
             display: block;
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 24px 48px rgba(51, 36, 28, 0.14));
         }
 
         /* Hand-held shots are sized by height, not width — matched on width
@@ -363,8 +364,18 @@
             margin: 0 auto;
         }
 
-        .shot--phone img  { max-height: 560px; }
-        .shot--tablet img { max-height: 660px; }
+        /* Die Höhen gelten für das Bild samt Schattenrand: das iPhone-Mockup
+           bringt seinen eigenen, weit auslaufenden Schatten mit (Gerät = 77 %
+           der Bildhöhe), das iPad-Mockup gar keinen (Gerät = 100 %). Beide
+           Geräte erscheinen damit gleich groß wie zuvor. */
+        .shot--phone img  { max-height: 680px; }
+
+        /* Einziges Mockup ohne eigenen Schatten — hier setzt ihn die Seite,
+           in derselben Richtung wie die gerenderten Schatten der anderen. */
+        .shot--tablet img {
+            max-height: 620px;
+            filter: drop-shadow(-8px 26px 44px rgba(51, 36, 28, 0.20));
+        }
 
         .shot figcaption {
             margin-top: 1.5rem;
