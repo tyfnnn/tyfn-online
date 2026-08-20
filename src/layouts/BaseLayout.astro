@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
+import LocalePreference from '../components/LocalePreference.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import LangScramble from '../components/LangScramble.astro';
 import FabMenu from '../components/FabMenu.astro';
@@ -51,6 +52,7 @@ const otherLocaleUrl = getRelativeLocaleUrl(otherLocale, pathname);
   data-wf-site={wfSite}
 >
 <head>
+  <LocalePreference lang={lang} enHref={enHref} deHref={deHref} />
   <meta charset="utf-8" />
   <title>{title}</title>
   <meta name="description" content={description} />
