@@ -1,0 +1,63 @@
+---
+interface Props {
+  lang: 'en' | 'de';
+  enHref: string;
+  deHref: string;
+}
+
+const { lang, enHref, deHref } = Astro.props;
+---
+<script is:inline define:vars={{ lang, enHref, deHref }}>
+  (() => {
+    const preferenceKey = 'tyfn.locale-preference.v1';
+    const supportedLocales = ['en', 'de'];
+    const localeUrls = { en: enHref, de: deHref };
+
+    const getStoredPreference = () => {
+      try {
+        const preference = window.localStorage.getItem(preferenceKey);
+        return preference && supportedLocales.includes(preference) ? preference : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const getBrowserPreference = () => {
+      const browserLanguages = navigator.languages?.length
+        ? navigator.languages
+        : [navigator.language];
+
+      for (const browserLanguage of browserLanguages) {
+        const locale = browserLanguage?.toLowerCase().split('-')[0];
+        if (supportedLocales.includes(locale)) return locale;
+      }
+
+      return 'en';
+    };
+
+    const preferredLocale = getStoredPreference() ?? getBrowserPreference();
+
+    if (preferredLocale !== lang) {
+      // Redirect with a path relative to the current origin so it works on
+      // dev/preview servers too, and keep any query string and anchor intact.
+      const targetPath = new URL(localeUrls[preferredLocale], window.location.href).pathname;
+      window.location.replace(targetPath + window.location.search + window.location.hash);
+      return;
+    }
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const languageLink = target.closest('[data-lang-switch][data-locale]');
+      const selectedLocale = languageLink?.getAttribute('data-locale');
+      if (!selectedLocale || !supportedLocales.includes(selectedLocale)) return;
+
+      try {
+        window.localStorage.setItem(preferenceKey, selectedLocale);
+      } catch {
+        // The selected language still changes through the link when storage is unavailable.
+      }
+    });
+  })();
+</script>
