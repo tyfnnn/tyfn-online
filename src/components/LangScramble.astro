@@ -80,6 +80,43 @@
       return GLYPHS.charAt((Math.random() * GLYPHS.length) | 0);
     }
 
+    function prefersReducedMotion() {
+      return window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    // ── Interruption support ────────────────────────────────────────
+    // Any pointer/key/wheel input during the morph snaps every node to
+    // its final text immediately instead of locking the page.
+    var activeMorphs = [];
+    var pendingTimers = [];
+    var INTERRUPT_EVENTS = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
+
+    function finishMorph(m) {
+      if (m.done) return;
+      m.done = true;
+      if (m.raf) cancelAnimationFrame(m.raf);
+      m.node.nodeValue = m.newText;
+    }
+
+    function interruptAll() {
+      if (!activeMorphs.length && !pendingTimers.length) return;
+      pendingTimers.forEach(clearTimeout);
+      pendingTimers = [];
+      activeMorphs.forEach(finishMorph);
+      activeMorphs = [];
+      // Snap every target to its final text — including nodes whose
+      // stagger timer was cancelled while they were pre-snapped to old.
+      document.querySelectorAll('[data-scramble]').forEach(function (el) {
+        collectTextNodes(el).forEach(function (n) {
+          if (typeof n.__newText === 'string') n.nodeValue = n.__newText;
+        });
+      });
+      INTERRUPT_EVENTS.forEach(function (evt) {
+        window.removeEventListener(evt, interruptAll, true);
+      });
+    }
+
     function isWhitespace(ch) {
       return ch === ' ' || ch === '\n' || ch === '\t' || ch === '\u00a0';
     }
@@ -89,8 +126,11 @@
       var start = performance.now();
       // Pre-snap to old text so first paint matches the previous locale.
       node.nodeValue = oldText;
+      var m = { node: node, newText: newText, done: false, raf: 0 };
+      activeMorphs.push(m);
 
       function frame(now) {
+        if (m.done) return;
         var p = Math.min(1, (now - start) / duration);
         var reveal = p * maxLen;
         var out = '';
@@ -111,11 +151,14 @@
           }
         }
         node.nodeValue = out;
-        if (p < 1) requestAnimationFrame(frame);
-        else node.nodeValue = newText;
+        if (p < 1) m.raf = requestAnimationFrame(frame);
+        else {
+          m.done = true;
+          node.nodeValue = newText;
+        }
       }
 
-      requestAnimationFrame(frame);
+      m.raf = requestAnimationFrame(frame);
     }
 
     function run() {
@@ -123,6 +166,10 @@
       requestAnimationFrame(restoreScroll);
       setTimeout(restoreScroll, 50);
       setTimeout(restoreScroll, 200);
+
+      // Reduced motion: skip the morph entirely — text just appears in the
+      // new locale (the server-rendered content is already correct).
+      if (prefersReducedMotion()) return;
 
       var targets = document.querySelectorAll('[data-scramble]');
       var stagger = 0;
@@ -138,20 +185,28 @@
         });
 
         var delay = stagger;
-        stagger += 120;
-        setTimeout(function () {
-          nodes.forEach(function (n, ni) {
-            var newText = n.nodeValue; // currently showing old text after pre-snap
-            // Recover the real new text from the closure-stored newText: but we
-            // overwrote it above. Instead, read from the data attribute we set.
-            var realNew = n.__newText;
-            var oldText = typeof snapNode[ni] === 'string' ? snapNode[ni] : '';
-            var maxLen = Math.max(oldText.length, realNew.length);
-            var dur = Math.min(2800, 1200 + maxLen * 45);
-            morphNode(n, oldText, realNew, dur);
-          });
-        }, delay);
+        stagger += 80;
+        pendingTimers.push(
+          setTimeout(function () {
+            nodes.forEach(function (n, ni) {
+              var newText = n.nodeValue; // currently showing old text after pre-snap
+              // Recover the real new text from the closure-stored newText: but we
+              // overwrote it above. Instead, read from the data attribute we set.
+              var realNew = n.__newText;
+              var oldText = typeof snapNode[ni] === 'string' ? snapNode[ni] : '';
+              var maxLen = Math.max(oldText.length, realNew.length);
+              var dur = Math.min(1200, 450 + maxLen * 14);
+              morphNode(n, oldText, realNew, dur);
+            });
+          }, delay)
+        );
       });
+
+      if (activeMorphs.length || pendingTimers.length) {
+        INTERRUPT_EVENTS.forEach(function (evt) {
+          window.addEventListener(evt, interruptAll, { capture: true, passive: true });
+        });
+      }
     }
 
     function prepare() {

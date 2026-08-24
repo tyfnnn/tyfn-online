@@ -109,6 +109,12 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
   .pnav-back:hover {
     color: var(--text-light, #E6E6DD);
   }
+  .pnav-back:active,
+  .pnav-logo:active,
+  .pnav-lang:active {
+    opacity: 0.7;
+    transition-duration: 100ms;
+  }
 
   .pnav-back svg {
     margin-right: 0.5rem;

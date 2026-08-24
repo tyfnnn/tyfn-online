@@ -45,6 +45,11 @@ const { href, kicker, title, body, cta } = Astro.props;
     border-color: var(--accent-color, #db4a2b);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
   }
+  .cross-link:active {
+    transform: translateY(-1px) scale(0.995);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition-duration: 100ms;
+  }
   .cross-link__inner {
     display: grid;
     grid-template-columns: 1fr auto;
