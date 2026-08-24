@@ -531,6 +531,17 @@
             transform: translateY(-1px);
         }
 
+        .btn-primary:active,
+        .btn-secondary:active {
+            background: var(--surface-variant);
+            transform: translateY(0) scale(0.98);
+            box-shadow: none;
+            transition-duration: 100ms;
+        }
+        .btn-primary:active {
+            background: #0F766E;
+        }
+
         /* ── Mobile ────────────────────────────────────────────────── */
         @media (max-width: 900px) {
             .info-grid { grid-template-columns: 1fr; gap: 2rem; }

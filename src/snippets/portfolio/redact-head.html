@@ -607,6 +607,12 @@
             transform: translateY(-2px);
         }
 
+        .btn-primary:active,
+        .btn-secondary:active {
+            transform: translateY(0) scale(0.98);
+            transition-duration: 100ms;
+        }
+
         /* ── Mobile ────────────────────────────────────────────────── */
         @media (max-width: 900px) {
             .info-grid { grid-template-columns: 1fr; gap: 2rem; }

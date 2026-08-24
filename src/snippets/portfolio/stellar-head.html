@@ -596,6 +596,12 @@
             transform: translateY(-2px);
         }
 
+        .btn-primary:active,
+        .btn-secondary:active {
+            transform: translateY(0) scale(0.98);
+            transition-duration: 100ms;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero-title {
@@ -779,5 +785,11 @@
         .pdf-btn-secondary:hover {
             background: var(--border-color);
             transform: translateY(-2px);
+        }
+
+        .pdf-btn-primary:active,
+        .pdf-btn-secondary:active {
+            transform: translateY(0) scale(0.98);
+            transition-duration: 100ms;
         }
     </style>
