@@ -1,0 +1,299 @@
+---
+---
+<script is:inline>
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<style is:global>
+  html[data-theme='light'] {
+    color-scheme: light;
+    --mattschwarz: #e6e6dd;
+    --mattweiÃŸ: #2b2b2b;
+  }
+
+  /* footer switches with the theme */
+  html[data-theme='light'] .link-mail-w-inline-block {
+    color: #13151c;
+  }
+  html[data-theme='light'] .footer-social-link-three img,
+  html[data-theme='light'] .footer_lottie svg {
+    filter: invert(1);
+  }
+
+  /* cto card intro texts (around the ipad, which stays dark) */
+  html[data-theme='light'] .ipad-eyebrow_text {
+    color: rgba(19, 21, 28, 0.55);
+  }
+  html[data-theme='light'] .ipad-eyebrow_rule {
+    background: rgba(19, 21, 28, 0.35);
+  }
+  html[data-theme='light'] .ipad-heading_main {
+    color: #13151c;
+    background: linear-gradient(180deg, #13151c 30%, rgba(19, 21, 28, 0.55) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  html[data-theme='light'] .ipad-subheading {
+    color: rgba(19, 21, 28, 0.6);
+  }
+
+  /* projects grid lines */
+  html[data-theme='light'] .home-work_bg-grid-wrapper {
+    border-bottom-color: #4b5151;
+  }
+  html[data-theme='light'] .line-vertical,
+  html[data-theme='light'] .line-horizontal {
+    background-color: #4b5151;
+  }
+
+  /* projects scene story text (code panes stay dark) */
+  html[data-theme='light'] .projects-scene .ps-story {
+    --ps-text: #13151c;
+    --ps-text-dim: rgba(19, 21, 28, 0.55);
+    --ps-text-ghost: rgba(19, 21, 28, 0.18);
+  }
+  html[data-theme='light'] .projects-scene .ps-story .ps-head em {
+    color: rgba(19, 21, 28, 0.6);
+  }
+  html[data-theme='light'] .projects-scene .ps-story .ps-body {
+    color: rgba(19, 21, 28, 0.85);
+  }
+
+  /* scene outro text */
+  html[data-theme='light'] .scene-outro_eye {
+    color: rgba(19, 21, 28, 0.5);
+  }
+  html[data-theme='light'] .scene-outro_head {
+    color: #13151c;
+  }
+
+  .nav-info-2 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.25rem;
+  }
+  .theme-toggle {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    font-size: inherit;
+  }
+  .theme-toggle:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+  }
+  .theme-toggle svg {
+    width: 1.05em;
+    height: 1.05em;
+    display: block;
+  }
+  html[data-theme='light'] .theme-toggle .theme-icon-sun {
+    display: none;
+  }
+  html:not([data-theme='light']) .theme-toggle .theme-icon-moon {
+    display: none;
+  }
+
+  /* splash veil */
+  .theme-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .theme-splat {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    will-change: transform;
+  }
+  .theme-splat svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    display: block;
+  }
+</style>
+
+<div class="theme-splash" aria-hidden="true"></div>
+
+<script is:inline>
+  (function () {
+    var doc = document.documentElement;
+    var overlay = document.querySelector('.theme-splash');
+    if (!overlay) return;
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var animating = false;
+
+    var SPLAT_PATH =
+      'M50 6c7-2 12 5 19 5s13-6 19-1 3 13 7 19 11 8 10 16-9 9-11 17 4 15-2 20-14-1-21 2-11 9-19 8-10-8-18-10-15 2-20-4 1-13-1-21S4 44 7 37s12-4 17-10 6-13 13-15z';
+
+    function apply(theme) {
+      if (theme === 'light') doc.setAttribute('data-theme', 'light');
+      else doc.removeAttribute('data-theme');
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (e) {}
+    }
+
+    function buildPoints() {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var corners = [
+        [0, 0],
+        [w, 0],
+        [0, h],
+        [w, h],
+      ];
+      var pts = corners.map(function (c) {
+        return { x: c[0], y: c[1] };
+      });
+      var cols = 3;
+      var rows = 3;
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          pts.push({
+            x: ((c + 0.5) / cols) * w + (Math.random() - 0.5) * (w / cols),
+            y: ((r + 0.5) / rows) * h + (Math.random() - 0.5) * (h / rows),
+          });
+        }
+      }
+      return pts.map(function (pt) {
+        var far = 0;
+        corners.forEach(function (c) {
+          far = Math.max(far, Math.hypot(c[0] - pt.x, c[1] - pt.y));
+        });
+        return { x: pt.x, y: pt.y, reach: far };
+      });
+    }
+
+    function dropletCircles(cx, cy) {
+      var out = '';
+      for (var d = 0; d < 6; d++) {
+        var a = Math.random() * Math.PI * 2;
+        var dist = 22 + Math.random() * 18;
+        out +=
+          '<circle cx="' +
+          (cx + Math.cos(a) * dist).toFixed(1) +
+          '" cy="' +
+          (cy + Math.sin(a) * dist).toFixed(1) +
+          '" r="' +
+          (1.5 + Math.random() * 3.5).toFixed(1) +
+          '"/>';
+      }
+      return out;
+    }
+
+    /* Splash reveal: the theme flips immediately, then a veil in the old
+       background color is torn open by growing organic splat shapes (CSS
+       mask-composite on a real element - reliable, no pseudo quirks). */
+    function splashTo(theme) {
+      var pts = buildPoints();
+      var T = 1400;
+      var veilBg = theme === 'light' ? '#2b2b2b' : '#e6e6dd';
+
+      var layers = pts.map(function (pt, i) {
+        var rot = Math.floor(Math.random() * 360);
+        var svg =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
+          '<g fill="#fff" transform="translate(50 50) rotate(' + rot + ' 50 50)">' +
+          '<path d="' + SPLAT_PATH + '"/>' +
+          dropletCircles(50, 50) +
+          '</g></svg>';
+        return {
+          x: pt.x,
+          y: pt.y,
+          /* cap the raster size: mask layers above ~2000px get dropped by
+             the renderer, which would make the whole veil vanish */
+          size: Math.min(pt.reach * 2.3, 2000),
+          /* every third splat is a "lead": no delay, fast growth and a
+             small starting size, so the veil never reads as a flat color */
+          base: i % 3 === 0 ? 0.14 : 0,
+          delay: i % 3 === 0 ? 0 : Math.random() * 250,
+          dur: i % 3 === 0 ? 380 + Math.random() * 120 : 650 + Math.random() * 400,
+          url: 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")',
+        };
+      });
+
+      var veil = document.createElement('div');
+      veil.style.cssText =
+        'position:fixed;inset:0;z-index:2147483000;pointer-events:none;background:' + veilBg + ';';
+      veil.style.maskImage =
+        'linear-gradient(rgb(0,0,0),rgb(0,0,0)), ' +
+        layers.map(function (L) { return L.url; }).join(', ');
+      veil.style.webkitMaskImage = veil.style.maskImage;
+      veil.style.maskComposite = 'subtract, ' + layers.map(function () { return 'add'; }).join(', ');
+      veil.style.maskRepeat = 'no-repeat';
+      veil.style.maskPosition = '0 0, ' + layers.map(function () { return '0px 0px'; }).join(', ');
+      veil.style.maskSize = '100% 100%, ' + layers.map(function () { return '0px 0px'; }).join(', ');
+      overlay.appendChild(veil);
+
+      apply(theme);
+
+      var steps = 30;
+      var maskPos = [];
+      var maskSize = [];
+      var opacity = [];
+      for (var k = 0; k <= steps; k++) {
+        var t = (k / steps) * T;
+        var pos = ['0 0'];
+        var size = ['100% 100%'];
+            layers.forEach(function (L) {
+              var u = Math.min(Math.max((t - L.delay) / L.dur, 0), 1);
+              var e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+              var s = L.size * (L.base + (1 - L.base) * e);
+              pos.push((L.x - s / 2).toFixed(1) + 'px ' + (L.y - s / 2).toFixed(1) + 'px');
+              size.push(s.toFixed(1) + 'px ' + s.toFixed(1) + 'px');
+            });
+        maskPos.push(pos.join(', '));
+        maskSize.push(size.join(', '));
+        /* dissolve whatever thin slivers the splat union cannot reach, so
+           the veil always finishes cleanly across the whole screen */
+        var fadeStart = T * 0.82;
+        opacity.push(t < fadeStart ? 1 : Math.max(0, 1 - (t - fadeStart) / (T - fadeStart)));
+      }
+
+      veil
+        .animate(
+          { maskPosition: maskPos, maskSize: maskSize, opacity: opacity },
+          { duration: T, easing: 'linear', fill: 'forwards' }
+        )
+        .finished.then(function () {
+          veil.remove();
+          animating = false;
+        })
+        .catch(function () {
+          veil.remove();
+          animating = false;
+        });
+    }
+
+    document.addEventListener('click', function (ev) {
+      var target = ev.target;
+      var btn = target && target.closest ? target.closest('[data-theme-toggle]') : null;
+      if (!btn || animating) return;
+      var next = doc.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      animating = true;
+      if (reduced || !overlay.animate) {
+        apply(next);
+        animating = false;
+        return;
+      }
+      splashTo(next);
+    });
+  })();
+</script>
