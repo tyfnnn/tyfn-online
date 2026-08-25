@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import homeHead from '../snippets/en/home-head.html?raw';
 import homeScripts from '../snippets/en/home-scripts.html?raw';
+import ThemeMode from '../components/home/ThemeMode.astro';
 import Navbar from '../components/home/Navbar.astro';
 import Hero from '../components/home/Hero.astro';
 import About from '../components/home/About.astro';
@@ -54,6 +55,7 @@ const jsonLd = [
 >
   <Fragment slot="head-extra" set:html={homeHead} />
   <Navbar lang={lang} pathname={pathname} />
+  <ThemeMode />
   <div
     style="opacity:1;-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
     class="wrapper"

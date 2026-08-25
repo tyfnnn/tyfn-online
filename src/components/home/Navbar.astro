@@ -13,6 +13,7 @@ const t = useTranslations(lang);
 const homeHref = getRelativeLocaleUrl(lang, pathname);
 const otherLocale: Lang = lang === 'en' ? 'de' : 'en';
 const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
+const themeToggleLabel = lang === 'de' ? 'Farbschema wechseln' : 'Toggle color theme';
 ---
 <nav
   style="transform:translate3d(0px, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);transform-style:preserve-3d"
@@ -28,6 +29,14 @@ const otherLocaleHref = getRelativeLocaleUrl(otherLocale, pathname);
     >
       <div class="_4mxc6w"><span style="font-variation-settings:&quot;ital&quot; 900, &quot;wght&quot; 500" class="textspan-italic-small">TAYFUN ILKER</span></div>
     </a>
-    <div id="w-node-c5fc8f12-887c-1e88-ca92-69dccd02e36d-0c146dc5" class="nav-info-2"><a href={otherLocaleHref} class="text-style-link" data-lang-switch data-locale={otherLocale}>EN | DE</a></div>
+    <div id="w-node-c5fc8f12-887c-1e88-ca92-69dccd02e36d-0c146dc5" class="nav-info-2"><a href={otherLocaleHref} class="text-style-link" data-lang-switch>EN | DE</a><button
+        type="button"
+        class="theme-toggle"
+        data-theme-toggle
+        aria-label={themeToggleLabel}
+      >
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+      </button></div>
   </div>
 </nav>
