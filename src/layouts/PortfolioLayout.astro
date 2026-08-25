@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Seo from '../components/Seo.astro';
+import LocalePreference from '../components/LocalePreference.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 import LangScramble from '../components/LangScramble.astro';
 import FabMenu from '../components/FabMenu.astro';
@@ -29,6 +30,7 @@ const rssTitle = lang === 'de' ? 'Tayfun Ilker â€” Blog (DE)' : 'Tayfun Ilker â€
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
+  <LocalePreference lang={lang} enHref={enHref} deHref={deHref} />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
