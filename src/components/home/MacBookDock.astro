@@ -1,0 +1,4456 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Lang } from '../../i18n/t';
+import { getBlogPosts, postHref, formatDate } from '../../lib/blog';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const portfolioHref = getRelativeLocaleUrl(lang, '/portfolio/');
+const blogHref = getRelativeLocaleUrl(lang, '/blog/');
+
+const apps = [
+  { id: 'xcode', name: 'Xcode', icon: '/assets/xcode.svg', href: null, badge: null },
+  { id: 'android-studio', name: 'Android Studio', icon: '/assets/android-studio.svg', href: null, badge: null },
+  { id: 'webstorm', name: 'WebStorm', icon: '/assets/webstorm.svg', href: null, badge: null },
+  { id: 'figma', name: 'Figma', icon: '/assets/figma.svg', href: null, badge: null },
+  { id: 'obsidian', name: 'Obsidian', icon: '/assets/obsidian.svg', href: null, badge: null },
+  {
+    id: 'mail',
+    name: 'Mail',
+    icon: '/assets/mail.svg',
+    href: `mailto:${t('common.email')}`,
+    badge: '1',
+  },
+  { id: 'messages', name: 'Messages', icon: '/assets/messages.svg', href: null, badge: '3' },
+  { id: 'snake', name: t('cto.win_snake_title'), icon: '/assets/snake.svg', href: null, badge: null },
+];
+
+/* Desktop lists — same content model the iPad shell used. */
+const projects = [
+  {
+    href: getRelativeLocaleUrl(lang, '/portfolio/easyngo/'),
+    title: t('portfolio.easyngo.card_title'),
+    tag: t('portfolio.easyngo.tag_3'),
+    status: t('portfolio.easyngo.status'),
+    image:
+      'https://res.cloudinary.com/dmokvj08w/image/upload/v1752658414/zentrik-accounting_hqbrnv.png',
+    accent: 'linear-gradient(135deg, #6e8efb, #4f6df5)',
+  },
+  {
+    href: getRelativeLocaleUrl(lang, '/portfolio/redact/'),
+    title: t('portfolio.redact.card_title'),
+    tag: t('portfolio.redact.tag_5'),
+    status: t('portfolio.redact.status'),
+    image: '/portfolio/redact/redact-logo.png',
+    accent: 'linear-gradient(135deg, #E5906B, #9C4F2E)',
+  },
+  {
+    href: getRelativeLocaleUrl(lang, '/portfolio/stellar-horizon/'),
+    title: t('portfolio.stellar.card_title'),
+    tag: t('portfolio.stellar.tag_1'),
+    status: t('portfolio.stellar.status'),
+    image:
+      'https://res.cloudinary.com/dmokvj08w/image/upload/v1752659137/stellar-horizon-title_h0aah5.png',
+    accent: 'linear-gradient(135deg, #ff7448, #ff4848)',
+  },
+].slice(0, 4);
+
+const allPosts = await getBlogPosts(lang);
+const posts = allPosts.slice(0, 4).map((entry) => ({
+  href: postHref(lang, entry),
+  title: entry.data.title,
+  description: entry.data.description,
+  date: formatDate(entry.data.pubDate, lang),
+  tag: entry.data.tags?.[0] ?? '',
+  image: entry.data.heroImage ?? '',
+}));
+
+const accents = [
+  'linear-gradient(135deg, #ff7448, #ff4848)',
+  'linear-gradient(135deg, #ffb86b, #ff7448)',
+  'linear-gradient(135deg, #7ad0ff, #4f8df5)',
+  'linear-gradient(135deg, #c69bff, #ff6bbd)',
+];
+
+const menus = [
+  t('cto.menu_file'),
+  t('cto.menu_edit'),
+  t('cto.menu_view'),
+  t('cto.menu_window'),
+  t('cto.menu_help'),
+];
+---
+<section class="cto-section mbd-section">
+  <!-- Hoisted into #projects at runtime so the laptop can travel the whole
+       section; the in-flow .mbd-canvas-wrap below stays as its landing box. -->
+  <div class="mbd-flight" data-mbd-flight>
+    <div class="mbd-flight_sticky" data-mbd-flight-sticky></div>
+  </div>
+  <!-- The canvas paints *behind* the section, but the screen UI has to be
+       clickable, so it rides in its own layer above it. Same sticky geometry,
+       so the projection matrix is identical in both. -->
+  <div class="mbd-uilayer" data-mbd-uilayer>
+    <div class="mbd-uilayer_sticky" data-mbd-ui-sticky></div>
+  </div>
+  <div class="padding-global-2">
+    <div class="mbd-stage" data-mbd-stage>
+      <header class="mbd-header">
+        <div class="mbd-eyebrow">
+          <span class="mbd-eyebrow_rule" aria-hidden="true"></span>
+          <span class="mbd-eyebrow_text">{t('cto.badge')}</span>
+          <span class="mbd-eyebrow_rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="mbd-heading">{t('cto.heading')}</h2>
+        <p class="mbd-subheading">{t('cto.subheading')}</p>
+      </header>
+
+      <div class="mbd-canvas-wrap" data-mbd-canvas-wrap>
+        <canvas class="mbd-canvas" data-mbd-canvas aria-hidden="true"></canvas>
+        <div class="mbd-shadow" aria-hidden="true"></div>
+
+        <div class="mbd-screen-ui" data-mbd-screen-ui data-cursor="off" hidden>
+          <div class="mbd-wallpaper" aria-hidden="true"></div>
+
+          <!-- ========== MENU BAR ========== -->
+          <div class="mbd-menubar">
+            <div class="mbd-menubar_left">
+              <span class="mbd-apple" aria-hidden="true">
+                <svg viewBox="0 0 14 17" width="10" height="12" fill="currentColor">
+                  <path d="M11.6 9c0-1.8 1.5-2.7 1.6-2.7-.9-1.3-2.2-1.4-2.7-1.5-1.2-.1-2.3.7-2.9.7-.6 0-1.5-.7-2.5-.7-1.3 0-2.5.7-3.1 1.9C.6 8.9 1.5 12.3 2.8 14.2c.6.9 1.4 1.9 2.4 1.9.9 0 1.3-.6 2.4-.6s1.4.6 2.4.6 1.7-.9 2.3-1.8c.7-1 1-2 1-2.1 0 0-2-.8-2-3.2zM9.8 3.4c.5-.6.9-1.5.8-2.4-.8 0-1.7.5-2.3 1.2-.5.6-.9 1.5-.8 2.4.9.1 1.8-.5 2.3-1.2z"/>
+                </svg>
+              </span>
+              <span class="mbd-menu mbd-menu--app">tyfn.online</span>
+              {menus.map((m) => <span class="mbd-menu">{m}</span>)}
+            </div>
+            <div class="mbd-menubar_right">
+              <span class="mbd-tray-item" aria-hidden="true">
+                <span class="mbd-battery" data-battery>
+                  <span class="mbd-battery_level" data-battery-level></span>
+                </span>
+                <span class="mbd-battery_pct" data-battery-pct></span>
+              </span>
+              <span class="mbd-tray-item mbd-wifi" aria-hidden="true">
+                <svg viewBox="0 0 16 12" width="13" height="10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                  <path d="M1 4.2a10 10 0 0 1 14 0" />
+                  <path d="M3.6 6.9a6.4 6.4 0 0 1 8.8 0" />
+                  <path d="M6.2 9.5a2.7 2.7 0 0 1 3.6 0" />
+                </svg>
+              </span>
+              <span class="mbd-tray-item mbd-search-glyph" aria-hidden="true">⌕</span>
+              <button
+                type="button"
+                class="mbd-tray-clock"
+                data-toggle="notif"
+                aria-label={t('cto.notif_title')}
+              >
+                <span class="mbd-date" data-clock-date></span>
+                <span class="mbd-time" data-clock-time>9:41</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ========== NOTIFICATION CENTER ========== -->
+          <div class="mbd-notif" data-mbd-notif aria-hidden="true">
+            <div class="mbd-notif_head">
+              <span class="mbd-notif_title">{t('cto.notif_title')}</span>
+              <button type="button" class="mbd-notif_clear" data-notif-close>{t('cto.notif_clear')}</button>
+            </div>
+            <div class="mbd-notif_list">
+              <a class="mbd-notif_card mbd-notif_card--accent" href={`mailto:${t('common.email')}`}>
+                <span class="mbd-notif_icon" style="background:linear-gradient(135deg,#ff8e5c,#ff4848);">✉</span>
+                <div class="mbd-notif_text">
+                  <div class="mbd-notif_card_title">{t('cto.notif_hire_title')}</div>
+                  <div class="mbd-notif_card_body">{t('cto.notif_hire_body')}</div>
+                </div>
+                <span class="mbd-notif_time">{t('cto.notif_now')}</span>
+              </a>
+              <div class="mbd-notif_card">
+                <span class="mbd-notif_icon" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">●</span>
+                <div class="mbd-notif_text">
+                  <div class="mbd-notif_card_title">{t('cto.notif_inquiry_title')}</div>
+                  <div class="mbd-notif_card_body">{t('cto.notif_inquiry_body')}</div>
+                </div>
+                <span class="mbd-notif_time">2m</span>
+              </div>
+              <div class="mbd-notif_card">
+                <span class="mbd-notif_icon" style="background:linear-gradient(135deg,#86d9ff,#1f7af0);">◴</span>
+                <div class="mbd-notif_text">
+                  <div class="mbd-notif_card_title">{t('cto.notif_calendar_title')}</div>
+                  <div class="mbd-notif_card_body">{t('cto.notif_calendar_body')}</div>
+                </div>
+                <span class="mbd-notif_time">5m</span>
+              </div>
+              <div class="mbd-notif_card">
+                <span class="mbd-notif_icon" style="background:linear-gradient(180deg,#3a3a3a,#0a0a0a);">⌥</span>
+                <div class="mbd-notif_text">
+                  <div class="mbd-notif_card_title">{t('cto.notif_github_title')}</div>
+                  <div class="mbd-notif_card_body">{t('cto.notif_github_body')}</div>
+                </div>
+                <span class="mbd-notif_time">1h</span>
+              </div>
+              <div class="mbd-notif_card">
+                <span class="mbd-notif_icon" style="background:linear-gradient(135deg,#1ED760,#0d6e2c);">◉</span>
+                <div class="mbd-notif_text">
+                  <div class="mbd-notif_card_title">{t('cto.notif_calm_title')}</div>
+                  <div class="mbd-notif_card_body">{t('cto.notif_calm_body')}</div>
+                </div>
+                <span class="mbd-notif_time">3h</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========== DESKTOP WINDOW: tyfn.online ========== -->
+          <section class="mbd-deskwin" data-deskwin>
+            <header class="mbd-deskwin_chrome">
+              <div class="mbd-win_lights mbd-win_lights--static" aria-hidden="true">
+                <span class="mbd-light mbd-light--r"></span>
+                <span class="mbd-light mbd-light--y"></span>
+                <span class="mbd-light mbd-light--g"></span>
+              </div>
+              <div class="mbd-deskwin_title">
+                <span class="mbd-dot mbd-dot--orange" aria-hidden="true"></span>
+                <span>tyfn.online</span>
+              </div>
+              <div class="mbd-tabs" role="tablist">
+                <button type="button" class="mbd-tab is-active" role="tab" aria-selected="true" data-tab="all">{t('cto.tab_all')}</button>
+                <button type="button" class="mbd-tab" role="tab" aria-selected="false" data-tab="projects">{t('cto.tab_projects')}</button>
+                <button type="button" class="mbd-tab" role="tab" aria-selected="false" data-tab="writing">{t('cto.tab_writing')}</button>
+                <span class="mbd-tab_pill" aria-hidden="true"></span>
+              </div>
+              <label class="mbd-searchbar">
+                <span class="mbd-searchbar_icon" aria-hidden="true">⌕</span>
+                <input
+                  type="search"
+                  class="mbd-searchbar_input"
+                  placeholder={t('cto.search_placeholder')}
+                  aria-label={t('cto.search_placeholder')}
+                  data-search
+                />
+                <kbd class="mbd-searchbar_kbd" aria-hidden="true">⌘K</kbd>
+              </label>
+              <button type="button" class="mbd-sort" data-sort="newest" aria-label={t('cto.sort_newest')}>
+                <span class="mbd-sort_arrow" aria-hidden="true">↓</span>
+                <span class="mbd-sort_label" data-sort-label>{t('cto.sort_newest')}</span>
+              </button>
+            </header>
+
+            <div class="mbd-deskwin_body" data-deskwin-body>
+              <section class="mbd-col" data-list="projects">
+                <header class="mbd-col_head">
+                  <span class="mbd-col_index">A</span>
+                  <h3 class="mbd-col_title">
+                    <span class="mbd-col_title-main">{t('cto.list_projects')}</span>
+                    <span class="mbd-col_title-meta" data-count>{projects.length}/04</span>
+                  </h3>
+                  <a class="mbd-col_all" href={portfolioHref}>
+                    {t('cto.view_all')} <span aria-hidden="true">→</span>
+                  </a>
+                </header>
+                <ul class="mbd-list" data-sortable>
+                  {projects.map((p, i) => (
+                    <li data-search={`${p.title} ${p.tag} ${p.status}`.toLowerCase()}>
+                      <a class="mbd-item" href={p.href}>
+                        <span class="mbd-item_index" aria-hidden="true">0{i + 1}</span>
+                        <span
+                          class="mbd-item_thumb"
+                          style={`background-image:url('${p.image}'); --thumb-accent:${p.accent};`}
+                          aria-hidden="true"
+                        ></span>
+                        <span class="mbd-item_text">
+                          <span class="mbd-item_title">{p.title}</span>
+                          <span class="mbd-item_meta">
+                            <span class="mbd-pill" style={`background:${p.accent};`}>{p.tag}</span>
+                            <span class="mbd-item_status">{p.status}</span>
+                          </span>
+                        </span>
+                        <span class="mbd-item_arrow" aria-hidden="true">→</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p class="mbd-empty" data-empty>{t('cto.empty')}</p>
+              </section>
+
+              <section class="mbd-col" data-list="writing">
+                <header class="mbd-col_head">
+                  <span class="mbd-col_index">B</span>
+                  <h3 class="mbd-col_title">
+                    <span class="mbd-col_title-main">{t('cto.list_blog')}</span>
+                    <span class="mbd-col_title-meta" data-count>{posts.length}/04</span>
+                  </h3>
+                  <a class="mbd-col_all" href={blogHref}>
+                    {t('cto.view_all')} <span aria-hidden="true">→</span>
+                  </a>
+                </header>
+                <ul class="mbd-list" data-sortable>
+                  {posts.map((post, i) => (
+                    <li data-search={`${post.title} ${post.tag} ${post.description}`.toLowerCase()}>
+                      <a class="mbd-item" href={post.href}>
+                        <span class="mbd-item_index" aria-hidden="true">0{i + 1}</span>
+                        {post.image ? (
+                          <span
+                            class="mbd-item_thumb"
+                            style={`background-image:url('${post.image}');`}
+                            aria-hidden="true"
+                          ></span>
+                        ) : (
+                          <span
+                            class="mbd-item_accent"
+                            style={`background:${accents[i % accents.length]};`}
+                            aria-hidden="true"
+                          ></span>
+                        )}
+                        <span class="mbd-item_text">
+                          <span class="mbd-item_title">{post.title}</span>
+                          <span class="mbd-item_meta">
+                            {post.tag && <span class="mbd-pill mbd-pill--ghost">#{post.tag}</span>}
+                            <span class="mbd-item_status">{post.date}</span>
+                          </span>
+                        </span>
+                        <span class="mbd-item_arrow" aria-hidden="true">→</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p class="mbd-empty" data-empty>{t('cto.empty')}</p>
+              </section>
+            </div>
+          </section>
+
+          <!-- ========== DOCK ========== -->
+          <nav class="mbd-dock" data-mbd-dock aria-label={t('cto.heading')}>
+            <span class="mbd-dock_shine" aria-hidden="true"></span>
+            {
+              apps.map((app) =>
+                app.href ? (
+                  <a
+                    class="mbd-app"
+                    href={app.href}
+                    data-app={app.id}
+                    data-tooltip={app.name}
+                    aria-label={app.name}
+                  >
+                    <span class="mbd-app_icon">
+                      <img src={app.icon} alt="" width="44" height="44" loading="lazy" />
+                    </span>
+                    {app.badge && <span class="mbd-badge">{app.badge}</span>}
+                    <span class="mbd-runlight" aria-hidden="true"></span>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    class="mbd-app"
+                    data-open={app.id}
+                    data-app={app.id}
+                    data-tooltip={app.name}
+                    aria-label={app.name}
+                  >
+                    <span class="mbd-app_icon">
+                      <img src={app.icon} alt="" width="44" height="44" loading="lazy" />
+                    </span>
+                    {app.badge && <span class="mbd-badge">{app.badge}</span>}
+                    <span class="mbd-runlight" aria-hidden="true"></span>
+                  </button>
+                )
+              )
+            }
+            <a
+              class="mbd-app"
+              href={blogHref}
+              data-app="blog"
+              data-tooltip={t('cto.dock_blog')}
+              aria-label={t('cto.dock_blog')}
+            >
+              <span class="mbd-app_icon">
+                <span class="mbd-blogicon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                    <path d="M4.5 11.5a8 8 0 0 1 8 8" />
+                    <path d="M4.5 4.5a15 15 0 0 1 15 15" />
+                    <circle cx="5.6" cy="18.4" r="1.9" fill="currentColor" stroke="none" />
+                  </svg>
+                </span>
+              </span>
+              <span class="mbd-runlight" aria-hidden="true"></span>
+            </a>
+            <span class="mbd-dock_sep" aria-hidden="true"></span>
+            <a
+              class="mbd-app mbd-app--stack"
+              href={portfolioHref}
+              data-app="portfolio"
+              data-tooltip={t('cto.dock_portfolio')}
+              aria-label={t('cto.dock_portfolio')}
+            >
+              <span class="mbd-app_icon">
+                <span class="mbd-folder" aria-hidden="true">
+                  <span class="mbd-folder_tab"></span>
+                  <span class="mbd-folder_face"></span>
+                </span>
+              </span>
+              <span class="mbd-runlight" aria-hidden="true"></span>
+            </a>
+            <button
+              type="button"
+              class="mbd-app mbd-app--trash"
+              data-trash
+              data-tooltip={t('cto.dock_trash')}
+              aria-label={t('cto.dock_trash')}
+            >
+              <span class="mbd-app_icon">
+                <span class="mbd-trash" aria-hidden="true">
+                  <span class="mbd-trash_lid"></span>
+                  <span class="mbd-trash_can"></span>
+                </span>
+              </span>
+              <span class="mbd-runlight" aria-hidden="true"></span>
+            </button>
+          </nav>
+
+          <div class="mbd-pointer" data-mbd-pointer aria-hidden="true">
+            <svg viewBox="0 0 20 26" width="20" height="26">
+              <path
+                d="M1 1.4 1 22.2l5-4.9 3.1 7.1 3.5-1.5-3-6.9 6.9-.4z"
+                fill="#fff"
+                stroke="#111"
+                stroke-width="1.1"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+              <div class="mbd-windows" data-windows>
+
+                <!-- ========== XCODE 26 ========== -->
+                <section class="mbd-win mbd-win--xcode" data-window="xcode" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--xcode">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="xc-toolbar">
+                      <span class="xc-btn">▶</span>
+                      <span class="xc-btn">■</span>
+                      <span class="xc-divider"></span>
+                      <span class="xc-scheme">
+                        <span class="xc-scheme_dot"></span>
+                        tyfn.app <span class="xc-scheme_caret">›</span> iPhone 16 Pro
+                      </span>
+                    </div>
+                    <div class="xc-status">{t('cto.win_xcode_subtitle')}</div>
+                  </header>
+                  <div class="xc-body">
+                    <aside class="xc-nav">
+                      <div class="xc-nav_head">PROJECT</div>
+                      <ul class="xc-tree">
+                        <li class="xc-tree_group is-open">
+                          <span class="xc-tree_label">▾ tyfn.app</span>
+                          <ul>
+                            <li class="xc-tree_group is-open">
+                              <span class="xc-tree_label">▾ iOS</span>
+                              <ul>
+                                <li><span class="xc-file is-active">􀐘 tyfnApp.swift</span></li>
+                                <li><span class="xc-file">􀐘 ContentView.swift</span></li>
+                              </ul>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ macOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ watchOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ iPadOS</span>
+                            </li>
+                            <li class="xc-tree_group">
+                              <span class="xc-tree_label">▸ Assets.xcassets</span>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="xc-editor">
+                      <div class="xc-tabbar">
+                        <span class="xc-tab is-active">tyfnApp.swift</span>
+                        <span class="xc-tab">ContentView.swift</span>
+                      </div>
+                      <pre class="xc-code"><code><span class="xc-ln">1</span>  <span class="xc-c">// {t('cto.win_xcode_lede')}</span>
+<span class="xc-ln">2</span>  <span class="xc-kw">import</span> <span class="xc-id">SwiftUI</span>
+<span class="xc-ln">3</span>
+<span class="xc-ln">4</span>  <span class="xc-at">@main</span>
+<span class="xc-ln">5</span>  <span class="xc-kw">struct</span> <span class="xc-ty">tyfnApp</span>: <span class="xc-ty">App</span> {'{'}
+<span class="xc-ln">6</span>    <span class="xc-kw">var</span> body: <span class="xc-kw">some</span> <span class="xc-ty">Scene</span> {'{'}
+<span class="xc-ln">7</span>      <span class="xc-ty">WindowGroup</span> {'{'} <span class="xc-ty">ContentView</span>() {'}'}
+<span class="xc-ln">8</span>    {'}'}
+<span class="xc-ln">9</span>  {'}'}
+<span class="xc-ln">10</span>
+<span class="xc-ln">11</span>  <span class="xc-kw">struct</span> <span class="xc-ty">ContentView</span>: <span class="xc-ty">View</span> {'{'}
+<span class="xc-ln">12</span>    <span class="xc-kw">let</span> platforms = [<span class="xc-s">"iOS"</span>, <span class="xc-s">"macOS"</span>, <span class="xc-s">"watchOS"</span>, <span class="xc-s">"iPadOS"</span>]
+<span class="xc-ln">13</span>
+<span class="xc-ln">14</span>    <span class="xc-kw">var</span> body: <span class="xc-kw">some</span> <span class="xc-ty">View</span> {'{'}
+<span class="xc-ln">15</span>      <span class="xc-ty">ForEach</span>(platforms, id: \.self) {'{'} <span class="xc-id">platform</span> <span class="xc-kw">in</span>
+<span class="xc-ln">16</span>        <span class="xc-ty">Text</span>(<span class="xc-s">"Shipped on \(platform)."</span>)
+<span class="xc-ln">17</span>      {'}'}
+<span class="xc-ln">18</span>    {'}'}
+<span class="xc-ln">19</span>  {'}'}</code></pre>
+                      <div class="xc-note">
+                        <strong>{t('cto.win_xcode_lede')}</strong>
+                        <p>{t('cto.win_xcode_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="xc-inspector">
+                      <div class="xc-insp_head">INSPECTOR</div>
+                      <dl class="xc-insp_grid">
+                        <dt>Target</dt><dd>tyfn.app</dd>
+                        <dt>Platforms</dt><dd>iOS · macOS · watchOS · iPadOS</dd>
+                        <dt>Swift</dt><dd>6.1</dd>
+                        <dt>Min iOS</dt><dd>17.0</dd>
+                      </dl>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== ANDROID STUDIO ========== -->
+                <section class="mbd-win mbd-win--android" data-window="android-studio" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--android">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="as-toolbar">
+                      <span class="as-app">
+                        <img src="/assets/android-studio.svg" alt="" />
+                        <strong>Android Studio</strong>
+                      </span>
+                      <span class="as-divider"></span>
+                      <span class="as-scheme">▣ app · debug · 🤖 Pixel 8 Pro</span>
+                      <span class="as-spacer"></span>
+                      <span class="as-run">▶ Run</span>
+                    </div>
+                    <div class="as-status">{t('cto.win_android_subtitle')}</div>
+                  </header>
+                  <div class="as-body">
+                    <aside class="as-nav">
+                      <div class="as-nav_head">▾ TyfnLab</div>
+                      <ul class="as-tree">
+                        <li class="as-tree_group is-open">
+                          <span>▾ composeApp</span>
+                          <ul>
+                            <li class="as-tree_group is-open">
+                              <span>▾ commonMain</span>
+                              <ul>
+                                <li><span class="as-file is-active">⌨ App.kt</span></li>
+                                <li><span class="as-file">⌨ HomeScreen.kt</span></li>
+                                <li><span class="as-file">⌨ Theme.kt</span></li>
+                              </ul>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ androidMain</span>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ iosMain</span>
+                            </li>
+                            <li class="as-tree_group">
+                              <span>▸ desktopMain</span>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="as-tree_group">
+                          <span>▸ gradle</span>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="as-editor">
+                      <div class="as-tabbar">
+                        <span class="as-tab is-active">⌨ App.kt</span>
+                        <span class="as-tab">⌨ HomeScreen.kt</span>
+                      </div>
+                      <pre class="as-code"><code><span class="as-ln">1</span>  <span class="as-c">// {t('cto.win_android_lede')}</span>
+<span class="as-ln">2</span>  <span class="as-kw">package</span> <span class="as-id">tyfn.lab</span>
+<span class="as-ln">3</span>
+<span class="as-ln">4</span>  <span class="as-at">@Composable</span>
+<span class="as-ln">5</span>  <span class="as-kw">fun</span> <span class="as-fn">App</span>() {'{'}
+<span class="as-ln">6</span>    <span class="as-ty">MaterialTheme</span> {'{'}
+<span class="as-ln">7</span>      <span class="as-ty">HomeScreen</span>(platform = <span class="as-fn">currentPlatform</span>())
+<span class="as-ln">8</span>    {'}'}
+<span class="as-ln">9</span>  {'}'}
+<span class="as-ln">10</span>
+<span class="as-ln">11</span>  <span class="as-kw">expect fun</span> <span class="as-fn">currentPlatform</span>(): <span class="as-ty">Platform</span>
+<span class="as-ln">12</span>
+<span class="as-ln">13</span>  <span class="as-kw">enum class</span> <span class="as-ty">Platform</span> {'{'} <span class="as-id">ANDROID</span>, <span class="as-id">IOS</span>, <span class="as-id">DESKTOP</span> {'}'}</code></pre>
+                      <div class="as-note">
+                        <strong>{t('cto.win_android_lede')}</strong>
+                        <p>{t('cto.win_android_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="as-preview">
+                      <div class="as-preview_label">PREVIEW · PIXEL 8</div>
+                      <div class="as-device">
+                        <div class="as-device_screen">
+                          <div class="as-device_topbar"></div>
+                          <div class="as-device_hero">Hi, Tayfun.</div>
+                          <div class="as-device_card">📱 Android</div>
+                          <div class="as-device_card">🍎 iOS</div>
+                          <div class="as-device_card">🖥 Desktop</div>
+                        </div>
+                      </div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== WEBSTORM ========== -->
+                <section class="mbd-win mbd-win--webstorm" data-window="webstorm" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--webstorm">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="ws-toolbar">
+                      <span class="ws-app">
+                        <img src="/assets/webstorm.svg" alt="" />
+                        <strong>WebStorm</strong>
+                      </span>
+                      <span class="ws-divider"></span>
+                      <span class="ws-scheme">▣ dev · localhost:4321</span>
+                      <span class="ws-spacer"></span>
+                      <span class="ws-run">▶ npm run dev</span>
+                    </div>
+                    <div class="ws-status">{t('cto.win_webstorm_subtitle')}</div>
+                  </header>
+                  <div class="ws-body">
+                    <aside class="ws-nav">
+                      <div class="ws-nav_head">▾ tyfn.online</div>
+                      <ul class="ws-tree">
+                        <li class="ws-tree_group is-open">
+                          <span>▾ src</span>
+                          <ul>
+                            <li class="ws-tree_group is-open">
+                              <span>▾ pages</span>
+                              <ul>
+                                <li><span class="ws-file">⌨ index.astro</span></li>
+                                <li><span class="ws-file">⌨ portfolio</span></li>
+                                <li><span class="ws-file">⌨ blog</span></li>
+                              </ul>
+                            </li>
+                            <li class="ws-tree_group is-open">
+                              <span>▾ components/home</span>
+                              <ul>
+                                <li><span class="ws-file is-active">⌨ CtoCard.astro</span></li>
+                                <li><span class="ws-file">⌨ Hero.astro</span></li>
+                                <li><span class="ws-file">⌨ Projects.astro</span></li>
+                              </ul>
+                            </li>
+                            <li class="ws-tree_group">
+                              <span>▸ i18n</span>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ public</span>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ astro.config.mjs</span>
+                        </li>
+                        <li class="ws-tree_group">
+                          <span>▸ package.json</span>
+                        </li>
+                      </ul>
+                    </aside>
+                    <main class="ws-editor">
+                      <div class="ws-tabbar">
+                        <span class="ws-tab is-active">⌨ CtoCard.astro</span>
+                        <span class="ws-tab">⌨ Hero.astro</span>
+                        <span class="ws-tab">⌨ index.astro</span>
+                      </div>
+                      <pre class="ws-code"><code><span class="ws-ln">1</span>  <span class="ws-c">// {t('cto.win_webstorm_lede')}</span>
+<span class="ws-ln">2</span>  <span class="ws-kw">---</span>
+<span class="ws-ln">3</span>  <span class="ws-kw">import</span> <span class="ws-id">{'{'} getRelativeLocaleUrl {'}'}</span> <span class="ws-kw">from</span> <span class="ws-s">'astro:i18n'</span>;
+<span class="ws-ln">4</span>  <span class="ws-kw">import</span> <span class="ws-id">{'{'} getBlogPosts {'}'}</span> <span class="ws-kw">from</span> <span class="ws-s">'../../lib/blog'</span>;
+<span class="ws-ln">5</span>
+<span class="ws-ln">6</span>  <span class="ws-kw">const</span> <span class="ws-id">posts</span> = <span class="ws-kw">await</span> <span class="ws-fn">getBlogPosts</span>(<span class="ws-id">lang</span>);
+<span class="ws-ln">7</span>  <span class="ws-kw">const</span> <span class="ws-id">latest</span> = <span class="ws-id">posts</span>.<span class="ws-fn">slice</span>(<span class="ws-n">0</span>, <span class="ws-n">4</span>);
+<span class="ws-ln">8</span>  <span class="ws-kw">---</span>
+<span class="ws-ln">9</span>  <span class="ws-tag">&lt;section</span> <span class="ws-attr">class</span>=<span class="ws-s">"cto-section"</span><span class="ws-tag">&gt;</span>
+<span class="ws-ln">10</span>    <span class="ws-tag">&lt;Ipad</span> <span class="ws-attr">posts</span>={'{'}<span class="ws-id">latest</span>{'}'} <span class="ws-tag">/&gt;</span>
+<span class="ws-ln">11</span>  <span class="ws-tag">&lt;/section&gt;</span></code></pre>
+                      <div class="ws-note">
+                        <strong>{t('cto.win_webstorm_lede')}</strong>
+                        <p>{t('cto.win_webstorm_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="ws-side">
+                      <div class="ws-side_head">TERMINAL</div>
+                      <div class="ws-term">
+                        <div class="ws-term_line"><span class="ws-term_prompt">tyfn ~/tyfn.online</span> <span class="ws-term_cmd">npm run dev</span></div>
+                        <div class="ws-term_line ws-term_out">  <span class="ws-term_arrow">▲</span> astro v5.13.5 ready in <b>421</b> ms</div>
+                        <div class="ws-term_line ws-term_out">  ┃ Local   http://localhost:4321/</div>
+                        <div class="ws-term_line ws-term_out">  ┃ watching for file changes…</div>
+                        <div class="ws-term_line"><span class="ws-term_prompt">tyfn ~/tyfn.online</span> <span class="ws-term_caret">_</span></div>
+                      </div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== FIGMA ========== -->
+                <section class="mbd-win mbd-win--figma" data-window="figma" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--figma">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="fg-toolbar">
+                      <img class="fg-icon" src="/assets/figma.svg" alt="" />
+                      <span class="fg-file">tyfn — Designs / Home</span>
+                      <span class="fg-divider"></span>
+                      <span class="fg-cursor">▿ Move</span>
+                      <span class="fg-spacer"></span>
+                      <span class="fg-avatars">
+                        <span class="fg-av" style="background:linear-gradient(135deg,#ff7448,#ff4848)">T</span>
+                        <span class="fg-av" style="background:linear-gradient(135deg,#7ad0ff,#4f8df5)">·</span>
+                      </span>
+                      <span class="fg-share">↗ Share</span>
+                    </div>
+                  </header>
+                  <div class="fg-body">
+                    <aside class="fg-layers">
+                      <div class="fg-layers_head">LAYERS</div>
+                      <ul class="fg-tree">
+                        <li class="is-page">▾ Page 1</li>
+                        <li class="is-frame">▾ ▢ Frame — Home <span>1440×900</span></li>
+                        <li class="is-layer is-active">▢ Hero</li>
+                        <li class="is-layer">▢ Card stack</li>
+                        <li class="is-layer">T Heading</li>
+                        <li class="is-layer">▢ Footer</li>
+                      </ul>
+                    </aside>
+                    <main class="fg-canvas">
+                      <div class="fg-grid" aria-hidden="true"></div>
+                      <div class="fg-artboard">
+                        <div class="fg-artboard_label">Home — 1440 × 900</div>
+                        <div class="fg-rect fg-rect--hero">
+                          <span class="fg-rect_caption">Hero</span>
+                        </div>
+                        <div class="fg-rect fg-rect--text">
+                          {t('cto.win_figma_lede')}
+                        </div>
+                        <div class="fg-rect fg-rect--c1"></div>
+                        <div class="fg-rect fg-rect--c2"></div>
+                        <div class="fg-rect fg-rect--c3"></div>
+                        <div class="fg-handles" aria-hidden="true">
+                          <span></span><span></span><span></span><span></span>
+                        </div>
+                      </div>
+                      <div class="fg-note">
+                        <strong>{t('cto.win_figma_lede')}</strong>
+                        <p>{t('cto.win_figma_body')}</p>
+                      </div>
+                    </main>
+                    <aside class="fg-props">
+                      <div class="fg-props_head">DESIGN</div>
+                      <div class="fg-row"><span>W</span><b>1440</b><span>H</span><b>900</b></div>
+                      <div class="fg-row"><span>X</span><b>0</b><span>Y</span><b>0</b></div>
+                      <div class="fg-section">FILL</div>
+                      <div class="fg-fill"><span class="fg-swatch" style="background:#ff7448"></span><span>FF7448</span></div>
+                      <div class="fg-section">TYPE</div>
+                      <div class="fg-row"><span>Fraunces</span><b>Italic 300</b></div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== OBSIDIAN ========== -->
+                <section class="mbd-win mbd-win--obsidian" data-window="obsidian" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--obsidian">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="ob-toolbar">
+                      <img class="ob-icon" src="/assets/obsidian.svg" alt="" />
+                      <span class="ob-vault">vault · tyfn</span>
+                      <span class="ob-divider"></span>
+                      <span class="ob-file">brain.md</span>
+                    </div>
+                  </header>
+                  <div class="ob-body">
+                    <aside class="ob-nav">
+                      <div class="ob-nav_head">▾ brain</div>
+                      <ul class="ob-files">
+                        <li class="is-active">📄 brain.md</li>
+                        <li>📄 ideas.md</li>
+                        <li>📄 mobile-eng.md</li>
+                        <li>📄 design-notes.md</li>
+                        <li>📄 reading.md</li>
+                        <li>📁 archive</li>
+                      </ul>
+                    </aside>
+                    <main class="ob-editor">
+                      <div class="ob-doc">
+                        <h1># {t('cto.win_obsidian_lede')}</h1>
+                        <p>{t('cto.win_obsidian_body')}</p>
+                        <h2>## Currently chewing on</h2>
+                        <ul>
+                          <li>SwiftUI animations &amp; <span class="ob-link">[[motion-design]]</span></li>
+                          <li>Kotlin Multiplatform on iOS — what actually works</li>
+                          <li>The shape of a <span class="ob-link">[[good portfolio]]</span></li>
+                        </ul>
+                        <h2>## Linked</h2>
+                        <p><span class="ob-tag">#mobile</span> <span class="ob-tag">#design</span> <span class="ob-tag">#process</span></p>
+                      </div>
+                    </main>
+                    <aside class="ob-graph" aria-hidden="true">
+                      <div class="ob-graph_label">GRAPH</div>
+                      <svg viewBox="0 0 200 200" class="ob-graph_svg">
+                        <g stroke="rgba(124, 90, 255, 0.45)" stroke-width="0.8" fill="none">
+                          <line x1="100" y1="100" x2="40" y2="50"/>
+                          <line x1="100" y1="100" x2="160" y2="60"/>
+                          <line x1="100" y1="100" x2="50" y2="160"/>
+                          <line x1="100" y1="100" x2="155" y2="150"/>
+                          <line x1="40" y1="50"  x2="160" y2="60"/>
+                          <line x1="50" y1="160" x2="155" y2="150"/>
+                          <line x1="100" y1="100" x2="100" y2="30"/>
+                        </g>
+                        <g fill="#c4b5fd">
+                          <circle cx="100" cy="100" r="7"/>
+                        </g>
+                        <g fill="#7c3aed">
+                          <circle cx="40" cy="50" r="4"/>
+                          <circle cx="160" cy="60" r="4.5"/>
+                          <circle cx="50" cy="160" r="3.5"/>
+                          <circle cx="155" cy="150" r="4"/>
+                          <circle cx="100" cy="30" r="3"/>
+                        </g>
+                      </svg>
+                      <div class="ob-graph_legend">7 notes · 8 links</div>
+                    </aside>
+                  </div>
+                </section>
+
+                <!-- ========== MESSAGES ========== -->
+                <section class="mbd-win mbd-win--messages" data-window="messages" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--messages">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="msg-toolbar">
+                      <img class="msg-icon" src="/assets/messages.svg" alt="" />
+                      <span class="msg-brand">{t('cto.win_messages_title')}</span>
+                      <span class="msg-divider"></span>
+                      <span class="msg-sub">{t('cto.win_messages_subtitle')}</span>
+                    </div>
+                  </header>
+                  <div class="msg-body">
+                    <aside class="msg-sidebar">
+                      <div class="msg-side_head">{t('cto.win_messages_title')}</div>
+                      <a class="msg-thread is-active" href="#">
+                        <span class="msg-avatar" aria-hidden="true">
+                          <img src="/assets/t-icon.png" alt="" />
+                        </span>
+                        <div class="msg-thread_text">
+                          <div class="msg-thread_name">Tayfun · AI</div>
+                          <div class="msg-thread_snippet">{t('cto.msg_b3_bot')}</div>
+                        </div>
+                        <span class="msg-thread_meta">{t('cto.notif_now')}</span>
+                      </a>
+                    </aside>
+                    <main class="msg-thread_view">
+                      <div class="msg-thread_header">
+                        <span class="msg-avatar msg-avatar--lg" aria-hidden="true"><img src="/assets/t-icon.png" alt="" /></span>
+                        <div>
+                          <div class="msg-thread_name">Tayfun · AI</div>
+                          <div class="msg-thread_status">
+                            <span class="msg-dot" aria-hidden="true"></span>
+                            <span>{t('cto.win_messages_typing')}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="msg-thread_stage">
+                        <div class="msg-day">{t('cto.win_messages_today')} · 14:32</div>
+                        <div class="msg-bubble msg-bubble--in">{t('cto.msg_b1_bot')}</div>
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b1_user')}</div>
+                        <div class="msg-bubble msg-bubble--in" set:html={t('cto.msg_b2_bot')} />
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b2_user')}</div>
+                        <div class="msg-bubble msg-bubble--in">{t('cto.msg_b3_bot')}</div>
+                        <div class="msg-bubble msg-bubble--out">{t('cto.msg_b3_user')}</div>
+                        <div class="msg-bubble msg-bubble--in msg-bubble--typing" aria-hidden="true">
+                          <span></span><span></span><span></span>
+                        </div>
+                      </div>
+                      <div class="msg-meta">
+                        <strong>{t('cto.win_messages_lede')}</strong>
+                        <p>{t('cto.win_messages_body')}</p>
+                      </div>
+                      <button type="button" class="msg-continue" data-msg-continue>
+                        <img src="/assets/messages.svg" alt="" />
+                        <span>{t('cto.win_messages_continue')}</span>
+                        <span class="msg-continue_arrow" aria-hidden="true">→</span>
+                      </button>
+                    </main>
+                  </div>
+                </section>
+
+                <!-- ========== SNAKE / BUG HUNT ========== -->
+                <section class="mbd-win mbd-win--snake" data-window="snake" aria-hidden="true">
+                  <header class="mbd-win_chrome mbd-win_chrome--snake">
+                    <div class="mbd-win_lights" aria-hidden="true">
+                      <span class="mbd-light mbd-light--r" data-close></span>
+                      <span class="mbd-light mbd-light--y" data-minimize></span>
+                      <span class="mbd-light mbd-light--g"></span>
+                    </div>
+                    <div class="sk-toolbar">
+                      <img class="sk-icon" src="/assets/snake.svg" alt="" />
+                      <span class="sk-brand">{t('cto.win_snake_title')}</span>
+                      <span class="sk-divider"></span>
+                      <span class="sk-prompt">{t('cto.win_snake_subtitle')}<span class="sk-caret"></span></span>
+                    </div>
+                  </header>
+                  <div class="sk-body">
+                    <aside class="sk-stats">
+                      <div class="sk-stat">
+                        <span class="sk-stat_label">{t('cto.win_snake_score')}</span>
+                        <span class="sk-stat_value" data-snake-score>00</span>
+                      </div>
+                      <div class="sk-stat">
+                        <span class="sk-stat_label">{t('cto.win_snake_best')}</span>
+                        <span class="sk-stat_value" data-snake-best>00</span>
+                      </div>
+                      <div class="sk-hint">{t('cto.win_snake_controls')}</div>
+                      <button type="button" class="sk-restart" data-snake-restart>
+                        <span data-snake-restart-label>{t('cto.win_snake_play')}</span>
+                      </button>
+                    </aside>
+                    <main class="sk-stage" data-snake-stage tabindex="0">
+                      <canvas data-snake-canvas></canvas>
+                      <div class="sk-overlay" data-snake-overlay>
+                        <div class="sk-overlay_message" data-snake-status>{t('cto.win_snake_idle')}</div>
+                      </div>
+                      <!-- Mobile / touch D-pad -->
+                      <div class="sk-dpad" aria-hidden="true">
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--u" data-snake-dir="up">▲</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--l" data-snake-dir="left">◀</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--r" data-snake-dir="right">▶</button>
+                        <button type="button" class="sk-dpad_btn sk-dpad_btn--d" data-snake-dir="down">▼</button>
+                      </div>
+                    </main>
+                  </div>
+                </section>
+
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mbd-section {
+    width: 100%;
+    margin: 0 0 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mbd-stage {
+    max-width: 1180px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .mbd-header {
+    text-align: center;
+    /* the framing leaves a little air at the top of the canvas box, so the
+       copy can sit closer than it looks */
+    margin-bottom: clamp(18px, 2.2vw, 30px);
+  }
+  .mbd-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: rgba(240, 237, 230, 0.42);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .mbd-eyebrow_rule {
+    width: 42px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(240, 237, 230, 0), rgba(240, 237, 230, 0.35));
+  }
+  .mbd-eyebrow_rule:last-child {
+    background: linear-gradient(90deg, rgba(240, 237, 230, 0.35), rgba(240, 237, 230, 0));
+  }
+  .mbd-heading {
+    margin-top: 12px;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.12;
+    color: #f0ede6;
+    font-weight: 500;
+  }
+  .mbd-subheading {
+    margin: 12px auto 0;
+    max-width: 560px;
+    color: rgba(240, 237, 230, 0.62);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .mbd-canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    overflow: hidden;
+  }
+  .mbd-canvas-wrap.is-ready {
+    opacity: 1;
+  }
+
+  .mbd-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  .mbd-shadow {
+    position: absolute;
+    left: 50%;
+    bottom: -4%;
+    width: 72%;
+    height: 9%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, transparent 68%);
+    filter: blur(14px);
+    pointer-events: none;
+  }
+
+  /*
+   * Screen UI overlay — pinned to the laptop LCD by the runtime script via a
+   * per-frame projective matrix3d. The script sizes this element to the
+   * screen's projected aspect (base width 800px); all dock dimensions use
+   * container-query units so proportions survive any projection scale.
+   */
+  /* While the laptop is still travelling the screen is a picture, not a UI. */
+  .mbd-screen-ui:not(.is-live),
+  .mbd-screen-ui:not(.is-live) * {
+    pointer-events: none !important;
+  }
+
+  .mbd-screen-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 500px;
+    transform-origin: 0 0;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 3;
+    container-type: size;
+    /* The panel it is projected onto has rounded corners; without this the
+       wallpaper and menu bar cut square across them. The radius is set from
+       the runtime in px — cqw here would resolve against the viewport, since
+       this element is the container, not inside one. */
+    overflow: hidden;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Desktop surface
+   * ------------------------------------------------------------------ */
+  .mbd-wallpaper {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 80% at 22% 8%, rgba(255, 116, 72, 0.30) 0%, transparent 58%),
+      radial-gradient(110% 90% at 84% 18%, rgba(94, 132, 255, 0.28) 0%, transparent 60%),
+      radial-gradient(90% 70% at 60% 100%, rgba(158, 96, 255, 0.22) 0%, transparent 62%),
+      linear-gradient(168deg, #10121b 0%, #0a0b10 52%, #07080c 100%);
+    overflow: hidden;
+  }
+  .mbd-wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background:
+      repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 46px);
+    opacity: 0.5;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Menu bar
+   * ------------------------------------------------------------------ */
+  .mbd-menubar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.85cqw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5cqw;
+    background: rgba(16, 17, 23, 0.55);
+    backdrop-filter: blur(1.4cqw) saturate(1.6);
+    -webkit-backdrop-filter: blur(1.4cqw) saturate(1.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: rgba(240, 237, 230, 0.86);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+    font-size: 1.42cqw;
+    letter-spacing: 0.005em;
+    z-index: 40;
+    pointer-events: auto;
+  }
+  .mbd-menubar_left,
+  .mbd-menubar_right {
+    display: flex;
+    align-items: center;
+    gap: 1.5cqw;
+  }
+  .mbd-menubar_right { gap: 1.25cqw; }
+  .mbd-apple {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(240, 237, 230, 0.9);
+  }
+  .mbd-apple svg { width: 1.35cqw; height: auto; }
+  .mbd-menu { opacity: 0.72; white-space: nowrap; }
+  .mbd-menu--app { font-weight: 600; opacity: 1; }
+  .mbd-tray-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45cqw;
+    opacity: 0.8;
+  }
+  .mbd-search-glyph { font-size: 1.8cqw; line-height: 1; }
+  .mbd-wifi svg { width: 1.7cqw; height: auto; }
+  .mbd-battery {
+    position: relative;
+    display: inline-block;
+    width: 3cqw;
+    height: 1.45cqw;
+    border: 1px solid rgba(240, 237, 230, 0.55);
+    border-radius: 0.42cqw;
+    padding: 0.16cqw;
+  }
+  .mbd-battery::after {
+    content: '';
+    position: absolute;
+    right: -0.42cqw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.24cqw;
+    height: 0.55cqw;
+    border-radius: 0 0.2cqw 0.2cqw 0;
+    background: rgba(240, 237, 230, 0.55);
+  }
+  .mbd-battery_level {
+    display: block;
+    height: 100%;
+    width: 82%;
+    border-radius: 0.2cqw;
+    background: rgba(240, 237, 230, 0.9);
+    transition: width 0.4s ease, background 0.4s ease;
+  }
+  .mbd-battery.is-low .mbd-battery_level { background: #ff6b5c; }
+  .mbd-battery.is-charging .mbd-battery_level { background: #34d15b; }
+  .mbd-battery_pct { font-size: 1.28cqw; opacity: 0.75; }
+  .mbd-tray-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7cqw;
+    padding: 0.2cqw 0.7cqw;
+    margin-right: -0.7cqw;
+    border: 0;
+    border-radius: 0.7cqw;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .mbd-tray-clock:hover { background: rgba(255, 255, 255, 0.12); }
+  .mbd-screen-ui.is-notif-open .mbd-tray-clock { background: rgba(255, 255, 255, 0.18); }
+  .mbd-date { opacity: 0.72; }
+
+  /* ---------------------------------------------------------------------
+   * Notification centre
+   * ------------------------------------------------------------------ */
+  .mbd-notif {
+    position: absolute;
+    top: 3.4cqw;
+    right: 1.2cqw;
+    width: 26cqw;
+    max-height: calc(100cqh - 16cqw);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9cqw;
+    padding: 1.4cqw;
+    border-radius: 1.8cqw;
+    background: rgba(20, 21, 27, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2cqw 5cqw rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2.2cqw) saturate(1.6);
+    -webkit-backdrop-filter: blur(2.2cqw) saturate(1.6);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+    opacity: 0;
+    transform: translateX(3cqw);
+    transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.32, 0.72, 0.24, 1);
+    pointer-events: none;
+    z-index: 35;
+    overflow: hidden;
+  }
+  .mbd-screen-ui.is-notif-open .mbd-notif {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .mbd-notif_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(240, 237, 230, 0.9);
+  }
+  .mbd-notif_title { font-size: 1.5cqw; font-weight: 600; }
+  .mbd-notif_clear {
+    border: 0;
+    background: none;
+    color: rgba(240, 237, 230, 0.5);
+    font: inherit;
+    font-size: 1.25cqw;
+    cursor: pointer;
+  }
+  .mbd-notif_clear:hover { color: rgba(240, 237, 230, 0.85); }
+  .mbd-notif_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75cqw;
+    overflow: hidden;
+  }
+  .mbd-notif_card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: 0.9cqw;
+    padding: 1cqw;
+    border-radius: 1.1cqw;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: inherit;
+    text-decoration: none;
+  }
+  .mbd-notif_card--accent {
+    background: rgba(255, 116, 72, 0.14);
+    border-color: rgba(255, 116, 72, 0.32);
+  }
+  a.mbd-notif_card:hover { background: rgba(255, 255, 255, 0.13); }
+  .mbd-notif_icon {
+    display: grid;
+    place-items: center;
+    width: 2.9cqw;
+    height: 2.9cqw;
+    border-radius: 0.75cqw;
+    color: #fff;
+    font-size: 1.5cqw;
+  }
+  .mbd-notif_text { min-width: 0; }
+  .mbd-notif_card_title {
+    font-size: 1.32cqw;
+    font-weight: 600;
+    color: #f0ede6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mbd-notif_card_body {
+    margin-top: 0.15cqw;
+    font-size: 1.22cqw;
+    line-height: 1.35;
+    color: rgba(240, 237, 230, 0.6);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mbd-notif_time { font-size: 1.1cqw; color: rgba(240, 237, 230, 0.42); }
+
+  /* ---------------------------------------------------------------------
+   * Desktop window — the portfolio / writing browser
+   * ------------------------------------------------------------------ */
+  .mbd-deskwin {
+    position: absolute;
+    top: 4.6cqw;
+    left: 3cqw;
+    right: 3cqw;
+    bottom: 13.4cqw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.4cqw;
+    overflow: hidden;
+    background: rgba(14, 15, 20, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 2.5cqw 6cqw rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2cqw) saturate(1.4);
+    -webkit-backdrop-filter: blur(2cqw) saturate(1.4);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+    pointer-events: auto;
+    z-index: 4;
+    transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+  }
+  .mbd-screen-ui[data-open-window] .mbd-deskwin {
+    transform: scale(0.985);
+    filter: brightness(0.6) saturate(0.8);
+  }
+  .mbd-deskwin_chrome {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.76cqw;
+    padding: 1.20cqw 1.64cqw;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .mbd-deskwin_title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.76cqw;
+    font-size: 1.70cqw;
+    font-weight: 600;
+    color: rgba(240, 237, 230, 0.9);
+    white-space: nowrap;
+  }
+  .mbd-dot {
+    width: 0.95cqw;
+    height: 0.95cqw;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .mbd-dot--orange {
+    background: #ff7448;
+    box-shadow: 0 0 1.01cqw rgba(255, 116, 72, 0.8);
+  }
+  .mbd-tabs {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25cqw;
+    padding: 0.32cqw;
+    border-radius: 1.13cqw;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .mbd-tab {
+    position: relative;
+    z-index: 1;
+    border: 0;
+    background: none;
+    padding: 0.44cqw 1.26cqw;
+    border-radius: 0.88cqw;
+    color: rgba(240, 237, 230, 0.55);
+    font: inherit;
+    font-size: 1.57cqw;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+  .mbd-tab.is-active { color: #f0ede6; }
+  .mbd-tab_pill {
+    position: absolute;
+    top: 0.32cqw;
+    bottom: 0.32cqw;
+    left: 0;
+    width: 0;
+    border-radius: 0.88cqw;
+    background: rgba(255, 255, 255, 0.14);
+    transition: transform 0.34s cubic-bezier(0.32, 0.72, 0.24, 1), width 0.34s cubic-bezier(0.32, 0.72, 0.24, 1);
+  }
+  .mbd-searchbar {
+    flex: 1;
+    min-width: 7.56cqw;
+    display: flex;
+    align-items: center;
+    gap: 0.76cqw;
+    padding: 0.50cqw 1.13cqw;
+    border-radius: 1.13cqw;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .mbd-searchbar:focus-within {
+    border-color: rgba(255, 116, 72, 0.55);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .mbd-searchbar_icon { font-size: 1.89cqw; color: rgba(240, 237, 230, 0.45); }
+  .mbd-searchbar_input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    color: #f0ede6;
+    font: inherit;
+    font-size: 1.57cqw;
+  }
+  .mbd-searchbar_input::placeholder { color: rgba(240, 237, 230, 0.35); }
+  .mbd-searchbar_input::-webkit-search-cancel-button { display: none; }
+  .mbd-searchbar_kbd {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.32cqw;
+    color: rgba(240, 237, 230, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.50cqw;
+    padding: 0.10cqw 0.44cqw;
+  }
+  .mbd-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.57cqw;
+    padding: 0.53cqw 1.20cqw;
+    border-radius: 1.13cqw;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(240, 237, 230, 0.72);
+    font: inherit;
+    font-size: 1.51cqw;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .mbd-sort:hover { background: rgba(255, 255, 255, 0.1); }
+  .mbd-sort_arrow { transition: transform 0.3s cubic-bezier(0.32, 0.72, 0.24, 1); }
+  .mbd-sort[data-sort='oldest'] .mbd-sort_arrow { transform: rotate(180deg); }
+
+  .mbd-deskwin_body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.02cqw;
+    padding: 1.76cqw;
+    overflow: hidden;
+  }
+  .mbd-deskwin_body[data-view='projects'] { grid-template-columns: 1fr; }
+  .mbd-deskwin_body[data-view='projects'] [data-list='writing'] { display: none; }
+  .mbd-deskwin_body[data-view='writing'] { grid-template-columns: 1fr; }
+  .mbd-deskwin_body[data-view='writing'] [data-list='projects'] { display: none; }
+
+  .mbd-col { min-width: 0; display: flex; flex-direction: column; }
+  .mbd-col_head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.01cqw;
+    padding-bottom: 0.88cqw;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 1.01cqw;
+  }
+  .mbd-col_index {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.32cqw;
+    color: rgba(240, 237, 230, 0.3);
+  }
+  .mbd-col_title {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.76cqw;
+    font-size: 1.70cqw;
+    font-weight: 600;
+    color: #f0ede6;
+    margin: 0;
+  }
+  .mbd-col_title-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.32cqw;
+    font-weight: 400;
+    color: rgba(240, 237, 230, 0.3);
+  }
+  .mbd-col_all {
+    font-size: 1.45cqw;
+    color: rgba(255, 138, 96, 0.9);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .mbd-col_all:hover { color: #ff7448; }
+
+  .mbd-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.63cqw;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .mbd-list li[hidden] { display: none; }
+  .mbd-item {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 1.07cqw;
+    padding: 0.82cqw 1.01cqw;
+    border-radius: 1.26cqw;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .mbd-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.09);
+    transform: translateX(0.38cqw);
+  }
+  .mbd-item_index {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.26cqw;
+    color: rgba(240, 237, 230, 0.28);
+  }
+  .mbd-item_thumb,
+  .mbd-item_accent {
+    width: 4.28cqw;
+    height: 4.28cqw;
+    border-radius: 0.95cqw;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  }
+  .mbd-item_text { min-width: 0; display: block; }
+  .mbd-item_title {
+    display: block;
+    font-size: 1.64cqw;
+    font-weight: 500;
+    color: #f0ede6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mbd-item_meta {
+    display: flex;
+    align-items: center;
+    gap: 0.69cqw;
+    margin-top: 0.35cqw;
+  }
+  .mbd-pill {
+    font-size: 1.23cqw;
+    line-height: 1;
+    padding: 0.38cqw 0.76cqw;
+    border-radius: 999px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .mbd-pill--ghost {
+    background: rgba(255, 255, 255, 0.09) !important;
+    color: rgba(240, 237, 230, 0.7);
+  }
+  .mbd-item_status {
+    font-size: 1.32cqw;
+    color: rgba(240, 237, 230, 0.42);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mbd-item_arrow { color: rgba(240, 237, 230, 0.3); font-size: 1.51cqw; }
+  .mbd-item:hover .mbd-item_arrow { color: #ff7448; }
+  .mbd-empty {
+    display: none;
+    margin: 1.51cqw 0 0;
+    font-size: 1.51cqw;
+    color: rgba(240, 237, 230, 0.4);
+  }
+  .mbd-col.is-empty .mbd-empty { display: block; }
+
+  /* ---------------------------------------------------------------------
+   * Dock
+   * ------------------------------------------------------------------ */
+  .mbd-dock {
+    --icon: 6.5cqw;
+    --pad: 0.95cqw;
+    position: absolute;
+    left: 50%;
+    bottom: 1.9cqw;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5cqw;
+    height: calc(var(--icon) + var(--pad) * 2 + 0.85cqw);
+    padding: var(--pad) 1.1cqw calc(var(--pad) + 0.85cqw);
+    border-radius: 2.2cqw;
+    background: rgba(30, 31, 38, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+      0 1.4cqw 3.6cqw rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2cqw) saturate(1.7);
+    -webkit-backdrop-filter: blur(2cqw) saturate(1.7);
+    pointer-events: auto;
+    z-index: 20;
+  }
+  .mbd-dock_shine {
+    position: absolute;
+    inset: 1px 1px auto 1px;
+    height: 45%;
+    border-radius: 2.1cqw 2.1cqw 50% 50% / 2.1cqw 2.1cqw 1.2cqw 1.2cqw;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+    pointer-events: none;
+  }
+  .mbd-dock_sep {
+    align-self: stretch;
+    width: 1px;
+    margin: 0.4cqw 0.5cqw;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.28),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  .mbd-app {
+    --s: 1;
+    position: relative;
+    flex: 0 0 auto;
+    width: calc(var(--icon) * var(--s));
+    height: calc(var(--icon) * var(--s));
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+    /* no transition: the magnification is driven per-frame by the runtime */
+  }
+  .mbd-app_icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 100%;
+  }
+  /* Blog: a proper app tile in the site's accent, with the one glyph that
+     unambiguously reads "written posts" at dock size. */
+  .mbd-blogicon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    border-radius: 23%;
+    background: linear-gradient(160deg, #ff9a63 0%, #ff7448 45%, #f0432f 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    color: #fff;
+  }
+  .mbd-blogicon svg {
+    width: 62%;
+    height: 62%;
+    display: block;
+    filter: none;
+  }
+
+  .mbd-app img,
+  .mbd-app .mbd-folder,
+  .mbd-app .mbd-trash,
+  .mbd-app .mbd-blogicon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0.4cqw 0.9cqw rgba(0, 0, 0, 0.45));
+  }
+  .mbd-app:active .mbd-app_icon { transform: scale(0.92); }
+
+  /* folder + trash glyphs, drawn so no extra assets are needed */
+  .mbd-folder { position: relative; }
+  .mbd-folder_tab {
+    position: absolute;
+    left: 6%;
+    top: 12%;
+    width: 42%;
+    height: 20%;
+    border-radius: 18% 18% 0 0;
+    background: linear-gradient(180deg, #6fa8ff, #4a86f0);
+  }
+  .mbd-folder_face {
+    position: absolute;
+    left: 4%;
+    top: 24%;
+    right: 4%;
+    bottom: 14%;
+    border-radius: 12%;
+    background: linear-gradient(165deg, #8dbcff 0%, #3f7ae4 60%, #2f5fc0 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  .mbd-trash { position: relative; }
+  .mbd-trash_lid {
+    position: absolute;
+    left: 16%;
+    top: 14%;
+    right: 16%;
+    height: 9%;
+    border-radius: 40%;
+    background: linear-gradient(180deg, #dfe3ea, #a7adba);
+    transform-origin: 10% 100%;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mbd-app--trash:hover .mbd-trash_lid { transform: translateY(-14%) rotate(-16deg); }
+  .mbd-trash_can {
+    position: absolute;
+    left: 21%;
+    top: 26%;
+    right: 21%;
+    bottom: 12%;
+    border-radius: 8% 8% 16% 16%;
+    background: linear-gradient(100deg, rgba(226, 230, 237, 0.9), rgba(150, 157, 170, 0.85));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  }
+
+  .mbd-badge {
+    position: absolute;
+    top: -2%;
+    right: -6%;
+    min-width: 1.85cqw;
+    height: 1.85cqw;
+    padding: 0 0.5cqw;
+    border-radius: 999px;
+    background: #ff453a;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 1.2cqw;
+    font-weight: 600;
+    line-height: 1.85cqw;
+    text-align: center;
+    box-shadow: 0 0.2cqw 0.5cqw rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+
+  /* running-app indicator, like the dot under an open app on macOS */
+  .mbd-runlight {
+    position: absolute;
+    left: 50%;
+    bottom: -0.7cqw;
+    width: 0.62cqw;
+    height: 0.62cqw;
+    border-radius: 50%;
+    background: rgba(240, 237, 230, 0.92);
+    box-shadow: 0 0 0.5cqw rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, 0) scale(0);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mbd-app.is-running .mbd-runlight { transform: translate(-50%, 0) scale(1); }
+
+  /* launch bounce */
+  .mbd-app.is-bouncing .mbd-app_icon {
+    animation: mbd-bounce 0.72s cubic-bezier(0.28, 0.62, 0.4, 1) 2;
+  }
+  @keyframes mbd-bounce {
+    0%   { transform: translateY(0) scaleY(1); }
+    12%  { transform: translateY(0) scaleY(0.88); }
+    42%  { transform: translateY(-42%) scaleY(1.06); }
+    72%  { transform: translateY(0) scaleY(0.94); }
+    100% { transform: translateY(0) scaleY(1); }
+  }
+
+  .mbd-app::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 1.1cqw);
+    left: 50%;
+    translate: -50% 0;
+    padding: 0.5cqw 1cqw;
+    border-radius: 0.9cqw;
+    background: rgba(24, 25, 31, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0.6cqw 1.6cqw rgba(0, 0, 0, 0.5);
+    color: #f0ede6;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 1.3cqw;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(0.35cqw);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    pointer-events: none;
+  }
+  .mbd-app:hover::after,
+  .mbd-app.is-peaked::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Fake in-screen pointer — the cursor "enters" the laptop
+   * ------------------------------------------------------------------ */
+  .mbd-pointer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.6cqw;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+    pointer-events: none;
+    z-index: 60;
+    filter: drop-shadow(0 0.25cqw 0.5cqw rgba(0, 0, 0, 0.5));
+  }
+  .mbd-pointer svg { width: 100%; height: auto; display: block; }
+  .mbd-screen-ui.is-pointer-in .mbd-pointer { opacity: 1; }
+
+  /* ---------------------------------------------------------------------
+   * Flight layer — the laptop travels through the whole projects section
+   * ------------------------------------------------------------------ */
+  /* Behind the grid and the scroll scene while it cruises — that is the whole
+     point of the flight. Once the lid opens it becomes the subject, so it
+     moves in front of both (but stays under the section heading at z-index 2
+     and under the screen overlay at 4). */
+  .mbd-flight {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .mbd-flight.is-front {
+    z-index: 1;
+  }
+  .mbd-flight_sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .mbd-flight_sticky.is-ready { opacity: 1; }
+  .mbd-flight_sticky .mbd-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .mbd-canvas-wrap.is-detached { visibility: hidden; }
+
+  .mbd-uilayer {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .mbd-uilayer_sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .mbd-canvas-wrap {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  /* -------------------------------------------------------------------
+   * Compact display — the panel is too narrow for side-by-side panes.
+   * Keyed to the projected surface, so it kicks in when the *screen* is
+   * small, not when the browser window is.
+   * ---------------------------------------------------------------- */
+  @container (max-width: 620px) {
+    .mbd-deskwin_body {
+      grid-template-columns: 1fr;
+      gap: 1cqw;
+    }
+    .mbd-list li:nth-child(n + 3) { display: none; }
+    .mbd-menu:not(.mbd-menu--app) { display: none; }
+    .mbd-search-glyph { display: none; }
+    .mbd-searchbar_kbd { display: none; }
+    .mbd-sort_label { display: none; }
+    .mbd-tab { padding: 0.35cqw 0.7cqw; }
+    .mbd-notif { width: 34cqw; }
+
+    .xc-body,
+    .as-body,
+    .ws-body,
+    .fg-body,
+    .ob-body,
+    .msg-body,
+    .sk-body {
+      grid-template-columns: 1fr;
+    }
+    .xc-nav,
+    .xc-inspector,
+    .as-nav,
+    .as-preview,
+    .ws-nav,
+    .ws-side,
+    .fg-layers,
+    .fg-props,
+    .ob-nav,
+    .ob-graph,
+    .msg-sidebar,
+    .sk-stats {
+      display: none;
+    }
+    .xc-status,
+    .as-status,
+    .ws-status {
+      display: none;
+    }
+  }
+
+    .mbd-windows {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+    .mbd-win {
+    --gdx: 0px;
+    --gdy: 220px;
+    position: absolute;
+    inset: 3.9cqw 2.6cqw 12.9cqw 2.6cqw;
+    border-radius: 1.4cqw;
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 2.5cqw 6cqw rgba(0, 0, 0, 0.6),
+      0 7cqw 14cqw rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform-origin: 50% 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: #d8d6d2;
+  }
+
+    .mbd-screen-ui[data-open-window="xcode"]          .mbd-win--xcode,
+  .mbd-screen-ui[data-open-window="android-studio"] .mbd-win--android,
+  .mbd-screen-ui[data-open-window="webstorm"]       .mbd-win--webstorm,
+  .mbd-screen-ui[data-open-window="figma"]          .mbd-win--figma,
+  .mbd-screen-ui[data-open-window="obsidian"]       .mbd-win--obsidian,
+  .mbd-screen-ui[data-open-window="messages"]       .mbd-win--messages,
+  .mbd-screen-ui[data-open-window="snake"]          .mbd-win--snake {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  /* Genie — the window is sucked into (or spat out of) its dock icon.
+     --gdx / --gdy are set per launch: the delta from the window's bottom
+     centre to the centre of the icon that owns it. */
+  .mbd-win.is-genie-in {
+    animation: mbd-genie-in 0.46s cubic-bezier(0.22, 0.9, 0.28, 1) both;
+  }
+  .mbd-win.is-genie-out {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+    animation: mbd-genie-out 0.42s cubic-bezier(0.6, 0.02, 0.86, 0.3) both;
+  }
+  @keyframes mbd-genie-out {
+    0% {
+      transform: translate(0, 0) scale(1, 1);
+      border-radius: 1.4cqw;
+      opacity: 1;
+    }
+    38% {
+      transform: translate(calc(var(--gdx) * 0.2), calc(var(--gdy) * 0.16)) scale(0.74, 0.9);
+      border-radius: 3.5cqw;
+      opacity: 0.98;
+    }
+    74% {
+      transform: translate(calc(var(--gdx) * 0.72), calc(var(--gdy) * 0.7)) scale(0.26, 0.44);
+      border-radius: 7cqw;
+      opacity: 0.8;
+    }
+    100% {
+      transform: translate(var(--gdx), var(--gdy)) scale(0.05, 0.08);
+      border-radius: 9cqw;
+      opacity: 0;
+    }
+  }
+  @keyframes mbd-genie-in {
+    0% {
+      transform: translate(var(--gdx), var(--gdy)) scale(0.05, 0.08);
+      border-radius: 9cqw;
+      opacity: 0;
+    }
+    30% {
+      transform: translate(calc(var(--gdx) * 0.66), calc(var(--gdy) * 0.62)) scale(0.32, 0.5);
+      border-radius: 6cqw;
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate(0, 0) scale(1, 1);
+      border-radius: 1.4cqw;
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mbd-win.is-genie-in,
+    .mbd-win.is-genie-out { animation-duration: 0.01s; }
+    .mbd-app.is-bouncing .mbd-app_icon { animation: none; }
+  }
+
+    /* Shared window chrome: traffic lights bar */
+  .mbd-win_chrome {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+    .mbd-win_lights {
+    display: inline-flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+    .mbd-light {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.3);
+  }
+
+    .mbd-light--r { background: #ff5f57; cursor: pointer; transition: filter 0.2s ease; }
+
+    .mbd-light--r:hover { filter: brightness(1.15); }
+
+    .mbd-light--y { background: #ffbd2e; }
+
+    .mbd-light--g { background: #28c840; }
+
+    /* ============== XCODE 26 ============== */
+  .mbd-win--xcode {
+    background: linear-gradient(180deg, #1e1e1e 0%, #161616 100%);
+    color: #e7e6e3;
+  }
+
+    .mbd-win_chrome--xcode {
+    background: linear-gradient(180deg, #2c2c2e 0%, #232325 100%);
+    border-bottom-color: rgba(0, 0, 0, 0.4);
+  }
+
+    /* ============== ANDROID STUDIO ============== */
+  .mbd-win--android {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+
+    .mbd-win_chrome--android {
+    background: #3c3f41;
+  }
+
+    /* ============== WEBSTORM ============== */
+  .mbd-win--webstorm {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+
+    .mbd-win_chrome--webstorm {
+    background:
+      linear-gradient(180deg, #2f3133 0%, #25272a 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+  }
+
+    .mbd-win_chrome--webstorm::after {
+    /* WebStorm signature cyan→blue→yellow accent stripe */
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #07C3F2 0%, #087CFA 55%, #FFF045 100%);
+    opacity: 0.55;
+  }
+
+    /* ============== FIGMA ============== */
+  .mbd-win--figma {
+    background: #1e1e1e;
+    color: #e6e6e6;
+  }
+
+    .mbd-win_chrome--figma { background: #2c2c2c; }
+
+    /* ============== OBSIDIAN ============== */
+  .mbd-win--obsidian {
+    background: #1e1e2a;
+    color: #d4d4d6;
+  }
+
+    .mbd-win_chrome--obsidian {
+    background: #232434;
+    border-bottom-color: rgba(124, 90, 255, 0.15);
+  }
+
+    /* ============== MESSAGES (iMessage) ============== */
+  .mbd-win--messages {
+    background: #0e0e0f;
+    color: #e8e8eb;
+  }
+
+    .mbd-win_chrome--messages {
+    background: linear-gradient(180deg, #1c1c1d 0%, #131314 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+    /* ============== SNAKE / BUG HUNT ============== */
+  .mbd-win--snake {
+    background:
+      radial-gradient(120% 60% at 0% 0%, rgba(255, 116, 72, 0.10) 0%, transparent 55%),
+      linear-gradient(180deg, #1a0f0a 0%, #0a0507 100%);
+    color: #f0ede6;
+    --sk-accent: #ff9b6e;
+  }
+
+    .mbd-win_chrome--snake {
+    background: linear-gradient(180deg, #1f1410 0%, #14080a 100%);
+    border-bottom: 1px solid rgba(255, 116, 72, 0.12);
+  }
+
+  /* The display surface is a fixed 800px container that the runtime projects
+     onto the panel, so the window layouts never depend on the viewport —
+     only the laptop as a whole gets smaller. */
+  @media (prefers-reduced-motion: reduce) {
+    .mbd-canvas-wrap {
+      opacity: 1;
+      transition: none;
+    }
+    .mbd-flight_sticky {
+      transition: none;
+    }
+  }
+
+  /* =================================================================
+     APP WINDOW INTERNALS — ported from the iPad shell so the laptop has
+     the same seven working apps.
+     ================================================================= */
+  /* ============== XCODE 26 ============== */
+  .mbd-win--xcode {
+    background: linear-gradient(180deg, #1e1e1e 0%, #161616 100%);
+    color: #e7e6e3;
+  }
+  .mbd-win_chrome--xcode {
+    background: linear-gradient(180deg, #2c2c2e 0%, #232325 100%);
+    border-bottom-color: rgba(0, 0, 0, 0.4);
+  }
+  .xc-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #d0cfcb;
+    font-size: 11px;
+  }
+  .xc-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #d0cfcb;
+    font-size: 10px;
+  }
+  .xc-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.08); }
+  .xc-scheme {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 11px;
+    color: #e7e6e3;
+  }
+  .xc-scheme_dot { width: 8px; height: 8px; border-radius: 50%; background: #0a84ff; box-shadow: 0 0 6px rgba(10, 132, 255, 0.6); }
+  .xc-scheme_caret { opacity: 0.5; }
+  .xc-status { margin-left: auto; font-size: 11px; color: rgba(231, 230, 227, 0.5); }
+
+  .xc-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .xc-nav, .xc-inspector {
+    background: #1c1c1d;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    overflow: auto;
+    font-size: 11px;
+  }
+  .xc-inspector { border-right: 0; border-left: 1px solid rgba(255, 255, 255, 0.05); }
+  .xc-nav_head, .xc-insp_head {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(231, 230, 227, 0.45);
+    padding: 4px 6px 8px;
+  }
+  .xc-tree, .xc-tree ul { list-style: none; padding: 0; margin: 0; }
+  .xc-tree ul { padding-left: 14px; }
+  .xc-tree_label { display: block; padding: 3px 6px; color: #d0cfcb; cursor: default; font-size: 11px; }
+  .xc-file { display: inline-block; padding: 3px 6px; border-radius: 4px; color: #c8c7c4; font-size: 11px; }
+  .xc-file.is-active { background: #0a84ff; color: #fff; }
+
+  .xc-editor { display: flex; flex-direction: column; min-width: 0; background: #1e1e1e; }
+  .xc-tabbar {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: #232325;
+    flex-shrink: 0;
+  }
+  .xc-tab {
+    padding: 6px 12px;
+    font-size: 11px;
+    color: rgba(231, 230, 227, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .xc-tab.is-active { color: #fff; background: #1e1e1e; }
+  .xc-code {
+    flex: 1;
+    margin: 0;
+    padding: 12px 14px;
+    overflow: auto;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: #e7e6e3;
+    background: #1e1e1e;
+    white-space: pre;
+  }
+  .xc-code code { font-family: inherit; }
+  .xc-ln { display: inline-block; width: 22px; color: rgba(231, 230, 227, 0.28); user-select: none; }
+  .xc-kw { color: #ff7ab2; }
+  .xc-ty { color: #d0a8ff; }
+  .xc-id { color: #e7e6e3; }
+  .xc-s  { color: #fc6a5d; }
+  .xc-c  { color: #6c7986; font-style: italic; }
+  .xc-at { color: #ffa14f; }
+  .xc-fn { color: #67b7a4; }
+  .xc-note {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(10, 132, 255, 0.06);
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #e7e6e3;
+  }
+  .xc-note strong { font-weight: 500; color: #fff; font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; color: #ff9b6e; }
+  .xc-note p { margin: 0; }
+
+  .xc-insp_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 8px;
+  }
+  .xc-insp_grid dt { font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(231, 230, 227, 0.45); margin-bottom: 2px; }
+  .xc-insp_grid dd { margin: 0; font-size: 11px; color: #e7e6e3; }
+
+  /* ============== ANDROID STUDIO ============== */
+  .mbd-win--android {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+  .mbd-win_chrome--android {
+    background: #3c3f41;
+  }
+  .as-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d2d2d2; }
+  .as-app { display: inline-flex; align-items: center; gap: 6px; }
+  .as-app img { width: 16px; height: 16px; border-radius: 4px; }
+  .as-app strong { font-weight: 500; }
+  .as-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.1); }
+  .as-scheme { padding: 3px 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); }
+  .as-spacer { flex: 1; }
+  .as-run { color: #3DDC84; font-weight: 600; padding: 3px 10px; border-radius: 4px; background: rgba(61, 220, 132, 0.12); }
+  .as-status { font-size: 11px; color: rgba(255, 255, 255, 0.45); }
+
+  .as-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 200px; min-height: 0; }
+  .as-nav { background: #2b2b2b; border-right: 1px solid #1a1a1a; padding: 8px; overflow: auto; font-size: 11px; }
+  .as-nav_head { color: #bbbbbb; padding: 4px 6px; margin-bottom: 4px; }
+  .as-tree, .as-tree ul { list-style: none; padding: 0; margin: 0; }
+  .as-tree ul { padding-left: 14px; }
+  .as-tree > li > span, .as-tree li > span { display: block; padding: 3px 6px; color: #bbbbbb; font-size: 11px; }
+  .as-file { color: #cccccc; }
+  .as-file.is-active { background: #2a4d6e; color: #fff; border-radius: 3px; }
+
+  .as-editor { display: flex; flex-direction: column; min-width: 0; background: #2b2b2b; }
+  .as-tabbar { background: #3c3f41; display: flex; border-bottom: 1px solid #1a1a1a; }
+  .as-tab { padding: 5px 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+  .as-tab.is-active { background: #2b2b2b; color: #fff; border-bottom: 2px solid #3DDC84; }
+  .as-code {
+    flex: 1; margin: 0; padding: 12px 14px; overflow: auto;
+    font-size: 11.5px; line-height: 1.55; color: #a9b7c6; background: #2b2b2b;
+    white-space: pre; font-family: inherit;
+  }
+  .as-ln { display: inline-block; width: 22px; color: #606366; user-select: none; }
+  .as-kw { color: #cc7832; font-weight: 600; }
+  .as-ty { color: #ffc66d; }
+  .as-id { color: #a9b7c6; }
+  .as-fn { color: #ffc66d; }
+  .as-c  { color: #808080; font-style: italic; }
+  .as-at { color: #bbb529; }
+  .as-note {
+    padding: 10px 14px; border-top: 1px solid #1a1a1a;
+    background: rgba(61, 220, 132, 0.08);
+    font-family: 'Fraunces', Georgia, serif; font-style: italic;
+    font-size: 13px; line-height: 1.5; color: #d2d2d2;
+  }
+  .as-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #3DDC84; margin-bottom: 4px; font-weight: 500; }
+  .as-note p { margin: 0; }
+
+  .as-preview { background: #2b2b2b; border-left: 1px solid #1a1a1a; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .as-preview_label { font-size: 9.5px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.5); }
+  .as-device {
+    flex: 1; border-radius: 18px;
+    background: #0a0a0a;
+    padding: 12px 8px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    display: flex; flex-direction: column;
+  }
+  .as-device_screen {
+    flex: 1; background: linear-gradient(170deg, #1a1a1f 0%, #0c0c0f 100%);
+    border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .as-device_topbar { height: 4px; width: 30%; background: rgba(255, 255, 255, 0.15); border-radius: 2px; margin: 4px auto 6px; }
+  .as-device_hero { font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: #fff; margin-bottom: 4px; }
+  .as-device_card {
+    background: rgba(61, 220, 132, 0.12);
+    border: 1px solid rgba(61, 220, 132, 0.25);
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 10px;
+    color: #c8efd9;
+  }
+
+  /* ============== WEBSTORM ============== */
+  .mbd-win--webstorm {
+    background: linear-gradient(180deg, #2b2b2b 0%, #1f1f1f 100%);
+    color: #e0e0e0;
+  }
+  .mbd-win_chrome--webstorm {
+    background:
+      linear-gradient(180deg, #2f3133 0%, #25272a 100%);
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+  }
+  .mbd-win_chrome--webstorm::after {
+    /* WebStorm signature cyan→blue→yellow accent stripe */
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #07C3F2 0%, #087CFA 55%, #FFF045 100%);
+    opacity: 0.55;
+  }
+  .ws-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d2d2d2; }
+  .ws-app { display: inline-flex; align-items: center; gap: 6px; }
+  .ws-app img { width: 16px; height: 16px; border-radius: 4px; }
+  .ws-app strong { font-weight: 500; }
+  .ws-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.1); }
+  .ws-scheme { padding: 3px 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); color: #c2c2c2; }
+  .ws-spacer { flex: 1; }
+  .ws-run {
+    color: #07C3F2;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(7, 195, 242, 0.10);
+    border: 1px solid rgba(7, 195, 242, 0.25);
+  }
+  .ws-status { font-size: 11px; color: rgba(255, 255, 255, 0.45); }
+
+  .ws-body { flex: 1; display: grid; grid-template-columns: 200px 1fr 220px; min-height: 0; }
+  .ws-nav { background: #2b2b2b; border-right: 1px solid #1a1a1a; padding: 8px; overflow: auto; font-size: 11px; }
+  .ws-nav_head { color: #bbbbbb; padding: 4px 6px; margin-bottom: 4px; font-weight: 500; }
+  .ws-tree, .ws-tree ul { list-style: none; padding: 0; margin: 0; }
+  .ws-tree ul { padding-left: 14px; }
+  .ws-tree li > span { display: block; padding: 3px 6px; color: #bbbbbb; font-size: 11px; }
+  .ws-file { color: #cccccc; border-radius: 3px; }
+  .ws-file.is-active { background: rgba(7, 195, 242, 0.20); color: #fff; }
+
+  .ws-editor { display: flex; flex-direction: column; min-width: 0; background: #2b2b2b; }
+  .ws-tabbar { background: #3c3f41; display: flex; border-bottom: 1px solid #1a1a1a; }
+  .ws-tab { padding: 5px 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+  .ws-tab.is-active { background: #2b2b2b; color: #fff; border-bottom: 2px solid #07C3F2; }
+  .ws-code {
+    flex: 1; margin: 0; padding: 12px 14px; overflow: auto;
+    font-size: 11.5px; line-height: 1.55; color: #a9b7c6; background: #2b2b2b;
+    white-space: pre; font-family: inherit;
+  }
+  .ws-ln { display: inline-block; width: 22px; color: #606366; user-select: none; }
+  .ws-kw { color: #cc7832; font-weight: 600; }
+  .ws-id { color: #a9b7c6; }
+  .ws-fn { color: #ffc66d; }
+  .ws-s  { color: #6a8759; }
+  .ws-n  { color: #6897bb; }
+  .ws-c  { color: #808080; font-style: italic; }
+  .ws-tag { color: #e8bf6a; }
+  .ws-attr { color: #bababa; }
+  .ws-note {
+    padding: 10px 14px; border-top: 1px solid #1a1a1a;
+    background: rgba(7, 195, 242, 0.07);
+    font-family: 'Fraunces', Georgia, serif; font-style: italic;
+    font-size: 13px; line-height: 1.5; color: #d2d2d2;
+  }
+  .ws-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #07C3F2; margin-bottom: 4px; font-weight: 500; }
+  .ws-note p { margin: 0; }
+
+  .ws-side { background: #1e1e1e; border-left: 1px solid #1a1a1a; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .ws-side_head { font-size: 9.5px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.4); }
+  .ws-term {
+    flex: 1;
+    background: #0d0d0d;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    line-height: 1.65;
+    color: #c8c8c8;
+    overflow: auto;
+  }
+  .ws-term_line { display: block; white-space: nowrap; }
+  .ws-term_prompt { color: #07C3F2; }
+  .ws-term_cmd { color: #fff; }
+  .ws-term_out { color: rgba(200, 200, 200, 0.85); }
+  .ws-term_arrow { color: #FFF045; }
+  .ws-term_caret {
+    display: inline-block;
+    width: 7px;
+    background: #07C3F2;
+    color: transparent;
+    animation: wsBlink 1s steps(2, end) infinite;
+  }
+  @keyframes wsBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ws-term_caret { animation: none; }
+  }
+
+  /* ============== FIGMA ============== */
+  .mbd-win--figma {
+    background: #1e1e1e;
+    color: #e6e6e6;
+  }
+  .mbd-win_chrome--figma { background: #2c2c2c; }
+  .fg-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; color: #d6d6d6; }
+  .fg-icon { width: 16px; height: 16px; border-radius: 4px; }
+  .fg-file { font-weight: 500; }
+  .fg-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.08); }
+  .fg-cursor { padding: 3px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); }
+  .fg-spacer { flex: 1; }
+  .fg-avatars { display: inline-flex; gap: -6px; }
+  .fg-av {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff; font-size: 10px; font-weight: 700;
+    box-shadow: 0 0 0 2px #2c2c2c;
+    margin-left: -6px;
+  }
+  .fg-share {
+    padding: 4px 12px; border-radius: 5px;
+    background: #0d99ff; color: #fff; font-weight: 600;
+  }
+
+  .fg-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .fg-layers, .fg-props {
+    background: #2c2c2c;
+    border-right: 1px solid #1a1a1a;
+    padding: 8px;
+    font-size: 11px;
+  }
+  .fg-props { border-right: 0; border-left: 1px solid #1a1a1a; }
+  .fg-layers_head, .fg-props_head, .fg-section {
+    font-size: 9.5px; letter-spacing: 0.14em;
+    color: rgba(230, 230, 230, 0.45);
+    padding: 4px 6px 6px;
+  }
+  .fg-tree { list-style: none; padding: 0; margin: 0; }
+  .fg-tree li { padding: 3px 8px; font-size: 11px; color: #c6c6c6; border-radius: 3px; }
+  .fg-tree li.is-page { color: #888; font-weight: 600; }
+  .fg-tree li.is-frame { color: #d6d6d6; display: flex; justify-content: space-between; }
+  .fg-tree li.is-frame span { color: #888; font-size: 10px; }
+  .fg-tree li.is-layer { padding-left: 22px; }
+  .fg-tree li.is-layer.is-active { background: #0d99ff; color: #fff; }
+
+  .fg-canvas {
+    position: relative;
+    background: #1e1e1e;
+    overflow: hidden;
+    padding: 24px;
+    min-width: 0;
+  }
+  .fg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .fg-artboard {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 80px);
+    background: #f7f3ec;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 12px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+  .fg-artboard_label {
+    position: absolute;
+    top: -20px; left: 0;
+    font-size: 10px;
+    color: rgba(230, 230, 230, 0.6);
+  }
+  .fg-rect { position: absolute; }
+  .fg-rect--hero {
+    inset: 12px 12px auto 12px;
+    height: 40%;
+    background: linear-gradient(135deg, #ff7448 0%, #ff4848 100%);
+    border-radius: 4px;
+    display: flex; align-items: flex-end; padding: 12px;
+  }
+  .fg-rect_caption { color: #fff; font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; }
+  .fg-rect--text {
+    bottom: 90px; left: 12px; right: 12px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #1a0808;
+    padding: 0 8px;
+  }
+  .fg-rect--c1, .fg-rect--c2, .fg-rect--c3 {
+    bottom: 14px;
+    height: 60px; width: 28%;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+  }
+  .fg-rect--c1 { left: 12px; background: linear-gradient(135deg, #4a3070, #7c3aed); }
+  .fg-rect--c2 { left: 36%; background: linear-gradient(135deg, #1ED760, #34d399); }
+  .fg-rect--c3 { right: 12px; background: linear-gradient(135deg, #ffb86b, #ff7448); }
+  .fg-handles {
+    position: absolute; inset: -1px;
+    pointer-events: none;
+  }
+  .fg-handles span {
+    position: absolute; width: 6px; height: 6px;
+    background: #0d99ff;
+    border: 1px solid #fff;
+  }
+  .fg-handles span:nth-child(1) { top: -3px; left: -3px; }
+  .fg-handles span:nth-child(2) { top: -3px; right: -3px; }
+  .fg-handles span:nth-child(3) { bottom: -3px; left: -3px; }
+  .fg-handles span:nth-child(4) { bottom: -3px; right: -3px; }
+  .fg-note {
+    position: absolute;
+    left: 24px; right: 24px; bottom: 14px;
+    padding: 8px 12px;
+    background: rgba(13, 153, 255, 0.10);
+    border: 1px solid rgba(13, 153, 255, 0.3);
+    border-radius: 4px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #e6e6e6;
+    z-index: 2;
+  }
+  .fg-note strong { display: block; font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #79bfff; margin-bottom: 2px; font-weight: 500; }
+  .fg-note p { margin: 0; }
+
+  .fg-row { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 6px; padding: 4px 6px; align-items: center; font-size: 10.5px; }
+  .fg-row span { color: rgba(230, 230, 230, 0.5); font-size: 10px; }
+  .fg-row b { color: #e6e6e6; font-weight: 500; }
+  .fg-fill { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px; font-size: 10.5px; color: #e6e6e6; }
+  .fg-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+  /* ============== OBSIDIAN ============== */
+  .mbd-win--obsidian {
+    background: #1e1e2a;
+    color: #d4d4d6;
+  }
+  .mbd-win_chrome--obsidian {
+    background: #232434;
+    border-bottom-color: rgba(124, 90, 255, 0.15);
+  }
+  .ob-toolbar { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 11px; }
+  .ob-icon { width: 16px; height: 16px; border-radius: 4px; }
+  .ob-vault { color: #b0aac7; }
+  .ob-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.08); }
+  .ob-file { color: #c4b5fd; font-weight: 500; }
+
+  .ob-body { flex: 1; display: grid; grid-template-columns: 180px 1fr 180px; min-height: 0; }
+  .ob-nav {
+    background: #1a1b27;
+    border-right: 1px solid rgba(124, 90, 255, 0.1);
+    padding: 10px;
+    font-size: 11.5px;
+  }
+  .ob-nav_head { color: #c4b5fd; padding: 4px 6px; margin-bottom: 4px; font-weight: 500; }
+  .ob-files { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ob-files li { padding: 4px 8px; color: #b0aac7; border-radius: 4px; font-size: 11px; cursor: default; }
+  .ob-files li.is-active { background: rgba(124, 90, 255, 0.18); color: #fff; }
+  .ob-files li:hover:not(.is-active) { background: rgba(255, 255, 255, 0.03); }
+
+  .ob-editor {
+    background: #1e1e2a;
+    overflow: auto;
+    padding: 18px 22px;
+    min-width: 0;
+  }
+  .ob-doc {
+    font-family: 'Fraunces', Georgia, serif;
+    color: #d4d4d6;
+    max-width: 60ch;
+  }
+  .ob-doc h1 {
+    font-style: italic;
+    font-weight: 300;
+    font-size: 26px;
+    margin: 0 0 14px;
+    color: #fff;
+  }
+  .ob-doc h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #c4b5fd;
+    margin: 22px 0 8px;
+  }
+  .ob-doc p {
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+    color: #c8c5cd;
+  }
+  .ob-doc ul { margin: 0 0 12px; padding-left: 18px; }
+  .ob-doc li { font-size: 13px; line-height: 1.7; color: #c8c5cd; }
+  .ob-link {
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.08);
+    padding: 0 4px;
+    border-radius: 3px;
+    text-decoration: none;
+  }
+  .ob-tag {
+    display: inline-block;
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.10);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-right: 4px;
+  }
+
+  .ob-graph {
+    background: #1a1b27;
+    border-left: 1px solid rgba(124, 90, 255, 0.1);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ob-graph_label, .ob-graph_legend {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(196, 181, 253, 0.55);
+  }
+  .ob-graph_legend { text-align: center; }
+  .ob-graph_svg { width: 100%; height: 100%; max-height: 200px; }
+
+
+  /* ============== MESSAGES (iMessage) ============== */
+  .mbd-win--messages {
+    background: #0e0e0f;
+    color: #e8e8eb;
+  }
+  .mbd-win_chrome--messages {
+    background: linear-gradient(180deg, #1c1c1d 0%, #131314 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .msg-toolbar { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; color: #d6d6da; }
+  .msg-icon { width: 18px; height: 18px; border-radius: 5px; }
+  .msg-brand { font-weight: 600; }
+  .msg-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.10); }
+  .msg-sub { color: rgba(214, 214, 218, 0.6); }
+
+  .msg-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 0;
+  }
+  .msg-sidebar {
+    background: #18181a;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .msg-side_head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232, 232, 235, 0.5);
+    padding: 4px 6px 2px;
+  }
+  .msg-thread {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+  }
+  .msg-thread.is-active { background: rgba(0, 122, 255, 0.16); }
+  .msg-thread:not(.is-active):hover { background: rgba(255, 255, 255, 0.04); }
+  .msg-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #2a2a2a;
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  .msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .msg-avatar--lg { width: 44px; height: 44px; }
+  .msg-thread_text { min-width: 0; }
+  .msg-thread_name { font-size: 12px; font-weight: 600; color: #fff; }
+  .msg-thread_snippet {
+    font-size: 11px;
+    color: rgba(232, 232, 235, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .msg-thread_meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: rgba(232, 232, 235, 0.5);
+  }
+
+  .msg-thread_view {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: #0e0e0f;
+    overflow: hidden;
+  }
+  .msg-thread_header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .msg-thread_status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(232, 232, 235, 0.6);
+  }
+  .msg-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+  }
+
+  .msg-thread_stage {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .msg-day {
+    align-self: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(232, 232, 235, 0.45);
+    padding: 4px 0 6px;
+  }
+  .msg-bubble {
+    max-width: 70%;
+    padding: 9px 13px;
+    border-radius: 18px;
+    font-size: 13.5px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: msgPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+  .msg-bubble strong {
+    font-weight: 600;
+    color: inherit;
+  }
+  .msg-bubble--in {
+    align-self: flex-start;
+    background: #29292b;
+    color: #fff;
+    border-bottom-left-radius: 5px;
+  }
+  .msg-bubble--out {
+    align-self: flex-end;
+    background: linear-gradient(180deg, #2a8cff 0%, #0a6eff 100%);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 4px 12px rgba(10, 110, 255, 0.25);
+  }
+  .msg-bubble--typing {
+    display: inline-flex;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .msg-bubble--typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    animation: msgTyping 1.2s ease-in-out infinite;
+  }
+  .msg-bubble--typing span:nth-child(2) { animation-delay: 0.15s; }
+  .msg-bubble--typing span:nth-child(3) { animation-delay: 0.30s; }
+  @keyframes msgTyping {
+    0%, 60%, 100% { transform: scale(0.8); opacity: 0.5; }
+    30% { transform: scale(1.2); opacity: 1; }
+  }
+  @keyframes msgPop {
+    from { opacity: 0; transform: translateY(6px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  .msg-meta {
+    margin: 0 18px;
+    padding: 10px 14px;
+    background: rgba(10, 110, 255, 0.08);
+    border: 1px solid rgba(10, 110, 255, 0.22);
+    border-radius: 10px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #d6d6da;
+  }
+  .msg-meta strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #79bfff;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .msg-meta p { margin: 0; }
+
+  .msg-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    margin: 12px 18px 18px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #0a6eff;
+    border: 0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(10, 110, 255, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .msg-continue img { width: 16px; height: 16px; border-radius: 4px; }
+  .msg-continue:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(10, 110, 255, 0.45); }
+  .msg-continue_arrow { transition: transform 0.2s ease; }
+  .msg-continue:hover .msg-continue_arrow { transform: translateX(3px); }
+
+  /* ============== SNAKE / BUG HUNT ============== */
+  .mbd-win--snake {
+    background:
+      radial-gradient(120% 60% at 0% 0%, rgba(255, 116, 72, 0.10) 0%, transparent 55%),
+      linear-gradient(180deg, #1a0f0a 0%, #0a0507 100%);
+    color: #f0ede6;
+    --sk-accent: #ff9b6e;
+  }
+  .mbd-win_chrome--snake {
+    background: linear-gradient(180deg, #1f1410 0%, #14080a 100%);
+    border-bottom: 1px solid rgba(255, 116, 72, 0.12);
+  }
+  .sk-toolbar { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; color: #d9d3c8; }
+  .sk-icon { width: 18px; height: 18px; border-radius: 5px; }
+  .sk-brand { font-weight: 600; }
+  .sk-divider { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.10); }
+  .sk-prompt {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--sk-accent);
+  }
+  .sk-caret {
+    display: inline-block;
+    width: 7px;
+    background: var(--sk-accent);
+    color: transparent;
+    margin-left: 4px;
+    animation: skBlink 1s steps(2, end) infinite;
+  }
+  @keyframes skBlink { 50% { opacity: 0; } }
+
+  .sk-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: clamp(14px, 1.6vw, 22px);
+    padding: clamp(14px, 1.8vw, 22px);
+    min-height: 0;
+  }
+  .sk-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .sk-stat {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+      linear-gradient(180deg, rgba(20, 14, 12, 0.65) 0%, rgba(10, 5, 7, 0.75) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+  .sk-stat_label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(240, 237, 230, 0.45);
+    margin-bottom: 4px;
+  }
+  .sk-stat_value {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum';
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+  }
+  .sk-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    color: rgba(240, 237, 230, 0.4);
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+  }
+  .sk-restart {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    cursor: pointer;
+    margin-top: auto;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ff8e5c, #ff4848);
+    color: #1a0508;
+    font-weight: 700;
+    font-size: 12px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 6px 16px rgba(255, 116, 72, 0.35);
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .sk-restart:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+  /* Stage / canvas */
+  .sk-stage {
+    position: relative;
+    border-radius: 14px;
+    background: #2a1d20;
+    border: 1px solid rgba(255, 116, 72, 0.22);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      inset 0 0 60px rgba(255, 116, 72, 0.10),
+      0 6px 22px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    outline: none;
+    cursor: pointer;
+  }
+  .sk-stage canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+  }
+  .sk-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    pointer-events: none;
+    background: rgba(6, 3, 4, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+  .sk-stage.is-running .sk-overlay { opacity: 0; }
+  .sk-overlay_message {
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: #f0ede6;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* D-pad — hidden on desktop, shown on touch */
+  .sk-dpad {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 96px;
+    height: 96px;
+    display: none;
+    z-index: 3;
+  }
+  .sk-dpad_btn {
+    position: absolute;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .sk-dpad_btn--u { top: 0;  left: 34px; }
+  .sk-dpad_btn--d { bottom: 0; left: 34px; }
+  .sk-dpad_btn--l { left: 0;  top: 34px; }
+  .sk-dpad_btn--r { right: 0; top: 34px; }
+  @media (pointer: coarse), (hover: none) {
+    .sk-dpad { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk-caret { animation: none; }
+  }
+
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+  import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+  import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+
+  const stage = document.querySelector<HTMLElement>('[data-mbd-stage]');
+  const wrap = document.querySelector<HTMLElement>('[data-mbd-canvas-wrap]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-mbd-canvas]');
+  const screenUi = document.querySelector<HTMLElement>('[data-mbd-screen-ui]');
+
+  const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+  const smoothstep = (edge0: number, edge1: number, x: number) => {
+    const t = clamp01((x - edge0) / (edge1 - edge0));
+    return t * t * (3 - 2 * t);
+  };
+
+  function init() {
+    if (!stage || !wrap || !canvas || !screenUi) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    } catch {
+      document.querySelector('[data-mbd-flight]')?.remove();
+      wrap.style.display = 'none';
+      return;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.94;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    /* ------------------------------------------------------------------
+     * Flight layer — the laptop is lifted out of its in-flow box and into a
+     * sticky viewport-sized layer that spans the whole #projects section, so
+     * it can drift behind the scroll scene and only land in its box at the
+     * end. The in-flow box stays as an invisible placeholder and is read
+     * every frame as the landing target.
+     * ---------------------------------------------------------------- */
+    const section = stage.closest<HTMLElement>('#projects');
+    const flight = document.querySelector<HTMLElement>('[data-mbd-flight]');
+    const uiLayer = document.querySelector<HTMLElement>('[data-mbd-uilayer]');
+    let sticky = flight?.querySelector<HTMLElement>('[data-mbd-flight-sticky]') ?? null;
+    const uiSticky = uiLayer?.querySelector<HTMLElement>('[data-mbd-ui-sticky]') ?? null;
+    if (section && flight && sticky && uiLayer && uiSticky) {
+      section.insertBefore(flight, section.firstChild);
+      section.appendChild(uiLayer);
+      sticky.appendChild(canvas);
+      uiSticky.appendChild(screenUi);
+      wrap.classList.add('is-detached');
+    } else {
+      flight?.remove();
+      uiLayer?.remove();
+      sticky = null;
+    }
+    const host: HTMLElement = sticky ?? wrap;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 40);
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const key = new THREE.DirectionalLight(0xfff4e5, 1.3);
+    key.position.set(1.2, 2.2, 1.6);
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0x88aaff, 0.45);
+    rim.position.set(-1.6, 0.8, -1.2);
+    scene.add(rim);
+
+    const pivot = new THREE.Group();
+    scene.add(pivot);
+
+    let screenCorners: THREE.Vector3[] | null = null;
+    let lcdMeshRef: THREE.Mesh | null = null;
+    let lidNode: THREE.Object3D | null = null;
+    let lidOpenX = 0;
+    const lidClosedX = Math.PI / 2;
+    let lidHingeY = 0;
+    let lidLift = 0;
+    /* pivot X that puts the shut lid square to the camera (the framing axis is
+       tilted back by the extra opening angle, so 90deg alone would miss) */
+    let lidFacingX = Math.PI / 2;
+
+    /* ---------- finish: Space Black in dark mode, Silver in light ---------- */
+    const caseMats = new Set<THREE.MeshStandardMaterial>();
+    const badgeMats = new Set<THREE.MeshStandardMaterial>();
+    const padMats = new Set<THREE.MeshStandardMaterial>();
+
+    const FINISH = {
+      dark: {
+        case: 0x2c2c30, caseRough: 0.42,
+        badge: 0x9aa0a8, badgeRough: 0.08,
+        pad: 0x25252a,
+        key: 2.1, rim: 1.5, exposure: 1.12,
+      },
+      light: {
+        case: 0xd6d8db, caseRough: 0.34,
+        badge: 0x6b7078, badgeRough: 0.1,
+        pad: 0xc9ccd1,
+        key: 1.3, rim: 0.45, exposure: 0.94,
+      },
+    } as const;
+
+    function isLightTheme() {
+      return document.documentElement.getAttribute('data-theme') === 'light';
+    }
+
+    function applyFinish() {
+      const f = isLightTheme() ? FINISH.light : FINISH.dark;
+      for (const m of caseMats) {
+        m.color?.setHex(f.case);
+        if ('roughness' in m) m.roughness = f.caseRough;
+        if ('metalness' in m) m.metalness = 0.9;
+        m.needsUpdate = true;
+      }
+      for (const m of badgeMats) {
+        m.color?.setHex(f.badge);
+        if ('roughness' in m) m.roughness = f.badgeRough;
+        if ('metalness' in m) m.metalness = 1;
+        m.needsUpdate = true;
+      }
+      for (const m of padMats) {
+        m.color?.setHex(f.pad);
+        if ('roughness' in m) m.roughness = 0.16;
+        if ('metalness' in m) m.metalness = 0.5;
+        m.needsUpdate = true;
+      }
+      /* A near-black chassis on a near-black page needs its edges lit, or the
+         whole thing dissolves while it cruises; silver needs the opposite. */
+      key.intensity = f.key;
+      rim.intensity = f.rim;
+      renderer.toneMappingExposure = f.exposure;
+    }
+
+    new MutationObserver(applyFinish).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    const modelCorners: THREE.Vector3[] = [];
+
+    const surface = { w: 800, h: 500 };
+    let ready = false;
+    let raf = 0;
+    let running = false;
+    const clock = new THREE.Clock();
+
+    /* framing state, solved once the model is in */
+    const fit = {
+      nrm: new THREE.Vector3(0, 0, 1),
+      up: new THREE.Vector3(0, 1, 0),
+      target: new THREE.Vector3(),
+      dist: 1,
+      aspect: 1.6,
+    };
+
+    const pointer = { cx: 0, cy: 0, lx: 0, ly: 0, inside: false, moved: false };
+    const tilt = { x: 0, y: 0, z: 0 };
+    let landT = 0;
+    let openT = 0;
+
+    function hostSize() {
+      return { w: host.clientWidth || 1, h: host.clientHeight || 1 };
+    }
+
+    function sizeRenderer() {
+      const { w, h } = hostSize();
+      renderer.setSize(w, h, false);
+    }
+    sizeRenderer();
+    new ResizeObserver(() => {
+      sizeRenderer();
+      solveFraming();
+    }).observe(host);
+
+    /* ---------- projection helpers ---------- */
+    const tmpV = new THREE.Vector3();
+    function projectToPx(v: THREE.Vector3, w: number, h: number): number[] {
+      tmpV.copy(v).project(camera);
+      return [(tmpV.x * 0.5 + 0.5) * w, (-tmpV.y * 0.5 + 0.5) * h];
+    }
+
+    /**
+     * Place the camera dead-on the screen normal and pull it back until the
+     * whole laptop fits the framing rect. Dead-on is the point: the lid is
+     * then exactly parallel to the viewer, so the display reads as a true
+     * rectangle instead of a trapezoid.
+     */
+    function solveFraming() {
+      if (!ready) return;
+      const wr = wrap.getBoundingClientRect();
+      fit.aspect = Math.max(0.2, (wr.width || 16) / (wr.height || 10));
+
+      const savedRot = pivot.rotation.clone();
+      const savedLid = lidNode ? lidNode.rotation.x : 0;
+      const savedLidY = lidNode ? lidNode.position.y : 0;
+      pivot.rotation.set(0, 0, 0);
+      if (lidNode) {
+        lidNode.rotation.x = lidOpenX;
+        lidNode.position.y = lidHingeY + lidLift * (1 - Math.cos(lidOpenX));
+      }
+      pivot.updateWorldMatrix(true, true);
+
+      camera.clearViewOffset();
+      camera.aspect = fit.aspect;
+      camera.up.copy(fit.up);
+
+      const right = new THREE.Vector3();
+      const camUp = new THREE.Vector3();
+      const pad = 0.985; // fraction of the frame the model may occupy
+
+      for (let iter = 0; iter < 14; iter++) {
+        camera.position.copy(fit.target).addScaledVector(fit.nrm, fit.dist);
+        camera.lookAt(fit.target);
+        camera.updateMatrixWorld();
+        camera.updateProjectionMatrix();
+        camera.matrixWorld.extractBasis(right, camUp, new THREE.Vector3());
+
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        for (const c of modelCorners) {
+          tmpV.copy(c).project(camera);
+          if (tmpV.x < minX) minX = tmpV.x;
+          if (tmpV.x > maxX) maxX = tmpV.x;
+          if (tmpV.y < minY) minY = tmpV.y;
+          if (tmpV.y > maxY) maxY = tmpV.y;
+        }
+        const cx = (minX + maxX) / 2;
+        const cy = (minY + maxY) / 2;
+        const halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * fit.dist;
+        const halfW = halfH * fit.aspect;
+        fit.target.addScaledVector(right, cx * halfW).addScaledVector(camUp, cy * halfH);
+        fit.dist *= Math.max((maxX - minX) / 2, (maxY - minY) / 2) / pad;
+      }
+
+      camera.position.copy(fit.target).addScaledVector(fit.nrm, fit.dist);
+      camera.lookAt(fit.target);
+      camera.updateMatrixWorld();
+
+      pivot.rotation.copy(savedRot);
+      if (lidNode) {
+        lidNode.rotation.x = savedLid;
+        lidNode.position.y = savedLidY;
+      }
+      pivot.updateWorldMatrix(true, true);
+
+      /* size the DOM overlay to the screen's projected aspect */
+      if (screenCorners && lcdMeshRef) {
+        camera.updateProjectionMatrix();
+        const quad = screenCorners
+          .map((c) => c.clone().applyMatrix4(lcdMeshRef!.matrixWorld))
+          .map((p) => projectToPx(p, 1000, Math.round(1000 / fit.aspect)));
+        const xs = quad.map((p) => p[0]);
+        const ys = quad.map((p) => p[1]);
+        const aspect =
+          (Math.max(...xs) - Math.min(...xs)) /
+          Math.max(1e-4, Math.max(...ys) - Math.min(...ys));
+        /* A narrow viewport shrinks the laptop, not the pixels: using a
+           smaller design surface keeps the UI legible once it is projected
+           onto a phone-sized panel. The compact layout below is driven by
+           container queries on this surface, never by the viewport. */
+        surface.w = window.innerWidth < 768 ? 520 : 700;
+        surface.h = Math.round(surface.w / aspect);
+        screenUi.style.width = surface.w + 'px';
+        screenUi.style.height = surface.h + 'px';
+        screenUi.style.borderRadius = (surface.w * 0.042).toFixed(1) + 'px';
+        laidOut = false;
+      }
+    }
+
+    /**
+     * Render the framed image into an arbitrary rectangle of the canvas.
+     * `setViewOffset` treats (rw, rh) as the full image and renders the
+     * sub-window that the canvas covers — so the laptop lands wherever the
+     * rect is, without ever moving the camera.
+     */
+    function applyRect(rx: number, ry: number, rw: number, rh: number) {
+      const { w, h } = hostSize();
+      camera.aspect = fit.aspect;
+      camera.setViewOffset(rw, rh, -rx, -ry, w, h);
+    }
+
+    /* ---------- model ---------- */
+    const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+
+    loader.load(
+      '/models/macbook-ultra.glb',
+      (gltf) => {
+        const model = gltf.scene;
+
+        const bbox = new THREE.Box3().setFromObject(model);
+        const center = bbox.getCenter(new THREE.Vector3());
+        model.position.sub(center);
+        pivot.add(model);
+        pivot.position.copy(center);
+        pivot.updateWorldMatrix(true, true);
+
+        /* The Lid node pivots around the panel's own centre, so rotating it
+           makes the lid hover instead of shut. Re-parent it under a group
+           placed on the actual hinge line -- the bottom-back edge of the panel
+           while it stands upright -- and drive that instead.
+           The open angle also goes a little past 90deg: real laptops do, and
+           with the camera dead-on the display a 90deg lid would render the
+           chassis perfectly edge-on. */
+        const rawLid = model.getObjectByName('Lid') ?? null;
+        if (rawLid) {
+          pivot.updateWorldMatrix(true, true);
+          const lidBox = new THREE.Box3().setFromObject(rawLid);
+          const parent = rawLid.parent!;
+          const hinge = new THREE.Group();
+          /* pivot sits at the model centre and the model is offset by -centre,
+             so world space and the lid's parent space coincide here. */
+          hinge.position.set(
+            rawLid.position.x,
+            lidBox.min.y,
+            (lidBox.min.z + lidBox.max.z) / 2,
+          );
+          parent.add(hinge);
+          rawLid.position.sub(hinge.position);
+          hinge.add(rawLid);
+          lidNode = hinge;
+          lidHingeY = hinge.position.y;
+
+          /* The hinge line sits inside the chassis, so a straight 90deg swing
+             buries the shut lid under the keyboard. Measure how far short it
+             lands and lift the hinge by that much as it closes — the travel is
+             a few millimetres and reads as the lid simply settling shut. */
+          let baseTop = -Infinity;
+          for (const n of ['Bottom case', 'Keyboard', 'Top case', 'Trackpad']) {
+            const m = model.getObjectByName(n);
+            if (m) baseTop = Math.max(baseTop, new THREE.Box3().setFromObject(m).max.y);
+          }
+          hinge.rotation.x = lidClosedX;
+          pivot.updateWorldMatrix(true, true);
+          const shutBottom = new THREE.Box3().setFromObject(hinge).min.y;
+          if (isFinite(baseTop)) lidLift = Math.max(0, baseTop - shutBottom + 0.0003);
+
+          lidOpenX = -THREE.MathUtils.degToRad(13);
+          hinge.rotation.x = lidOpenX;
+          pivot.updateWorldMatrix(true, true);
+        }
+
+        /* corners of the whole laptop, in pivot-local space, for the fit */
+        const lb = new THREE.Box3().setFromObject(pivot);
+        for (let i = 0; i < 8; i++) {
+          modelCorners.push(
+            new THREE.Vector3(
+              i & 1 ? lb.max.x : lb.min.x,
+              i & 2 ? lb.max.y : lb.min.y,
+              i & 4 ? lb.max.z : lb.min.z,
+            ),
+          );
+        }
+
+        /* find the display mesh by its LCD material */
+        let lcd: THREE.Mesh | null = null;
+        model.traverse((obj) => {
+          if (!(obj instanceof THREE.Mesh)) return;
+          const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+          for (const m of mats) {
+            /* The chassis and the badge follow the page theme: Space Black in
+               the dark palette, Silver in the light one. The badge ships the
+               exact colour of the case, which makes it vanish, so it always
+               gets its own polished tone. */
+            if (m && /^anodized aluminum/i.test(m.name ?? '')) {
+              caseMats.add(m as THREE.MeshStandardMaterial);
+            }
+            /* the trackpad is its own glass, and it has to follow the case —
+               a Space Black machine with a white pad looks wrong */
+            if (m && /touchpad/i.test(m.name ?? '')) {
+              padMats.add(m as THREE.MeshStandardMaterial);
+            }
+            if (m && /apple\s*logo/i.test(m.name ?? '')) {
+              badgeMats.add(m as THREE.MeshStandardMaterial);
+            }
+            if (!m || !/lcd/i.test(m.name ?? '')) continue;
+            if (!lcd) lcd = obj;
+            /* the DOM overlay is the display, so the panel underneath is
+               just a dark, slightly reflective sheet */
+            const mm = m as THREE.MeshStandardMaterial;
+            if (mm.color) mm.color.setHex(0x08080b);
+            if ('roughness' in mm) mm.roughness = 0.28;
+            if ('metalness' in mm) mm.metalness = 0.1;
+            if (mm.emissive) mm.emissive.setHex(0x05060a);
+            if (mm.map) mm.map = null;
+            mm.needsUpdate = true;
+          }
+        });
+
+        const size = bbox.getSize(new THREE.Vector3());
+        fit.dist = size.length();
+        fit.target.copy(center);
+
+        if (lcd) {
+          lcdMeshRef = lcd as THREE.Mesh;
+          const mesh = lcdMeshRef;
+
+          // Bbox of only the LCD-material primitives (the Lid mesh also contains
+          // the aluminum lid back, so the whole-mesh bbox is far too large).
+          const geo = mesh.geometry;
+          const pos = geo.getAttribute('position');
+          const sb = new THREE.Box3();
+          const vTmp = new THREE.Vector3();
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          const groups = geo.groups.length
+            ? geo.groups
+            : [{ start: 0, count: geo.index ? geo.index.count : pos.count, materialIndex: 0 }];
+          let found = false;
+          for (const g of groups) {
+            const m = mats[g.materialIndex];
+            if (!m || !/lcd/i.test(m.name ?? '')) continue;
+            found = true;
+            for (let i = g.start; i < g.start + g.count; i++) {
+              const idx = geo.index ? geo.index.getX(i) : i;
+              vTmp.fromBufferAttribute(pos, idx);
+              sb.expandByPoint(vTmp);
+            }
+          }
+          if (!found) sb.setFromBufferAttribute(pos);
+          const ls = new THREE.Vector3().subVectors(sb.max, sb.min);
+
+          // Thinnest bbox axis = screen normal axis.
+          const axes = ['x', 'y', 'z'] as const;
+          const thin = axes.reduce((a, b) => (ls[a] < ls[b] ? a : b));
+          const others = axes.filter((a) => a !== thin);
+
+          const worldQ = mesh.getWorldQuaternion(new THREE.Quaternion());
+          const faceCenter = (side: 0 | 1) => {
+            const c = new THREE.Vector3();
+            c[thin] = side === 0 ? sb.min[thin] : sb.max[thin];
+            for (const a of others) c[a] = (sb.min[a] + sb.max[a]) / 2;
+            return c.applyMatrix4(mesh.matrixWorld);
+          };
+          /* the face that points away from the keyboard is the one we watch */
+          const probe = center.clone().add(new THREE.Vector3(0, 0, fit.dist));
+          const bestSide: 0 | 1 =
+            faceCenter(1).distanceTo(probe) < faceCenter(0).distanceTo(probe) ? 1 : 0;
+
+          const nrmLocal = new THREE.Vector3();
+          nrmLocal[thin] = bestSide === 0 ? -1 : 1;
+          fit.nrm.copy(nrmLocal).applyQuaternion(worldQ).normalize();
+          lidFacingX = Math.PI / 2 - Math.atan2(fit.nrm.y, fit.nrm.z);
+
+          /* the taller in-plane axis is "up" on the display */
+          const upAxis = ls[others[0]] < ls[others[1]] ? others[0] : others[1];
+          const upLocal = new THREE.Vector3();
+          upLocal[upAxis] = 1;
+          fit.up.copy(upLocal).applyQuaternion(worldQ).normalize();
+          if (fit.up.y < 0) fit.up.negate();
+
+          const corners: THREE.Vector3[] = [];
+          for (let i = 0; i < 4; i++) {
+            const p = new THREE.Vector3();
+            p[thin] = bestSide === 0 ? sb.min[thin] : sb.max[thin];
+            p[others[0]] = i & 1 ? sb.max[others[0]] : sb.min[others[0]];
+            p[others[1]] = i & 2 ? sb.max[others[1]] : sb.min[others[1]];
+            corners.push(p);
+          }
+          screenCorners = corners;
+        }
+
+        applyFinish();
+
+        ready = true;
+        clock.getDelta();
+        solveFraming();
+        measureDock();
+        host.classList.add('is-ready');
+        wrap.classList.add('is-ready');
+      },
+      undefined,
+      () => {
+        host.classList.add('is-failed');
+        wrap.style.display = 'none';
+      },
+    );
+
+    /* ---------- homography: overlay rect -> projected screen quad ---------- */
+    function solve8(A: number[][], b: number[]): number[] {
+      const M = A.map((row, i) => [...row, b[i]]);
+      for (let col = 0; col < 8; col++) {
+        let piv = col;
+        for (let r = col + 1; r < 8; r++) if (Math.abs(M[r][col]) > Math.abs(M[piv][col])) piv = r;
+        [M[col], M[piv]] = [M[piv], M[col]];
+        const d = M[col][col] || 1e-12;
+        for (let r = 0; r < 8; r++) {
+          if (r === col) continue;
+          const f = M[r][col] / d;
+          for (let c = col; c <= 8; c++) M[r][c] -= f * M[col][c];
+        }
+      }
+      return Array.from({ length: 8 }, (_, i) => M[i][8] / (M[i][i] || 1e-12));
+    }
+
+    /* inverse of the current surface -> host-pixel homography */
+    let homInv: number[] | null = null;
+    function invertHomography(m: number[]) {
+      const a = m[0], b = m[1], c = m[2], d = m[3], e = m[4], f = m[5], g = m[6], h = m[7];
+      const A = e - f * h, B = c * h - b, C = b * f - c * e;
+      const D = f * g - d, E = a - c * g, F = c * d - a * f;
+      const G = d * h - e * g, H = b * g - a * h, I = a * e - b * d;
+      const det = a * A + b * D + c * G;
+      if (!det || !isFinite(det)) return null;
+      return [A, B, C, D, E, F, G, H, I].map((v) => v / det);
+    }
+    function hostToSurface(px: number, py: number): number[] | null {
+      if (!homInv) return null;
+      const [a, b, c, d, e, f, g, h, i] = homInv;
+      const w = g * px + h * py + i;
+      if (Math.abs(w) < 1e-9) return null;
+      return [(a * px + b * py + c) / w, (d * px + e * py + f) / w];
+    }
+
+    function updateScreenUi(w: number, h: number) {
+      if (!screenCorners || !lcdMeshRef) return;
+      const quad = screenCorners
+        .map((c) => c.clone().applyMatrix4(lcdMeshRef!.matrixWorld))
+        .map((p) => projectToPx(p, w, h));
+
+      // Order TL, TR, BR, BL in projected space.
+      quad.sort((p, q) => p[1] - q[1]);
+      const top = quad.slice(0, 2).sort((p, q) => p[0] - q[0]);
+      const bottom = quad.slice(2, 4).sort((p, q) => p[0] - q[0]);
+      const ordered = [top[0], top[1], bottom[1], bottom[0]];
+
+      const src = [
+        [0, 0],
+        [surface.w, 0],
+        [surface.w, surface.h],
+        [0, surface.h],
+      ];
+      const A: number[][] = [];
+      const b: number[] = [];
+      for (let i = 0; i < 4; i++) {
+        const [x, y] = src[i];
+        const [X, Y] = ordered[i];
+        A.push([x, y, 1, 0, 0, 0, -x * X, -y * X]);
+        b.push(X);
+        A.push([0, 0, 0, x, y, 1, -x * Y, -y * Y]);
+        b.push(Y);
+      }
+      const m = solve8(A, b); // a b c d e f g h
+      homInv = invertHomography(m);
+      screenUi.style.transform = `matrix3d(${m[0]},${m[3]},0,${m[6]},${m[1]},${m[4]},0,${m[7]},0,0,1,0,${m[2]},${m[5]},0,1)`;
+      screenUi.hidden = false;
+    }
+
+    /* ------------------------------------------------------------------
+     * Dock — magnification, launch bounce, running lights
+     * ---------------------------------------------------------------- */
+    const dock = screenUi.querySelector<HTMLElement>('[data-mbd-dock]');
+    const dockApps = dock ? Array.from(dock.querySelectorAll<HTMLElement>('.mbd-app')) : [];
+    const rest: { c: number; w: number }[] = [];
+    let dockBox = { top: 0, bottom: 0, left: 0, right: 0 };
+
+    const MAG = 0.85;   // peak growth — macOS tops out near 2x
+    const SPREAD = 1.55; // gaussian width, in rest icon widths
+
+    /** Capture the dock's resting layout; every scale is measured against it. */
+    function measureDock() {
+      if (!dock || !dockApps.length || !dock.offsetWidth) return false;
+      dockApps.forEach((el) => el.style.setProperty('--s', '1'));
+      rest.length = 0;
+      for (const el of dockApps) {
+        rest.push({ c: el.offsetLeft + el.offsetWidth / 2, w: el.offsetWidth || 1 });
+      }
+      const half = dock.offsetWidth / 2;
+      dockBox = {
+        left: dock.offsetLeft - half,
+        right: dock.offsetLeft + half,
+        top: dock.offsetTop,
+        bottom: dock.offsetTop + dock.offsetHeight,
+      };
+      return true;
+    }
+
+    function updateDock(active: boolean) {
+      if (!dock || !rest.length) return;
+      const unit = rest[0].w;
+      const sigma = unit * SPREAD;
+      /* the dock reacts while the cursor is over it or just above it */
+      const near =
+        active &&
+        pointer.ly > dockBox.top - unit * 1.9 &&
+        pointer.ly < dockBox.bottom + unit * 0.6 &&
+        pointer.lx > dockBox.left - unit &&
+        pointer.lx < dockBox.right + unit;
+
+      dockApps.forEach((el, i) => {
+        const prev = parseFloat(el.style.getPropertyValue('--s')) || 1;
+        let target = 1;
+        if (near) {
+          const dx = pointer.lx - (dockBox.left + rest[i].c);
+          target = 1 + MAG * Math.exp(-(dx * dx) / (2 * sigma * sigma));
+        }
+        /* a touch of smoothing so the icons settle instead of snapping */
+        const s = prev + (target - prev) * (near ? 0.5 : 0.22);
+        el.style.setProperty('--s', s.toFixed(3));
+      });
+    }
+
+    /* ------------------------------------------------------------------
+     * Window system — genie in and out of the owning dock icon
+     * ---------------------------------------------------------------- */
+    const lang = document.documentElement.lang === 'de' ? 'de' : 'en';
+    let relayoutTabs: () => void = () => {};
+
+    function iconFor(name: string) {
+      return dock?.querySelector<HTMLElement>(`.mbd-app[data-app="${name}"]`) ?? null;
+    }
+    function winFor(name: string) {
+      return screenUi.querySelector<HTMLElement>(`.mbd-win[data-window="${name}"]`) ?? null;
+    }
+
+    /** Point the genie at the dock icon that owns the window. */
+    function setGenieVars(win: HTMLElement, icon: HTMLElement | null) {
+      if (!icon || !dock) return;
+      const bx = win.offsetLeft + win.offsetWidth / 2;
+      const by = win.offsetTop + win.offsetHeight;
+      const ix = dock.offsetLeft + icon.offsetLeft + icon.offsetWidth / 2;
+      const iy = dock.offsetTop + icon.offsetTop + icon.offsetHeight / 2;
+      win.style.setProperty('--gdx', `${(ix - bx).toFixed(1)}px`);
+      win.style.setProperty('--gdy', `${(iy - by).toFixed(1)}px`);
+    }
+
+    function bounce(icon: HTMLElement | null) {
+      if (!icon || reducedMotion) return;
+      icon.classList.remove('is-bouncing');
+      void icon.offsetWidth;
+      icon.classList.add('is-bouncing');
+      icon.addEventListener(
+        'animationend',
+        () => icon.classList.remove('is-bouncing'),
+        { once: true },
+      );
+    }
+
+    function openWindow(name: string) {
+      const win = winFor(name);
+      const icon = iconFor(name);
+      if (!win) return;
+      if (screenUi.getAttribute('data-open-window') === name) return;
+      closeWindow(true, true);
+      setGenieVars(win, icon);
+      screenUi.setAttribute('data-open-window', name);
+      win.classList.remove('is-genie-out');
+      void win.offsetWidth;
+      win.classList.add('is-genie-in');
+      win.addEventListener(
+        'animationend',
+        () => win.classList.remove('is-genie-in'),
+        { once: true },
+      );
+      icon?.classList.add('is-running');
+      bounce(icon);
+      setNotifOpen(false);
+    }
+
+    function closeWindow(minimize = false, instant = false) {
+      const name = screenUi.getAttribute('data-open-window');
+      if (!name) return;
+      const win = winFor(name);
+      const icon = iconFor(name);
+      screenUi.removeAttribute('data-open-window');
+      if (!minimize) icon?.classList.remove('is-running');
+      if (!win) return;
+      win.classList.remove('is-genie-in');
+      if (instant) return;
+      setGenieVars(win, icon);
+      win.classList.add('is-genie-out');
+      win.addEventListener(
+        'animationend',
+        () => win.classList.remove('is-genie-out'),
+        { once: true },
+      );
+    }
+
+    screenUi.addEventListener('click', (e) => {
+      const target = e.target as Element;
+
+      const opener = target.closest<HTMLElement>('[data-open]');
+      if (opener) {
+        e.preventDefault();
+        openWindow(opener.getAttribute('data-open')!);
+        return;
+      }
+      if (target.closest('[data-close]')) {
+        closeWindow(false);
+        return;
+      }
+      if (target.closest('[data-minimize]')) {
+        closeWindow(true);
+        return;
+      }
+      const trash = target.closest<HTMLElement>('[data-trash]');
+      if (trash) {
+        bounce(trash);
+        return;
+      }
+      /* links out of the laptop still bounce their icon before leaving */
+      const link = target.closest<HTMLElement>('.mbd-app[href]');
+      if (link) {
+        bounce(link);
+        return;
+      }
+      if (screenUi.hasAttribute('data-open-window') && !target.closest('.mbd-win')) {
+        closeWindow(false);
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (screenUi.classList.contains('is-notif-open')) setNotifOpen(false);
+      else if (screenUi.hasAttribute('data-open-window')) closeWindow(false);
+    });
+
+    /* ------------------------------------------------------------------
+     * Menu bar: live clock, battery, notification centre
+     * ---------------------------------------------------------------- */
+    function initClock() {
+      const timeEl = screenUi.querySelector<HTMLElement>('[data-clock-time]');
+      const dateEl = screenUi.querySelector<HTMLElement>('[data-clock-date]');
+      if (!timeEl || !dateEl) return;
+      const locale = lang === 'de' ? 'de-DE' : 'en-US';
+      const dateOpts: Intl.DateTimeFormatOptions = { weekday: 'short', day: '2-digit', month: 'short' };
+      const tick = () => {
+        const now = new Date();
+        timeEl.textContent =
+          String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        dateEl.textContent = now.toLocaleDateString(locale, dateOpts);
+      };
+      tick();
+      setTimeout(() => {
+        tick();
+        setInterval(tick, 60000);
+      }, (60 - new Date().getSeconds()) * 1000);
+    }
+
+    function initBattery() {
+      const box = screenUi.querySelector<HTMLElement>('[data-battery]');
+      const level = screenUi.querySelector<HTMLElement>('[data-battery-level]');
+      const pct = screenUi.querySelector<HTMLElement>('[data-battery-pct]');
+      if (!box || !level || !pct) return;
+      const paint = (value: number, charging: boolean) => {
+        const p = Math.round(clamp01(value) * 100);
+        level.style.width = Math.max(6, p) + '%';
+        pct.textContent = p + '%';
+        box.classList.toggle('is-low', p <= 20 && !charging);
+        box.classList.toggle('is-charging', charging);
+      };
+      const nav = navigator as Navigator & { getBattery?: () => Promise<any> };
+      if (typeof nav.getBattery === 'function') {
+        nav
+          .getBattery()
+          .then((b: any) => {
+            paint(b.level, b.charging);
+            b.addEventListener('levelchange', () => paint(b.level, b.charging));
+            b.addEventListener('chargingchange', () => paint(b.level, b.charging));
+          })
+          .catch(() => paint(0.82, false));
+      } else {
+        paint(0.82, false);
+      }
+    }
+
+    function setNotifOpen(open: boolean) {
+      screenUi.classList.toggle('is-notif-open', open);
+      const panel = screenUi.querySelector('[data-mbd-notif]');
+      panel?.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+
+    function initNotif() {
+      const toggle = screenUi.querySelector<HTMLElement>('[data-toggle="notif"]');
+      const close = screenUi.querySelector<HTMLElement>('[data-notif-close]');
+      if (!toggle) return;
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        setNotifOpen(!screenUi.classList.contains('is-notif-open'));
+      });
+      close?.addEventListener('click', () => setNotifOpen(false));
+      screenUi.addEventListener('click', (e) => {
+        if (!screenUi.classList.contains('is-notif-open')) return;
+        const t = e.target as Element;
+        if (t.closest('[data-mbd-notif]') || t.closest('[data-toggle="notif"]')) return;
+        setNotifOpen(false);
+      });
+    }
+
+    /* ------------------------------------------------------------------
+     * Desktop window: tabs, search, sort
+     * ---------------------------------------------------------------- */
+    function initTabs() {
+      const tabs = Array.from(screenUi.querySelectorAll<HTMLElement>('.mbd-tab'));
+      const pill = screenUi.querySelector<HTMLElement>('.mbd-tab_pill');
+      const body = screenUi.querySelector<HTMLElement>('[data-deskwin-body]');
+      if (!tabs.length || !body) return;
+
+      const movePill = (el: HTMLElement) => {
+        if (!pill) return;
+        pill.style.width = el.offsetWidth + 'px';
+        pill.style.transform = `translateX(${el.offsetLeft}px)`;
+      };
+
+      const select = (el: HTMLElement) => {
+        tabs.forEach((t) => {
+          const on = t === el;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        const view = el.getAttribute('data-tab') || 'all';
+        if (view === 'all') body.removeAttribute('data-view');
+        else body.setAttribute('data-view', view);
+        movePill(el);
+      };
+
+      tabs.forEach((t) => t.addEventListener('click', () => select(t)));
+      relayoutTabs = () => {
+        const active = tabs.find((t) => t.classList.contains('is-active')) ?? tabs[0];
+        if (active && active.offsetWidth) movePill(active);
+      };
+      relayoutTabs();
+    }
+
+    function initSearch() {
+      const input = screenUi.querySelector<HTMLInputElement>('[data-search]');
+      if (!input) return;
+      const cols = Array.from(screenUi.querySelectorAll<HTMLElement>('.mbd-col'));
+
+      const apply = () => {
+        const q = input.value.trim().toLowerCase();
+        cols.forEach((col) => {
+          let visible = 0;
+          col.querySelectorAll<HTMLElement>('li[data-search]').forEach((li) => {
+            const hit = !q || (li.getAttribute('data-search') || '').includes(q);
+            li.hidden = !hit;
+            if (hit) visible++;
+          });
+          col.classList.toggle('is-empty', visible === 0);
+          const count = col.querySelector<HTMLElement>('[data-count]');
+          if (count) count.textContent = `${visible}/04`;
+        });
+      };
+      input.addEventListener('input', apply);
+      input.addEventListener('search', apply);
+
+      window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && screenUi.classList.contains('is-live')) {
+          e.preventDefault();
+          input.focus();
+          input.select();
+        }
+      });
+    }
+
+    function initSort() {
+      const btn = screenUi.querySelector<HTMLElement>('[data-sort]');
+      const label = screenUi.querySelector<HTMLElement>('[data-sort-label]');
+      if (!btn) return;
+      const labels = {
+        en: { newest: 'Newest', oldest: 'Oldest' },
+        de: { newest: 'Neueste', oldest: 'Älteste' },
+      } as const;
+      btn.addEventListener('click', () => {
+        const next = (btn.getAttribute('data-sort') || 'newest') === 'newest' ? 'oldest' : 'newest';
+        btn.setAttribute('data-sort', next);
+        if (label) label.textContent = labels[lang as 'en' | 'de'][next];
+        screenUi.querySelectorAll<HTMLElement>('.mbd-list[data-sortable]').forEach((list) => {
+          Array.from(list.children)
+            .reverse()
+            .forEach((li, i) => {
+              list.appendChild(li);
+              const idx = li.querySelector('.mbd-item_index');
+              if (idx) idx.textContent = '0' + (i + 1);
+            });
+        });
+      });
+    }
+
+    initClock();
+    initBattery();
+    initNotif();
+    initTabs();
+    initSearch();
+    initSort();
+    /* ---------- Snake / Bug Hunt ---------- */
+    function initSnake() {
+      const win = screenUi.querySelector<HTMLElement>('.mbd-win--snake');
+      if (!win) return;
+      const canvasEl = win.querySelector<HTMLCanvasElement>('[data-snake-canvas]');
+      const snakeStage = win.querySelector<HTMLElement>('[data-snake-stage]');
+      const statusEl = win.querySelector<HTMLElement>('[data-snake-status]');
+      const scoreEl = win.querySelector<HTMLElement>('[data-snake-score]');
+      const bestEl = win.querySelector<HTMLElement>('[data-snake-best]');
+      const restartBtn = win.querySelector<HTMLElement>('[data-snake-restart]');
+      const restartLabel = win.querySelector<HTMLElement>('[data-snake-restart-label]');
+      if (!canvasEl || !snakeStage || !statusEl || !scoreEl || !bestEl || !restartBtn || !restartLabel)
+        return;
+
+      const COLS = 24, ROWS = 16, CELL = 24;
+      canvasEl.width = COLS * CELL;
+      canvasEl.height = ROWS * CELL;
+      const ctx = canvasEl.getContext('2d');
+      if (!ctx) return;
+
+      const i18n = {
+        idle: statusEl.textContent || '',
+        play: lang === 'de' ? 'Los' : 'Play',
+        restart: lang === 'de' ? 'Neu starten' : 'Restart',
+      };
+
+      const STORE_KEY = 'tyfn-snake-best';
+      let best = 0;
+      try {
+        best = parseInt(sessionStorage.getItem(STORE_KEY) || '0', 10) || 0;
+      } catch {}
+      bestEl.textContent = String(best).padStart(2, '0');
+
+      let snake: { x: number; y: number }[] = [];
+      let dir = { x: 1, y: 0 };
+      let nextDir = { x: 1, y: 0 };
+      let bug = { x: 0, y: 0 };
+      let score = 0;
+      let state: 'idle' | 'running' | 'paused' | 'over' = 'idle';
+      let lastStep = 0;
+      let stepInterval = 130;
+
+      function spawnBug() {
+        for (let attempts = 0; attempts < 200; attempts++) {
+          const x = Math.floor(Math.random() * COLS);
+          const y = Math.floor(Math.random() * ROWS);
+          if (!snake.some((s) => s.x === x && s.y === y)) {
+            bug = { x, y };
+            return;
+          }
+        }
+        bug = { x: 0, y: 0 };
+      }
+
+      function updateScore() {
+        scoreEl.textContent = String(score).padStart(2, '0');
+        if (score > best) {
+          best = score;
+          bestEl.textContent = String(best).padStart(2, '0');
+          try {
+            sessionStorage.setItem(STORE_KEY, String(best));
+          } catch {}
+        }
+      }
+
+      function draw() {
+        ctx!.fillStyle = '#101012';
+        ctx!.fillRect(0, 0, canvasEl!.width, canvasEl!.height);
+        ctx!.fillStyle = '#e8e5de';
+        for (const s of snake) ctx!.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
+        const cx = bug.x * CELL + CELL / 2;
+        const cy = bug.y * CELL + CELL / 2;
+        ctx!.fillStyle = '#ff3b30';
+        ctx!.beginPath();
+        ctx!.arc(cx, cy, CELL * 0.32, 0, Math.PI * 2);
+        ctx!.fill();
+        ctx!.fillStyle = '#0a0508';
+        ctx!.beginPath();
+        ctx!.arc(cx - CELL * 0.1, cy - CELL * 0.1, CELL * 0.1, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      function loop(t: number) {
+        raf = requestAnimationFrame(loop);
+        if (state !== 'running') return;
+        if (t - lastStep < stepInterval) return;
+        lastStep = t;
+        dir = nextDir;
+        const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+        if (
+          head.x < 0 ||
+          head.x >= COLS ||
+          head.y < 0 ||
+          head.y >= ROWS ||
+          snake.some((s) => s.x === head.x && s.y === head.y)
+        ) {
+          state = 'over';
+          snakeStage.classList.remove('is-running');
+          statusEl.textContent = (lang === 'de'
+            ? 'Game Over · {n} Bugs gefangen'
+            : 'Game over · ate {n} bugs'
+          ).replace('{n}', String(score));
+          restartLabel.textContent = i18n.restart;
+          return;
+        }
+        snake.unshift(head);
+        if (head.x === bug.x && head.y === bug.y) {
+          score++;
+          updateScore();
+          stepInterval = Math.max(60, stepInterval - 4);
+          spawnBug();
+        } else {
+          snake.pop();
+        }
+        draw();
+      }
+
+      function reset() {
+        snake = [{ x: 6, y: 8 }, { x: 5, y: 8 }, { x: 4, y: 8 }];
+        dir = { x: 1, y: 0 };
+        nextDir = { x: 1, y: 0 };
+        score = 0;
+        stepInterval = 130;
+        spawnBug();
+        updateScore();
+        state = 'idle';
+        statusEl.textContent = i18n.idle;
+        restartLabel.textContent = i18n.play;
+        snakeStage.classList.remove('is-running');
+        draw();
+      }
+
+      function startGame() {
+        if (state === 'over') reset();
+        if (state === 'running') return;
+        state = 'running';
+        snakeStage.classList.add('is-running');
+      }
+      function pauseGame() {
+        if (state !== 'running') return;
+        state = 'paused';
+        statusEl.textContent =
+          lang === 'de' ? 'Pause — Leertaste zum Weitermachen' : 'Paused — press space to resume';
+      }
+
+      function setDir(d: { x: number; y: number }) {
+        if (d.x === -dir.x && d.y === -dir.y) return;
+        nextDir = d;
+        if (state === 'idle' || state === 'paused') startGame();
+      }
+
+      function onKey(e: KeyboardEvent) {
+        if (screenUi.getAttribute('data-open-window') !== 'snake') return;
+        const k = e.key.toLowerCase();
+        if (k === 'arrowup' || k === 'w') {
+          e.preventDefault();
+          setDir({ x: 0, y: -1 });
+        } else if (k === 'arrowdown' || k === 's') {
+          e.preventDefault();
+          setDir({ x: 0, y: 1 });
+        } else if (k === 'arrowleft' || k === 'a') {
+          e.preventDefault();
+          setDir({ x: -1, y: 0 });
+        } else if (k === 'arrowright' || k === 'd') {
+          e.preventDefault();
+          setDir({ x: 1, y: 0 });
+        } else if (k === ' ') {
+          e.preventDefault();
+          if (state === 'running') pauseGame();
+          else startGame();
+        }
+      }
+      window.addEventListener('keydown', onKey);
+
+      snakeStage.addEventListener('click', (e) => {
+        if ((e.target as Element).closest('.sk-dpad_btn')) return;
+        if (state === 'running') pauseGame();
+        else startGame();
+      });
+
+      restartBtn.addEventListener('click', () => {
+        if (state === 'over') reset();
+        startGame();
+      });
+
+      win.querySelectorAll<HTMLElement>('[data-snake-dir]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const d = btn.getAttribute('data-snake-dir');
+          if (d === 'up') setDir({ x: 0, y: -1 });
+          if (d === 'down') setDir({ x: 0, y: 1 });
+          if (d === 'left') setDir({ x: -1, y: 0 });
+          if (d === 'right') setDir({ x: 1, y: 0 });
+        });
+      });
+
+      new MutationObserver(() => {
+        if (
+          screenUi.getAttribute('data-open-window') !== 'snake' &&
+          state === 'running'
+        )
+          pauseGame();
+      }).observe(screenUi, { attributes: true, attributeFilter: ['data-open-window'] });
+
+      reset();
+      requestAnimationFrame(loop);
+    }
+    initSnake();
+
+
+    /* ---------- Messages → n8n chatbot bridge ---------- */
+    const msgContinue = screenUi.querySelector<HTMLElement>('[data-msg-continue]');
+    if (msgContinue) {
+      msgContinue.addEventListener('click', () => {
+        closeWindow(false);
+        setTimeout(() => {
+          const t = document.querySelector('#n8n-chat .chat-window-toggle');
+          if (t) (t as HTMLElement).click();
+        }, 260);
+      });
+    }
+
+    /* ------------------------------------------------------------------
+     * Pointer — mapped through the inverse homography so the dock reacts in
+     * the display's own coordinates, not in screen pixels. That also lets us
+     * draw a cursor that lives *inside* the laptop.
+     * ---------------------------------------------------------------- */
+    const fakePointer = screenUi.querySelector<HTMLElement>('[data-mbd-pointer]');
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        pointer.cx = e.clientX;
+        pointer.cy = e.clientY;
+        pointer.moved = true;
+      },
+      { passive: true },
+    );
+
+    function updatePointer(interactive: boolean) {
+      const r = host.getBoundingClientRect();
+      const local = interactive ? hostToSurface(pointer.cx - r.left, pointer.cy - r.top) : null;
+      const inside =
+        !!local &&
+        local[0] >= 0 &&
+        local[0] <= surface.w &&
+        local[1] >= 0 &&
+        local[1] <= surface.h &&
+        pointer.cx >= r.left &&
+        pointer.cx <= r.right &&
+        pointer.cy >= r.top &&
+        pointer.cy <= r.bottom;
+
+      if (local) {
+        pointer.lx = local[0];
+        pointer.ly = local[1];
+      }
+      pointer.inside = inside;
+
+      if (fakePointer && finePointer) {
+        screenUi.classList.toggle('is-pointer-in', inside);
+        if (inside) {
+          fakePointer.style.transform = `translate3d(${pointer.lx.toFixed(1)}px, ${pointer.ly.toFixed(1)}px, 0)`;
+        }
+      }
+      return inside;
+    }
+
+    /* ------------------------------------------------------------------
+     * Scroll choreography
+     *
+     *   • through the scene the laptop is small, shut, drifting behind the
+     *     other animations
+     *   • as its in-flow box comes up it flies into place, squares up to the
+     *     viewer and the lid swings open
+     * ---------------------------------------------------------------- */
+    const flightRect = { x: 0, y: 0, w: 0, h: 0 };
+    let laidOut = false;
+
+    /* How big the laptop is while it cruises, as a fraction of its landed
+       size. It has to stay readable behind the scroll scene's panels. */
+    const CRUISE_SCALE = 0.72;
+
+    const stories = section ? Array.from(section.querySelectorAll<HTMLElement>('.ps-story')) : [];
+    const marquee = section?.querySelector<HTMLElement>('.scroll-section') ?? null;
+    const header = section?.querySelector<HTMLElement>('.mbd-header') ?? null;
+    const cruise = { x: 0, y: 0, seeded: false };
+
+    /**
+     * The block of copy the laptop should be sitting behind right now. The
+     * scroll scene fades its story columns in and out a pair at a time; we
+     * pick one side, and swap sides a few times down the section so the
+     * laptop drifts across instead of parking.
+     */
+    function currentAnchor(progress: number): HTMLElement | null {
+      const shown = stories.filter((s) => s.classList.contains('visible'));
+      if (shown.length) {
+        const front = Math.sin(progress * Math.PI * 3) >= 0;
+        return front ? shown[0] : shown[shown.length - 1];
+      }
+      const onScreen = (el: HTMLElement | null) => {
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < window.innerHeight;
+      };
+      if (onScreen(header)) return header;
+      if (onScreen(marquee)) return marquee;
+      return null;
+    }
+
+    function updateFlight(dt: number) {
+      const { w: hw, h: hh } = hostSize();
+      const hostRect = host.getBoundingClientRect();
+      const box = wrap.getBoundingClientRect();
+
+      /* Landing target: the in-flow placeholder, opened up a little. The
+         placeholder is kept short so the section heading stays on screen, but
+         the canvas spans the viewport, so the laptop may spill past it. */
+      const GROW = 1.2;
+      let tw = (box.width || hw) * GROW;
+      let th = (box.height || hh) * GROW;
+      const maxW = hw * 0.985;
+      if (tw > maxW) {
+        th *= maxW / tw;
+        tw = maxW;
+      }
+      const tx = box.left - hostRect.left + ((box.width || hw) - tw) / 2;
+      const ty = box.top - hostRect.top + ((box.height || hh) - th) / 2;
+
+      let progress = 0;
+      if (section) {
+        const sr = section.getBoundingClientRect();
+        const span = Math.max(1, sr.height - window.innerHeight);
+        progress = clamp01(-sr.top / span);
+        landT = smoothstep(0, 0.62, clamp01((window.innerHeight - box.top) / (window.innerHeight * 0.62)));
+      } else {
+        landT = 1;
+      }
+      /* Reduced motion: skip the whole journey — the laptop simply sits in its
+         box, open, the way it would without any choreography. */
+      if (reducedMotion) landT = 1;
+
+      /* Cruise: shadow whichever block of copy is currently on screen, so the
+         laptop is always drifting behind the thing being read. */
+      const amp = reducedMotion ? 0 : 1;
+      const fw = tw * CRUISE_SCALE;
+      const fh = th * CRUISE_SCALE;
+
+      let ax = hw * 0.5;
+      let ay = hh * 0.5;
+      const anchor = currentAnchor(progress);
+      if (anchor) {
+        const ar = anchor.getBoundingClientRect();
+        if (ar.width && ar.height) {
+          ax = ar.left + ar.width / 2 - hostRect.left;
+          ay = ar.top + ar.height / 2 - hostRect.top;
+        }
+      }
+      ax += Math.sin(progress * Math.PI * 3.4 + 0.6) * hw * 0.09 * amp;
+      ay += Math.sin(progress * Math.PI * 2.2 + 1.1) * hh * 0.05 * amp;
+      /* it may hang off an edge, but never by more than about a fifth */
+      ax = Math.min(Math.max(ax, fw * 0.3), hw - fw * 0.3);
+      ay = Math.min(Math.max(ay, fh * 0.3), hh - fh * 0.3);
+
+      if (!cruise.seeded) {
+        cruise.x = ax;
+        cruise.y = ay;
+        cruise.seeded = true;
+      }
+      const follow = Math.min(1, dt * (reducedMotion ? 20 : 1.9));
+      cruise.x += (ax - cruise.x) * follow;
+      cruise.y += (ay - cruise.y) * follow;
+
+      flightRect.w = fw;
+      flightRect.h = fh;
+      flightRect.x = cruise.x - fw / 2;
+      flightRect.y = cruise.y - fh / 2;
+
+      const e = landT * landT * (3 - 2 * landT);
+      applyRect(
+        mix(flightRect.x, tx, e),
+        mix(flightRect.y, ty, e),
+        mix(flightRect.w, tw, e),
+        mix(flightRect.h, th, e),
+      );
+
+      /* the lid only swings open on the final approach */
+      openT = smoothstep(0.45, 0.98, landT);
+      flight?.classList.toggle('is-front', openT > 0.2);
+      if (lidNode) {
+        const a = mix(lidClosedX, lidOpenX, openT);
+        lidNode.rotation.x = a;
+        lidNode.position.y = lidHingeY + lidLift * (1 - Math.cos(a));
+      }
+
+      /* Orientation: while it is shut it floats lid-up, squared to the reader
+         so the badge on the back of the display faces them; it then rolls down
+         into the open, screen-on pose as the lid swings. The roll is mostly
+         around Z, which keeps that face pointed at the camera. */
+      const cruiseY = Math.sin(progress * Math.PI * 2.6) * 0.3 * amp;
+      const cruiseX =
+        mix(lidFacingX, 0, openT) + Math.sin(progress * Math.PI * 1.7 + 2.2) * 0.15 * amp;
+      const cruiseZ = Math.sin(progress * Math.PI * 2.0 + 0.4) * 0.34 * amp;
+
+      const parallax = finePointer && !reducedMotion && landT > 0.9;
+      let hoverY = 0;
+      let hoverX = 0;
+      if (parallax) {
+        const r = host.getBoundingClientRect();
+        const nx = ((pointer.cx - r.left) / Math.max(1, r.width)) * 2 - 1;
+        const ny = ((pointer.cy - r.top) / Math.max(1, r.height)) * 2 - 1;
+        hoverY = clamp01(Math.abs(nx)) * Math.sign(nx) * 0.075;
+        hoverX = clamp01(Math.abs(ny)) * Math.sign(ny) * 0.03;
+      }
+
+      const k = Math.min(1, dt * 5);
+      tilt.y += (mix(cruiseY, hoverY, e) - tilt.y) * k;
+      tilt.x += (mix(cruiseX, hoverX, openT) - tilt.x) * k;
+      tilt.z += (mix(cruiseZ, 0, e) - tilt.z) * k;
+      pivot.rotation.set(tilt.x, tilt.y, tilt.z);
+    }
+
+    /* ---------- render loop ---------- */
+    function render() {
+      const dt = Math.min(clock.getDelta(), 0.05);
+
+      if (ready) {
+        updateFlight(dt);
+        pivot.updateWorldMatrix(true, true);
+        camera.updateProjectionMatrix();
+
+        const { w, h } = hostSize();
+        const live = landT > 0.55;
+        if (live) {
+          const wasHidden = screenUi.hidden;
+          updateScreenUi(w, h);
+          if (wasHidden || !laidOut) {
+            laidOut = measureDock();
+            relayoutTabs();
+          }
+          const interactive = landT > 0.92;
+          const inside = updatePointer(interactive);
+          updateDock(interactive && inside);
+          screenUi.style.opacity = smoothstep(0.55, 0.85, landT).toFixed(3);
+          screenUi.classList.toggle('is-live', interactive);
+          screenUi.inert = !interactive;
+        } else if (!screenUi.hidden) {
+          screenUi.hidden = true;
+          screenUi.classList.remove('is-pointer-in', 'is-live');
+        }
+
+        renderer.render(scene, camera);
+      }
+      if (running) raf = requestAnimationFrame(render);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      clock.getDelta();
+      raf = requestAnimationFrame(render);
+    }
+    function stop() {
+      running = false;
+      cancelAnimationFrame(raf);
+    }
+
+    sizeRenderer();
+    new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()), {
+      threshold: 0,
+    }).observe(section ?? stage);
+
+    window.addEventListener('resize', () => {
+      laidOut = false;
+      relayoutTabs();
+    });
+  }
+
+  init();
+</script>

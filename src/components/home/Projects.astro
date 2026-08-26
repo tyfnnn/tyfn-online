@@ -60,36 +60,6 @@ const scrollText = t('projects.scroll_text');
   </div>
   <div class="spacer-xxhuge-2"></div>
   <ProjectsScene lang={lang} />
-  <div class="scene-outro">
-    <div class="scene-outro_eye">{t('projects.scene.outro.eye')}</div>
-    <div class="scene-outro_head">{t('projects.scene.outro.head')}</div>
-  </div>
-
   <slot />
   <div class="spacer-xxhuge-3"></div>
 </section>
-
-<style>
-  .scene-outro {
-    text-align: center;
-    padding: 0 32px;
-    margin: -40px auto 48px;
-    max-width: 720px;
-    position: relative;
-    z-index: 2;
-  }
-  .scene-outro_eye {
-    font-size: 14px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(240, 237, 230, 0.42);
-    margin-bottom: 14px;
-  }
-  .scene-outro_head {
-    font-size: 44px;
-    line-height: 1.15;
-    color: #F0EDE6;
-    font-weight: 500;
-  }
-
-</style>
