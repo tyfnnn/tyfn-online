@@ -43,6 +43,23 @@
     color: rgba(19, 21, 28, 0.6);
   }
 
+  /* same intro, now above the MacBook */
+  html[data-theme='light'] .mbd-eyebrow {
+    color: rgba(19, 21, 28, 0.55);
+  }
+  /* the component's own :last-child rule is scoped, which outweighs a plain
+     class override here — so name it explicitly */
+  html[data-theme='light'] .mbd-eyebrow_rule,
+  html[data-theme='light'] .mbd-eyebrow_rule:last-child {
+    background: rgba(19, 21, 28, 0.35);
+  }
+  html[data-theme='light'] .mbd-heading {
+    color: #13151c;
+  }
+  html[data-theme='light'] .mbd-subheading {
+    color: rgba(19, 21, 28, 0.6);
+  }
+
   /* projects grid lines */
   html[data-theme='light'] .home-work_bg-grid-wrapper {
     border-bottom-color: #4b5151;
@@ -63,14 +80,6 @@
   }
   html[data-theme='light'] .projects-scene .ps-story .ps-body {
     color: rgba(19, 21, 28, 0.85);
-  }
-
-  /* scene outro text */
-  html[data-theme='light'] .scene-outro_eye {
-    color: rgba(19, 21, 28, 0.5);
-  }
-  html[data-theme='light'] .scene-outro_head {
-    color: #13151c;
   }
 
   .nav-info-2 {

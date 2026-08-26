@@ -50,18 +50,13 @@
           "head": "iOS und Android.",
           "body": "Jede Plattform bekommt ihre eigene actual-Implementierung. Native UI, null Kompromisse."
         }
-      },
-      "outro": {
-        "eye": "In Aktion sehen",
-        "head": "Entdecke mein Portfolio.",
-        "cta": "Zu den Projekten"
       }
     }
   },
   "cto": {
-    "badge": "Mobile Developer",
-    "heading": "Sieh, woran ich gerade arbeite.",
-    "subheading": "Ausgewählte Projekte und Notizen zum Handwerk.",
+    "badge": "Live",
+    "heading": "Kurz aufgeklappt.",
+    "subheading": "Meine aktuellen Projekte und Notizen — anklickbar, direkt hier drin.",
     "portfolio_title": "Portfolio",
     "portfolio_description": "Ausgewählte mobile Apps — vom Konzept bis zum App Store.",
     "portfolio_cta": "Portfolio öffnen",
@@ -79,6 +74,14 @@
     "sort_oldest": "Älteste",
     "empty": "Keine Treffer.",
     "inbox_label": "Eingang",
+    "menu_file": "Ablage",
+    "menu_edit": "Bearbeiten",
+    "menu_view": "Darstellung",
+    "menu_window": "Fenster",
+    "menu_help": "Hilfe",
+    "dock_portfolio": "Portfolio",
+    "dock_blog": "Blog",
+    "dock_trash": "Papierkorb — verworfene Ideen",
     "win_close": "Schließen",
     "win_xcode_title": "Xcode 26",
     "win_xcode_subtitle": "tyfn.app · main",
