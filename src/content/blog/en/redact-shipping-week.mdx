@@ -1,0 +1,173 @@
+---
+title: Two releases in one evening — how Redact turned into a product
+description: Five weeks in the summer of 2026 in which Redact got O(1) pixelation, a real project library, a StoreKit paywall, and two App Store releases on the same evening — and why that's the actual difference between a side project and a product.
+pubDate: 2026-08-11
+lang: en
+tags:
+  - swift
+  - swiftui
+  - ios
+  - redact
+  - storekit
+  - performance
+  - shipping
+translationKey: redact-shipping-week
+heroImage: /assets/redact-shipping-week-hero.png?v=2
+draft: false
+---
+
+By this point Redact was already in the App Store — the
+[origin post](/blog/redact-origin/) explains why the app exists at all,
+the [macOS review post](/blog/redact-macos-review/) how it made it
+through four rounds of review. Both articles end at a point that's easy
+to mistake for "done": the app is live, it works.
+
+What followed were five weeks in July and August that changed more than
+the months before them combined. No single big feature. More like: the
+sum of performance, memory, money, and infrastructure — the four things
+that turn a tool that works into a product you can actually sell.
+
+## O(1) instead of a bitmap per face
+
+The first crack showed up in photos with a lot of faces. The original
+pixelation allocated a fresh bitmap for every detected face, blurred it,
+wrote it back. Invisible with three or four faces. With a group shot of
+twenty people, the app started visibly stuttering — exactly the photos
+Redact is meant for.
+
+The fix wasn't a new feature, it was an architecture change: anonymisation
+now runs in a single pass over the image instead of opening a fresh
+allocation per face. Cost per additional face: effectively zero. On top
+of that came tile-based detection — small faces that only take up a
+fraction of a large photo used to get missed or badly cropped. Now the
+model scans the image in tiles instead of squeezing the whole frame down
+to a fixed input size.
+
+No user ever sees that commit. Every user with a conference photo feels
+it.
+
+## From proof of concept to a tool
+
+The following week was almost entirely Redact, six out of seven days
+active. Three things landed that look unrelated at first glance but
+share the same denominator.
+
+**A real project library.** Before: close the app, lose the progress.
+Now, photos and videos you've started can be resumed at any time. Sounds
+minor, but it's the precondition for someone editing a video across
+several sittings instead of finishing it in one go or abandoning it.
+
+**Live video preview without re-rendering.** Internally the target was
+called "Kloak parity" — changes to masks, effects, or tracks should show
+up in the player immediately, without a re-render each time. That's the
+difference between an editor that feels like a tool and one that feels
+like a batch-processing script with a progress bar.
+
+**Multi-step undo.** Sounds trivial, but it simply wasn't there before.
+An editor where you can't undo a mistake gets used cautiously instead of
+playfully — and a tool used cautiously gets used less.
+
+Library, speed, correction: memory, pace, a safety net. None of it is a
+marketing feature. Together they're the difference between a proof of
+concept and a tool you trust with a real task.
+
+## The price I hadn't set yet
+
+Up to that point, Redact was free, no exceptions. The next week changed
+that — and with it started the genuinely uncomfortable work: not
+building new features, but drawing a line that feels fair.
+
+Free-tier export with a 720p cap and a "Made with Redact" badge was the
+first commit of the week, and it made the direction clear right away.
+Right after it came the StoreKit 2 paywall with free-tier gating, plus a
+pricing ladder of $4.99, $24.99, and $49.99 a month. The rest of the week
+was polish on exactly that boundary: a ten-second video export cap on
+the free tier, a watermark large enough to be noticed without making the
+result unusable, an upsell hint inside the player instead of a popup that
+interrupts the workflow.
+
+A watermark you can't see isn't a watermark. Ad space nobody reads is
+wasted space. I had to talk myself into both more than once before the
+balance felt right — the instinct as a developer is to take as little
+away from the free tier as possible; the instinct as someone who wants
+to make a living from the app is the opposite. The truth sits somewhere
+in between, and you don't find it on the first try.
+
+## Two versions in one evening
+
+The week everything came together ran differently from the weeks before
+it. No more slow iterating — an organised sprint toward a finish line,
+three days, fifteen merged pull requests.
+
+Wednesday evening was the moment. First the changelog for v1.0.0, the
+first official release. A few commits later, the correction: the
+changelog had to be updated to v1.1.0, because the second version — with
+the entire monetisation layer on top — was ready four hours after the
+first. Not a mistake, more an honest record of the work moving faster
+than the documentation could keep up with.
+
+At the same time, the website got a redesign in a warm iOS theme with Pro
+pricing, and macOS got its first real onboarding flow — first-run
+onboarding with TipKit popovers, backported from a later iOS sprint. To
+close it out, one more App Store icon fix: the upload validator rejects
+an alpha channel in the icon, and if you miss that, you wait out an
+entire build before you notice.
+
+## Then comes the infrastructure
+
+A release week is almost always followed by a cleanup week, and the next
+one felt exactly like that: four active days, twelve merged pull
+requests, nothing worth announcing — but the kind of work that makes the
+next release week shorter.
+
+GitHub Actions moved into the repo: Redact can now build itself without
+anyone stepping in manually. A bug in license plate detection that only
+showed up at certain camera angles got fixed. A loading issue with the
+StoreKit product data in the paywall got fixed too — not an optional fix,
+but exactly the kind of bug that stops someone from completing a
+purchase. On top of that, an n8n workflow that automatically structures
+incoming user feedback before it disappears into an inbox. Feedback that
+never gets sorted is worth exactly as much as no feedback at all.
+
+## The quiet close
+
+The last week of this arc was the quietest one: two commits, two active
+days. But the one commit that mattered was the release merge for 1.2.1 —
+not a feature branch, but the moment version, changelog, and release
+branch officially come together. The real work had already happened;
+this week was just closing the bracket.
+
+That's a lesson on its own: release weeks often look the least dramatic
+in the commit graph, precisely because most of the work happened before
+them.
+
+## What actually makes the difference
+
+Four things, clearer in hindsight than in the week I was building them.
+
+**Performance is a feature nobody experiences as a feature.** O(1)
+pixelation earned no new UI element, no line in the release notes — but
+without it the app falls over on exactly the photos it was built for.
+
+**A price isn't a number, it's a boundary.** The real work on the paywall
+wasn't the StoreKit setup, it was deciding exactly where the free
+experience stops without feeling like a trap.
+
+**Infrastructure pays off with a delay.** CI that no human has to trigger
+manually does absolutely nothing visible the week you build it. Every
+week after that it saves time you don't notice, because you never lost
+it.
+
+**"Done" is a snapshot, not a state.** The App Store approval post ended
+with a shipped app. This is proof that the more interesting work starts
+right after.
+
+## Conclusion
+
+Five weeks, two App Store releases, a pricing structure, a CI pipeline,
+and a performance rewrite nobody will ever read about in the release
+notes. That's the unglamorous part of turning an app into a product —
+and, looking back, the part I remember most precisely. Redact is still
+free with an optional Pro tier, on the
+[App Store](https://apps.apple.com/de/app/redact-faces-off/id6762188914)
+or on the [website](https://redact.vortex-labs.de/).

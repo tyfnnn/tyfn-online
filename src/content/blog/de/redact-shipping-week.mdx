@@ -1,0 +1,184 @@
+---
+title: Zwei Versionen an einem Abend — wie aus Redact ein Produkt wurde
+description: Fünf Wochen im Sommer 2026, in denen Redact eine O(1)-Pixelation, eine echte Projekt-Bibliothek, eine StoreKit-Paywall und zwei App-Store-Releases am selben Abend bekommen hat — und warum genau das der Unterschied zwischen Nebenprojekt und Produkt ist.
+pubDate: 2026-08-11
+lang: de
+tags:
+  - swift
+  - swiftui
+  - ios
+  - redact
+  - storekit
+  - performance
+  - shipping
+translationKey: redact-shipping-week
+heroImage: /assets/redact-shipping-week-hero.png?v=2
+draft: false
+---
+
+Redact war zu diesem Zeitpunkt im App Store — der [Origin-Post](/de/blog/redact-origin/)
+erklärt, warum die App überhaupt existiert, der
+[macOS-Review-Post](/de/blog/redact-macos-review/), wie sie durch vier
+Review-Runden gekommen ist. Beide Artikel enden an einem Punkt, den man
+leicht mit "fertig" verwechselt: die App ist im Store, es funktioniert.
+
+Was danach kam, waren fünf Wochen im Juli und August, in denen sich mehr
+verändert hat als in den Monaten davor zusammen. Kein einzelnes großes
+Feature. Eher: die Summe aus Performance, Gedächtnis, Geld und
+Infrastruktur — die vier Dinge, die aus einem Tool, das funktioniert, ein
+Produkt machen, das man verkaufen kann.
+
+## O(1) statt Bitmap pro Gesicht
+
+Der erste Riss zeigte sich bei Fotos mit vielen Gesichtern. Die
+ursprüngliche Pixelation legte für jedes erkannte Gesicht eine eigene
+Bitmap an, verpixelte sie, schrieb sie zurück. Bei drei, vier Gesichtern
+unsichtbar. Bei einem Gruppenfoto mit zwanzig Personen fing die App an,
+spürbar zu ruckeln — genau die Fotos, für die Redact eigentlich gebaut
+ist.
+
+Die Lösung war kein neues Feature, sondern ein Architekturwechsel: die
+Anonymisierung läuft jetzt in einem Durchgang über das Bild, statt pro
+Gesicht eine eigene Allokation zu öffnen. Aufwand pro zusätzlichem
+Gesicht: praktisch null. Dazu kam Kachel-Detection — kleine Gesichter,
+die in einem großen Foto nur einen Bruchteil des Frames einnehmen,
+wurden vorher entweder übersehen oder falsch zugeschnitten erkannt. Jetzt
+tastet das Modell das Bild in Kacheln ab, statt es als Ganzes auf eine
+feste Eingabegröße zu quetschen.
+
+Kein Nutzer sieht diesen Commit. Aber jeder Nutzer mit einem
+Konferenzfoto spürt ihn.
+
+## Vom Proof-of-Concept zum Werkzeug
+
+Die Woche danach war fast ausschließlich Redact, sechs von sieben Tagen
+aktiv. Drei Dinge kamen dazu, die auf den ersten Blick unabhängig
+wirken, aber denselben Nenner haben.
+
+**Eine echte Projekt-Bibliothek.** Vorher: App zu, Fortschritt weg. Jetzt
+lassen sich angefangene Fotos und Videos jederzeit weiterbearbeiten.
+Klingt nach einer Kleinigkeit, ist aber die Voraussetzung dafür, dass
+jemand ein Video über mehrere Sitzungen hinweg bearbeitet, statt es in
+einem Rutsch durchzuziehen oder aufzugeben.
+
+**Live-Video-Vorschau ohne Re-Render.** Intern hieß das Ziel
+"Kloak-Parität" — Änderungen an Masken, Effekten oder Tracks sollten sich
+sofort im Player zeigen, ohne dass jedes Mal neu gerendert wird. Das ist
+der Unterschied zwischen einem Editor, der sich wie ein Werkzeug anfühlt,
+und einem, der sich wie ein Stapelverarbeitungs-Skript mit Fortschrittsbalken
+anfühlt.
+
+**Mehrstufiges Undo.** Trivial klingend, aber vorher schlicht nicht da.
+Ein Editor, in dem man einen Fehler nicht rückgängig machen kann, wird
+vorsichtig benutzt statt spielerisch — und ein Tool, das vorsichtig
+benutzt wird, wird seltener benutzt.
+
+Bibliothek, Geschwindigkeit, Korrektur: Gedächtnis, Tempo, ein
+Sicherheitsnetz. Keins davon ist ein Marketing-Feature. Zusammen sind sie
+der Unterschied zwischen einem Proof-of-Concept und einem Werkzeug, dem
+man eine echte Aufgabe anvertraut.
+
+## Der Preis, den ich noch nicht gestellt hatte
+
+Bis dahin war Redact kostenlos, ohne Ausnahme. Die nächste Woche hat das
+geändert — und damit fing die eigentlich unbequeme Arbeit an: nicht neue
+Features bauen, sondern eine Grenze ziehen, die sich fair anfühlt.
+
+Free-Tier-Export mit einem 720p-Cap und einem "Made with Redact"-Badge
+war der erste Commit der Woche, und er hat die Richtung sofort klar
+gemacht. Direkt danach kam die StoreKit-2-Paywall mit Free-Tier-Gating,
+dazu eine Preisstruktur von 4,99 € über 24,99 € bis 49,99 € im Monat. Der
+Rest der Woche war Feinschliff an genau dieser Grenze: ein
+Video-Export-Cap bei zehn Sekunden im Free-Tier, ein Wasserzeichen, das
+groß genug ist, um wahrgenommen zu werden, ohne das Ergebnis unbrauchbar
+zu machen, ein Upsell-Hinweis im Player statt eines Popups, das den
+Workflow unterbricht.
+
+Ein Wasserzeichen, das man nicht sieht, ist kein Wasserzeichen. Eine
+Werbefläche, die niemand liest, ist vergeudeter Platz. Beides musste ich
+mir mehrfach selbst vorsagen, bevor die Balance stimmte — der Instinkt
+als Entwickler ist, dem Free-Tier möglichst wenig wegzunehmen; der
+Instinkt als jemand, der von der App leben will, ist das Gegenteil. Die
+Wahrheit liegt dazwischen, und man findet sie nicht beim ersten Versuch.
+
+## Zwei Versionen an einem Abend
+
+Die Woche, in der sich das alles zusammengefügt hat, lief anders als die
+Wochen davor. Kein langsames Iterieren mehr — ein geordneter Sprint auf
+eine Linie, drei Tage, fünfzehn gemergte Pull Requests.
+
+Der Mittwochabend war der Moment. Erst der Changelog für v1.0.0, das
+erste offizielle Release. Wenige Commits später die Korrektur: der
+Changelog musste auf v1.1.0 nachgezogen werden, weil die zweite Version —
+mit dem kompletten Monetarisierungs-Layer obendrauf — vier Stunden nach
+der ersten fertig war. Kein Fehler, eher ein ehrliches Protokoll davon,
+dass die Arbeit schneller lief als die Dokumentation sie einholen konnte.
+
+Parallel dazu bekam die Website ein Redesign im warmen iOS-Theme mit
+Pro-Pricing, und macOS bekam seinen ersten echten Onboarding-Flow —
+First-run-Onboarding mit TipKit-Popovers, zurückportiert aus einem
+späteren Sprint der iOS-Version. Zum Schluss noch ein App-Icon-Fix: der
+App-Store-Validator nimmt keinen Alphakanal im Icon, und wer das
+übersieht, wartet einen kompletten Build lang, bis er es merkt.
+
+## Danach kommt die Infrastruktur
+
+Nach einer Release-Woche folgt fast immer eine Aufräum-Woche, und genau
+so hat sich die nächste angefühlt: vier aktive Tage, zwölf gemergte
+Pull Requests, keine einzige Ankündigung wert — aber die Sorte Arbeit,
+die die nächste Release-Woche kürzer macht.
+
+GitHub Actions ist ins Repo eingezogen: Redact kann sich jetzt selbst
+bauen, ohne dass jemand manuell eingreift. Ein Bug in der
+Kennzeichenerkennung, der nur bei bestimmten Kamerawinkeln auftrat,
+wurde behoben. Ein Ladeproblem bei den StoreKit-Produktdaten in der
+Paywall wurde gefixt — kein optionaler Fix, sondern genau die Art Bug,
+die verhindert, dass jemand einen Kauf abschließen kann. Dazu ein
+n8n-Workflow, der eingehendes Nutzerfeedback automatisch strukturiert,
+bevor es in einem Posteingang verschwindet. Feedback, das nicht sortiert
+wird, hat denselben Wert wie gar keines.
+
+## Der ruhige Schluss
+
+Die letzte Woche dieses Bogens war die leiseste: zwei Commits, zwei
+aktive Tage. Aber der eine Commit, der zählte, war der Release-Merge für
+1.2.1 — kein Feature-Branch, sondern der Moment, in dem Version, Changelog
+und Release-Branch offiziell zusammenfinden. Die eigentliche Arbeit war
+schon geleistet; diese Woche war nur noch das Schließen der Klammer.
+
+Das ist eine Lektion für sich: Release-Wochen sehen im Commit-Graph oft
+am unspektakulärsten aus, gerade weil das meiste vorher passiert ist.
+
+## Was den Unterschied macht
+
+Vier Dinge, im Rückblick klarer als in der Woche, in der ich sie gebaut
+habe.
+
+**Performance ist ein Feature, das niemand als Feature erlebt.** Die
+O(1)-Pixelation hat kein neues UI-Element, keine neue Zeile in den
+Release Notes verdient — aber ohne sie bricht die App genau bei den
+Fotos zusammen, für die sie gebaut wurde.
+
+**Ein Preis ist kein Betrag, sondern eine Grenze.** Die eigentliche
+Arbeit an der Paywall war nicht das StoreKit-Setup, sondern die
+Entscheidung, wo genau das kostenlose Erlebnis aufhört, ohne sich wie
+eine Falle anzufühlen.
+
+**Infrastruktur zahlt sich verzögert aus.** CI, die kein Mensch mehr
+manuell anstoßen muss, macht in der Woche, in der man sie baut, rein gar
+nichts sichtbar. In jeder Woche danach spart sie Zeit, die man nicht
+merkt, weil man sie nie verloren hat.
+
+**"Fertig" ist eine Momentaufnahme, kein Zustand.** Der App-Store-
+Approval-Post endete mit einer freigegebenen App. Das hier ist der
+Beweis, dass danach die interessantere Arbeit erst anfängt.
+
+## Fazit
+
+Fünf Wochen, zwei App-Store-Releases, eine Preisstruktur, eine CI-Pipeline
+und ein Performance-Rewrite, den niemand in den Release Notes lesen wird.
+Das ist der unglamouröse Teil davon, eine App zu einem Produkt zu machen
+— und der Teil, an den ich mich rückblickend am genauesten erinnere.
+Redact gibt es weiterhin kostenlos mit optionalem Pro-Tier im
+[App Store](https://apps.apple.com/de/app/redact-faces-off/id6762188914)
+oder auf der [Website](https://redact.vortex-labs.de/).
