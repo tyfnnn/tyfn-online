@@ -1851,57 +1851,16 @@ const menus = [
     pointer-events: none;
   }
 
+  /* Phones land screen-first (see the flight layer in the script): the panel
+     fills the width and the chassis runs off the sides and the bottom of this
+     box. The box is kept tall enough for the keyboard deck so the laptop never
+     runs into the section below it. */
   @media (max-width: 767px) {
     .mbd-canvas-wrap {
-      aspect-ratio: 3 / 2;
-    }
-  }
-
-  /* -------------------------------------------------------------------
-   * Compact display — the panel is too narrow for side-by-side panes.
-   * Keyed to the projected surface, so it kicks in when the *screen* is
-   * small, not when the browser window is.
-   * ---------------------------------------------------------------- */
-  @container (max-width: 620px) {
-    .mbd-deskwin_body {
-      grid-template-columns: 1fr;
-      gap: 1cqw;
-    }
-    .mbd-list li:nth-child(n + 3) { display: none; }
-    .mbd-menu:not(.mbd-menu--app) { display: none; }
-    .mbd-search-glyph { display: none; }
-    .mbd-searchbar_kbd { display: none; }
-    .mbd-sort_label { display: none; }
-    .mbd-tab { padding: 0.35cqw 0.7cqw; }
-    .mbd-notif { width: 34cqw; }
-
-    .xc-body,
-    .as-body,
-    .ws-body,
-    .fg-body,
-    .ob-body,
-    .msg-body,
-    .sk-body {
-      grid-template-columns: 1fr;
-    }
-    .xc-nav,
-    .xc-inspector,
-    .as-nav,
-    .as-preview,
-    .ws-nav,
-    .ws-side,
-    .fg-layers,
-    .fg-props,
-    .ob-nav,
-    .ob-graph,
-    .msg-sidebar,
-    .sk-stats {
-      display: none;
-    }
-    .xc-status,
-    .as-status,
-    .ws-status {
-      display: none;
+      aspect-ratio: 7 / 8;
+      /* held sideways there is no room for a box that tall, and the runtime
+         caps the panel against the viewport height to match */
+      max-height: 66vh;
     }
   }
 
@@ -3013,6 +2972,10 @@ const menus = [
   }
   .sk-stage canvas {
     display: block;
+    /* a grid item's automatic minimum size is its intrinsic size, and that
+       wins over max-height — without this the board never scales down */
+    min-width: 0;
+    min-height: 0;
     max-width: 100%;
     max-height: 100%;
     image-rendering: pixelated;
@@ -3079,8 +3042,242 @@ const menus = [
     .sk-dpad { display: block; }
   }
 
+  /* ---------------------------------------------------------------------
+   * Panes that fit their window
+   *
+   * Every app window body is a grid, and its single implicit row is
+   * auto-sized: it grew to whichever pane was tallest, so the panes' own
+   * `overflow` never engaged and `.mbd-win`'s overflow:hidden cut the result
+   * off at the window edge. The Xcode editor was 602px tall in a 363px
+   * window; its note has never been visible at any size. Capping the row at
+   * the body's height and letting the panes shrink into their own scroll
+   * areas is the whole fix — the panes were always built to scroll.
+   * ------------------------------------------------------------------ */
+  .xc-body,
+  .as-body,
+  .ws-body,
+  .fg-body,
+  .ob-body,
+  .msg-body,
+  .sk-body {
+    grid-auto-rows: minmax(0, 1fr);
+  }
+  /* grid and flex children default to min-height:auto, which refuses to
+     shrink below the content — the reason capping the row is not enough */
+  .xc-nav, .xc-editor, .xc-inspector,
+  .as-nav, .as-editor, .as-preview,
+  .ws-nav, .ws-editor, .ws-side,
+  .fg-layers, .fg-canvas, .fg-props,
+  .ob-nav, .ob-editor, .ob-graph,
+  .msg-sidebar, .msg-thread_view,
+  .xc-code, .as-code, .ws-code,
+  .ws-term {
+    min-height: 0;
+  }
+  /* in an editor column the code is the part that gives way; the note under
+     it is a fixed strip, the way its border and tint say it is */
+  .xc-note, .as-note, .ws-note {
+    flex-shrink: 0;
+  }
+  /* side panes are lists and mock-ups — they clip rather than grow */
+  .as-preview,
+  .ws-side,
+  .fg-layers,
+  .fg-props,
+  .ob-graph,
+  .msg-sidebar {
+    overflow: hidden;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .sk-caret { animation: none; }
+  }
+
+  /* -------------------------------------------------------------------
+   * Compact display — the panel is too narrow for side-by-side panes.
+   * Keyed to the projected surface, so it kicks in when the *screen* is
+   * small, not when the browser window is. The runtime uses a 420px design
+   * surface on phones and 700 everywhere else, so this is the phone layout.
+   *
+   * A phone gets ~370 real pixels of panel. The desktop is not squeezed into
+   * that, it is rebuilt for it: what stays takes roughly twice its usual
+   * share of the surface — 5px type is not type, and a 24px icon is not a
+   * tap target — and what cannot earn that room is dropped. Everything is
+   * still in cqw, so it survives whatever the projection does with it.
+   *
+   * This block is last in the stylesheet on purpose: its overrides carry the
+   * same specificity as the base rules, so anything defined below it would
+   * quietly win. The app-window internals used to sit below and did exactly
+   * that — the side panes were hidden while their fixed grid tracks stayed,
+   * squeezing the Xcode editor into 39px.
+   * ---------------------------------------------------------------- */
+  @container (max-width: 620px) {
+    /* ---------- menu bar ---------- */
+    .mbd-menubar {
+      height: 6.2cqw;
+      padding: 0 2.2cqw;
+      font-size: 2.8cqw;
+    }
+    .mbd-menubar_left,
+    .mbd-menubar_right { gap: 2.2cqw; }
+    .mbd-apple svg { width: 2.6cqw; }
+    .mbd-menu:not(.mbd-menu--app) { display: none; }
+    .mbd-search-glyph { display: none; }
+    .mbd-battery_pct { display: none; }
+    .mbd-wifi svg { width: 3.1cqw; }
+    .mbd-battery {
+      width: 5.4cqw;
+      height: 2.6cqw;
+      border-radius: 0.75cqw;
+      padding: 0.3cqw;
+    }
+    .mbd-battery::after { right: -0.7cqw; width: 0.45cqw; height: 1cqw; }
+    /* The notification centre cannot be shown at a readable size on a panel
+       this small, so the clock stops being a button along with it — a dead
+       control is worse than no control. */
+    .mbd-notif { display: none; }
+    .mbd-tray-clock {
+      padding: 0.4cqw 1.2cqw;
+      border-radius: 1.2cqw;
+      pointer-events: none;
+    }
+
+    /* ---------- desktop window ---------- */
+    .mbd-deskwin {
+      top: 7.2cqw;
+      left: 2cqw;
+      right: 2cqw;
+      bottom: 13cqw;
+      border-radius: 2cqw;
+    }
+    .mbd-deskwin_chrome { gap: 2cqw; padding: 1.2cqw 2cqw; }
+    .mbd-deskwin_title { gap: 1.1cqw; font-size: 2.9cqw; }
+    .mbd-dot { width: 1.5cqw; height: 1.5cqw; }
+    .mbd-tabs { gap: 0.4cqw; padding: 0.45cqw; border-radius: 1.6cqw; }
+    .mbd-tab {
+      padding: 0.6cqw 1.5cqw;
+      border-radius: 1.2cqw;
+      font-size: 2.5cqw;
+    }
+    .mbd-tab_pill { top: 0.45cqw; bottom: 0.45cqw; border-radius: 1.2cqw; }
+    /* Two lists side by side is what “Alle” means, and there is room for
+       one. The tab goes, and the runtime falls back to Projekte. */
+    .mbd-tab[data-tab='all'] { display: none; }
+    /* No room for a search field or a sort control — and no way to type into
+       one on a phone anyway. */
+    .mbd-searchbar,
+    .mbd-sort { display: none; }
+
+    .mbd-deskwin_body {
+      grid-template-columns: 1fr;
+      gap: 1cqw;
+      padding: 1.5cqw;
+    }
+    .mbd-deskwin_body:not([data-view]) [data-list='writing'] { display: none; }
+
+    .mbd-col_head { gap: 1.4cqw; padding-bottom: 0.9cqw; margin-bottom: 0.9cqw; }
+    .mbd-col_index { font-size: 2.2cqw; }
+    .mbd-col_title { gap: 1.1cqw; font-size: 2.9cqw; }
+    .mbd-col_title-meta { font-size: 2.2cqw; }
+    .mbd-col_all { font-size: 2.4cqw; }
+
+    .mbd-list { gap: 0.6cqw; }
+    /* one list, three rows — that is what fits at a readable size */
+    .mbd-list li:nth-child(n + 4) { display: none; }
+    .mbd-item {
+      gap: 1.4cqw;
+      padding: 0.9cqw 1.4cqw;
+      border-radius: 1.8cqw;
+    }
+    .mbd-item_index { font-size: 2.2cqw; }
+    .mbd-item_thumb,
+    .mbd-item_accent { width: 6.2cqw; height: 6.2cqw; border-radius: 1.4cqw; }
+    .mbd-item_title { font-size: 2.7cqw; }
+    .mbd-item_meta { gap: 1cqw; margin-top: 0.5cqw; }
+    .mbd-pill { font-size: 2.1cqw; padding: 0.5cqw 1.1cqw; }
+    .mbd-item_status { font-size: 2.2cqw; }
+    .mbd-item_arrow { font-size: 2.5cqw; }
+    .mbd-empty { margin-top: 2cqw; font-size: 2.4cqw; }
+
+    /* ---------- dock ----------
+       Eleven icons have to fit across 100cqw and still have room to
+       magnify, so they are smaller than the rest of the pass and the bin —
+       the one icon that does nothing on a phone — goes. */
+    .mbd-dock {
+      --icon: 7.6cqw;
+      --pad: 1cqw;
+      bottom: 1.6cqw;
+      gap: 0.5cqw;
+      padding-left: 1cqw;
+      padding-right: 1cqw;
+      border-radius: 2.6cqw;
+    }
+    .mbd-app--trash { display: none; }
+    .mbd-dock_sep { margin: 0.4cqw 0.35cqw; }
+    .mbd-badge {
+      min-width: 2.8cqw;
+      height: 2.8cqw;
+      line-height: 2.8cqw;
+      font-size: 1.9cqw;
+    }
+    .mbd-runlight { bottom: -1cqw; width: 0.9cqw; height: 0.9cqw; }
+    /* a tooltip belongs to a cursor, and a finger has none */
+    .mbd-app::after { display: none; }
+
+    /* ---------- app windows ---------- */
+    .mbd-win { inset: 7.2cqw 2cqw 13cqw 2cqw; border-radius: 2cqw; }
+
+    /* An editor window is ~160px tall here. The note under the code is a
+       paragraph of prose that takes 110-130 of them and leaves two lines of
+       code — the code is what the window is for, so the note stands down.
+       Same for the aside under the chat. */
+    .xc-note,
+    .as-note,
+    .ws-note,
+    .msg-meta {
+      display: none;
+    }
+    /* The chat is left with ~66px of thread after that, which is half a
+       bubble. The window's own title bar already says whose chat this is, so
+       the in-window header and the date divider stand down and the
+       conversation gets the room instead. */
+    .msg-thread_header,
+    .msg-day {
+      display: none;
+    }
+    .msg-continue { margin: 8px 14px 12px; padding: 7px 12px; }
+    /* 70% of a phone-wide panel wraps the first message into five lines and
+       only four of them fit; wider and a touch smaller and it lands whole */
+    .msg-bubble { max-width: 88%; padding: 7px 11px; font-size: 12px; }
+
+    .xc-body,
+    .as-body,
+    .ws-body,
+    .fg-body,
+    .ob-body,
+    .msg-body,
+    .sk-body {
+      grid-template-columns: 1fr;
+    }
+    .xc-nav,
+    .xc-inspector,
+    .as-nav,
+    .as-preview,
+    .ws-nav,
+    .ws-side,
+    .fg-layers,
+    .fg-props,
+    .ob-nav,
+    .ob-graph,
+    .msg-sidebar,
+    .sk-stats {
+      display: none;
+    }
+    .xc-status,
+    .as-status,
+    .ws-status {
+      display: none;
+    }
   }
 
 </style>
@@ -3244,7 +3441,29 @@ const menus = [
       target: new THREE.Vector3(),
       dist: 1,
       aspect: 1.6,
+      /* where the display sits inside the framed image, as fractions of it.
+         The landing rect is derived from these on phones, so the *panel*
+         can be given a size instead of the whole laptop. */
+      scrW: 0,
+      scrH: 0,
+      scrCx: 0.5,
+      scrCy: 0.5,
     };
+
+    /* Phones frame the display, not the chassis: the panel fills the width
+       and the keyboard deck runs off the bottom of the box. Anything wider
+       shows the whole laptop, the way it always has. */
+    const SCREEN_FIRST_MAX = 767;
+    const SCREEN_FILL = 0.94;
+    /* air between the top of the landing box and the top of the lid */
+    const SCREEN_TOP_PAD = 6;
+    /* the most of the viewport height the panel alone may take */
+    const SCREEN_MAX_H = 0.62;
+    /* How much of the design surface a real pixel of panel buys. Everything
+       sized in cqw is immune to this — it is the px-sized insides of the app
+       windows that this keeps readable. */
+    const PANEL_PER_SURFACE = 0.87;
+    let screenFirst = window.innerWidth <= SCREEN_FIRST_MAX;
 
     const pointer = { cx: 0, cy: 0, lx: 0, ly: 0, inside: false, moved: false };
     const tilt = { x: 0, y: 0, z: 0 };
@@ -3253,6 +3472,31 @@ const menus = [
 
     function hostSize() {
       return { w: host.clientWidth || 1, h: host.clientHeight || 1 };
+    }
+
+    /**
+     * The rect the whole laptop lands in: the in-flow placeholder, opened up
+     * a little, and never bigger than the viewport it has to live in. The
+     * placeholder is kept short so the section heading stays on screen, but
+     * the canvas spans the viewport, so the laptop may spill past the box.
+     * A short viewport — a phone on its side, a half-height window — would
+     * otherwise be framed for a rect nobody can see.
+     */
+    function wholeLaptopRect(hw: number, hh: number, box: DOMRect) {
+      const GROW = 1.2;
+      let w = (box.width || hw) * GROW;
+      let h = (box.height || hh) * GROW;
+      const maxW = hw * 0.985;
+      if (w > maxW) {
+        h *= maxW / w;
+        w = maxW;
+      }
+      const maxH = hh * 0.96;
+      if (h > maxH) {
+        w *= maxH / h;
+        h = maxH;
+      }
+      return { w, h };
     }
 
     function sizeRenderer() {
@@ -3280,6 +3524,7 @@ const menus = [
      */
     function solveFraming() {
       if (!ready) return;
+      screenFirst = window.innerWidth <= SCREEN_FIRST_MAX;
       const wr = wrap.getBoundingClientRect();
       fit.aspect = Math.max(0.2, (wr.width || 16) / (wr.height || 10));
 
@@ -3328,14 +3573,11 @@ const menus = [
       camera.lookAt(fit.target);
       camera.updateMatrixWorld();
 
-      pivot.rotation.copy(savedRot);
-      if (lidNode) {
-        lidNode.rotation.x = savedLid;
-        lidNode.position.y = savedLidY;
-      }
-      pivot.updateWorldMatrix(true, true);
-
-      /* size the DOM overlay to the screen's projected aspect */
+      /* Size the DOM overlay to the screen's projected aspect — while the
+         model is still in the pose the fit was solved for. Measured after the
+         restore below it would be read off whatever the flight is doing at
+         that instant: a resize with the lid shut used to hand the overlay the
+         aspect of a nearly edge-on panel and leave it there. */
       if (screenCorners && lcdMeshRef) {
         camera.updateProjectionMatrix();
         const quad = screenCorners
@@ -3343,20 +3585,46 @@ const menus = [
           .map((p) => projectToPx(p, 1000, Math.round(1000 / fit.aspect)));
         const xs = quad.map((p) => p[0]);
         const ys = quad.map((p) => p[1]);
-        const aspect =
-          (Math.max(...xs) - Math.min(...xs)) /
-          Math.max(1e-4, Math.max(...ys) - Math.min(...ys));
-        /* A narrow viewport shrinks the laptop, not the pixels: using a
-           smaller design surface keeps the UI legible once it is projected
-           onto a phone-sized panel. The compact layout below is driven by
-           container queries on this surface, never by the viewport. */
-        surface.w = window.innerWidth < 768 ? 520 : 700;
+        const imgH = Math.round(1000 / fit.aspect);
+        const x0 = Math.min(...xs), x1 = Math.max(...xs);
+        const y0 = Math.min(...ys), y1 = Math.max(...ys);
+        const aspect = (x1 - x0) / Math.max(1e-4, y1 - y0);
+        /* the display's box inside the framed image, as fractions of it */
+        fit.scrW = (x1 - x0) / 1000;
+        fit.scrH = (y1 - y0) / imgH;
+        fit.scrCx = (x0 + x1) / 2 / 1000;
+        fit.scrCy = (y0 + y1) / 2 / imgH;
+        /* Everything on the desktop is sized in cqw, so this number does not
+           change how big the desktop reads — it nets out against the
+           projection. What it does change is (a) the app windows, whose
+           internals are in px, and (b) which side of the compact container
+           query the desktop lands on. So it is derived from how wide the
+           panel is about to be, by the same rules the landing rect uses
+           below: the app windows then hold a readable size on every screen,
+           and the compact layout goes to the panels that are genuinely
+           small — a phone, a phone on its side, a portrait tablet — while a
+           wide window keeps the full desktop. The layout itself still only
+           ever asks the container, never the viewport. */
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const panelW = screenFirst
+          ? Math.min(vw * SCREEN_FILL, vh * SCREEN_MAX_H * aspect)
+          : wholeLaptopRect(vw, vh, wr).w * fit.scrW;
+        surface.w = Math.round(
+          Math.min(700, Math.max(420, panelW / PANEL_PER_SURFACE)),
+        );
         surface.h = Math.round(surface.w / aspect);
         screenUi.style.width = surface.w + 'px';
         screenUi.style.height = surface.h + 'px';
         screenUi.style.borderRadius = (surface.w * 0.042).toFixed(1) + 'px';
         laidOut = false;
       }
+      pivot.rotation.copy(savedRot);
+      if (lidNode) {
+        lidNode.rotation.x = savedLid;
+        lidNode.position.y = savedLidY;
+      }
+      pivot.updateWorldMatrix(true, true);
     }
 
     /**
@@ -3432,16 +3700,41 @@ const menus = [
           pivot.updateWorldMatrix(true, true);
         }
 
-        /* corners of the whole laptop, in pivot-local space, for the fit */
-        const lb = new THREE.Box3().setFromObject(pivot);
-        for (let i = 0; i < 8; i++) {
-          modelCorners.push(
-            new THREE.Vector3(
-              i & 1 ? lb.max.x : lb.min.x,
-              i & 2 ? lb.max.y : lb.min.y,
-              i & 4 ? lb.max.z : lb.min.z,
-            ),
-          );
+        /* Corners the fit is solved against, in world space at the landed
+           pose. One box around the whole laptop is a poor stand-in for it:
+           its top-front corner is empty air, sits nearest the camera and so
+           projects widest, and the fit then reserves ~9% of the frame for
+           nothing. A box per mesh has no such corner — the lid's box is
+           tilted with the lid, the base's hugs the base — and their union
+           still contains every vertex, so nothing can clip. */
+        pivot.updateWorldMatrix(true, true);
+        model.traverse((obj) => {
+          if (!(obj instanceof THREE.Mesh) || !obj.visible) return;
+          const geo = obj.geometry;
+          if (!geo.boundingBox) geo.computeBoundingBox();
+          const bb = geo.boundingBox;
+          if (!bb || bb.isEmpty()) return;
+          for (let i = 0; i < 8; i++) {
+            modelCorners.push(
+              new THREE.Vector3(
+                i & 1 ? bb.max.x : bb.min.x,
+                i & 2 ? bb.max.y : bb.min.y,
+                i & 4 ? bb.max.z : bb.min.z,
+              ).applyMatrix4(obj.matrixWorld),
+            );
+          }
+        });
+        if (!modelCorners.length) {
+          const lb = new THREE.Box3().setFromObject(pivot);
+          for (let i = 0; i < 8; i++) {
+            modelCorners.push(
+              new THREE.Vector3(
+                i & 1 ? lb.max.x : lb.min.x,
+                i & 2 ? lb.max.y : lb.min.y,
+                i & 4 ? lb.max.z : lb.min.z,
+              ),
+            );
+          }
         }
 
         /* find the display mesh by its LCD material */
@@ -3905,9 +4198,35 @@ const menus = [
         movePill(el);
       };
 
-      tabs.forEach((t) => t.addEventListener('click', () => select(t)));
+      let autoNarrowed = false;
+      tabs.forEach((t) =>
+        t.addEventListener('click', () => {
+          autoNarrowed = false;
+          select(t);
+        }),
+      );
       relayoutTabs = () => {
+        /* The compact layout hides the “Alle” tab — there is only room for
+           one list — so a panel that lands on it falls back to Projekte.
+           This runs at start-up and on every resize, so crossing the phone
+           breakpoint either way lands on a tab that is actually there. */
         const active = tabs.find((t) => t.classList.contains('is-active')) ?? tabs[0];
+        const all = tabs.find((t) => t.getAttribute('data-tab') === 'all');
+        const allGone = !!all && getComputedStyle(all).display === 'none';
+        if (active === all && allGone) {
+          const fallback = tabs.find((t) => t.getAttribute('data-tab') === 'projects');
+          if (fallback) {
+            autoNarrowed = true;
+            select(fallback);
+            return;
+          }
+        }
+        /* widened again, and the reader never asked for this tab */
+        if (autoNarrowed && !allGone && all) {
+          autoNarrowed = false;
+          select(all);
+          return;
+        }
         if (active && active.offsetWidth) movePill(active);
       };
       relayoutTabs();
@@ -4289,19 +4608,35 @@ const menus = [
       const hostRect = host.getBoundingClientRect();
       const box = wrap.getBoundingClientRect();
 
-      /* Landing target: the in-flow placeholder, opened up a little. The
-         placeholder is kept short so the section heading stays on screen, but
-         the canvas spans the viewport, so the laptop may spill past it. */
-      const GROW = 1.2;
-      let tw = (box.width || hw) * GROW;
-      let th = (box.height || hh) * GROW;
-      const maxW = hw * 0.985;
-      if (tw > maxW) {
-        th *= maxW / tw;
-        tw = maxW;
+      /* Landing target: the in-flow placeholder, opened up a little. */
+      const { w: baseW, h: baseH } = wholeLaptopRect(hw, hh, box);
+      let tw = baseW;
+      let th = baseH;
+      let tx = box.left - hostRect.left + ((box.width || hw) - tw) / 2;
+      let ty = box.top - hostRect.top + ((box.height || hh) - th) / 2;
+
+      /* Phones land screen-first. Fitting the whole laptop into a phone-wide
+         box leaves a ~220px display that no amount of layout can make
+         readable, so the rect is sized from the *panel* instead: it fills the
+         viewport width and the chassis is allowed to run off the box —
+         off the sides and, mostly, off the bottom. Both numbers come from
+         where solveFraming() found the display inside the frame, so this
+         stays correct however the model is framed. */
+      if (screenFirst && fit.scrW > 0.05) {
+        tw = (hw * SCREEN_FILL) / fit.scrW;
+        th = tw / fit.aspect;
+        /* A phone held sideways is 375px tall: filling the width would put
+           the panel alone past the bottom of the screen. Height wins. */
+        const maxDisp = hh * SCREEN_MAX_H;
+        if (fit.scrH > 0 && th * fit.scrH > maxDisp) {
+          const k = maxDisp / (th * fit.scrH);
+          tw *= k;
+          th *= k;
+        }
+        tx = box.left - hostRect.left + (box.width || hw) / 2 - fit.scrCx * tw;
+        ty =
+          box.top - hostRect.top + SCREEN_TOP_PAD + (th * fit.scrH) / 2 - fit.scrCy * th;
       }
-      const tx = box.left - hostRect.left + ((box.width || hw) - tw) / 2;
-      const ty = box.top - hostRect.top + ((box.height || hh) - th) / 2;
 
       let progress = 0;
       if (section) {
@@ -4319,8 +4654,8 @@ const menus = [
       /* Cruise: shadow whichever block of copy is currently on screen, so the
          laptop is always drifting behind the thing being read. */
       const amp = reducedMotion ? 0 : 1;
-      const fw = tw * CRUISE_SCALE;
-      const fh = th * CRUISE_SCALE;
+      const fw = baseW * CRUISE_SCALE;
+      const fh = baseH * CRUISE_SCALE;
 
       let ax = hw * 0.5;
       let ay = hh * 0.5;
