@@ -3094,6 +3094,42 @@ const menus = [
   }
 
   /* -------------------------------------------------------------------
+   * Touch dock
+   *
+   * How big the dock is, is a question about room; what is *in* it is a
+   * question about the input. With a cursor the dock stays as it is at any
+   * panel size — all eleven icons, and the tooltips, and the width the
+   * magnification needs to swell them into. A touch screen summons no
+   * tooltip and has no use for a bin, so that room goes into the icons
+   * themselves: 28px of tap target on a phone instead of 23.
+   *
+   * This is the one thing the surface may ask an @media: what the reader
+   * is pointing with. Its size still only ever comes from the container.
+   * ---------------------------------------------------------------- */
+  @media (hover: none), (pointer: coarse) {
+    .mbd-dock {
+      --icon: 7.6cqw;
+      --pad: 1cqw;
+      bottom: 1.6cqw;
+      gap: 0.5cqw;
+      padding-left: 1cqw;
+      padding-right: 1cqw;
+      border-radius: 2.6cqw;
+    }
+    .mbd-app--trash { display: none; }
+    .mbd-dock_sep { margin: 0.4cqw 0.35cqw; }
+    .mbd-badge {
+      min-width: 2.8cqw;
+      height: 2.8cqw;
+      line-height: 2.8cqw;
+      font-size: 1.9cqw;
+    }
+    .mbd-runlight { bottom: -1cqw; width: 0.9cqw; height: 0.9cqw; }
+    /* a tooltip needs a cursor to ask for it */
+    .mbd-app::after { display: none; }
+  }
+
+  /* -------------------------------------------------------------------
    * Compact display — the panel is too narrow for side-by-side panes.
    * Keyed to the projected surface, so it kicks in when the *screen* is
    * small, not when the browser window is. The runtime uses a 420px design
@@ -3198,31 +3234,6 @@ const menus = [
     .mbd-item_status { font-size: 2.2cqw; }
     .mbd-item_arrow { font-size: 2.5cqw; }
     .mbd-empty { margin-top: 2cqw; font-size: 2.4cqw; }
-
-    /* ---------- dock ----------
-       Eleven icons have to fit across 100cqw and still have room to
-       magnify, so they are smaller than the rest of the pass and the bin —
-       the one icon that does nothing on a phone — goes. */
-    .mbd-dock {
-      --icon: 7.6cqw;
-      --pad: 1cqw;
-      bottom: 1.6cqw;
-      gap: 0.5cqw;
-      padding-left: 1cqw;
-      padding-right: 1cqw;
-      border-radius: 2.6cqw;
-    }
-    .mbd-app--trash { display: none; }
-    .mbd-dock_sep { margin: 0.4cqw 0.35cqw; }
-    .mbd-badge {
-      min-width: 2.8cqw;
-      height: 2.8cqw;
-      line-height: 2.8cqw;
-      font-size: 1.9cqw;
-    }
-    .mbd-runlight { bottom: -1cqw; width: 0.9cqw; height: 0.9cqw; }
-    /* a tooltip belongs to a cursor, and a finger has none */
-    .mbd-app::after { display: none; }
 
     /* ---------- app windows ---------- */
     .mbd-win { inset: 7.2cqw 2cqw 13cqw 2cqw; border-radius: 2cqw; }
