@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Redact — Zwei Versionen an einem Abend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* palette sampled from redact.vortex-labs.de — warm dark, coral accent */
+      --bg: #1C1816;
+      --bg-card: #262019;
+      --rule: #3A332B;
+      --ink: #F8F2EB;
+      --ink-dim: #B8AFA3;
+      --ink-faint: #7A7167;
+
+      --accent: #D58664;      /* coral — headline accent */
+      --accent-deep: #AF7054; /* deeper coral — filled pill */
+      --sunshine: #E0C561;    /* sticker-pack yellow, sparing use */
+
+      --sans: 'Manrope', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Menlo', monospace;
+    }
+
+    html, body {
+      background: #100D0B;
+      font-family: var(--sans);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    html.export body { padding: 0; min-height: auto; align-items: flex-start; justify-content: flex-start; }
+    html.export .poster { border-radius: 0; box-shadow: none; }
+
+    /* ============== POSTER ============== */
+    .poster {
+      position: relative;
+      width: 1200px;
+      height: 800px;
+      background:
+        radial-gradient(900px 620px at 14% 12%, rgba(213, 134, 100, 0.14), transparent 55%),
+        radial-gradient(800px 620px at 92% 88%, rgba(224, 197, 97, 0.08), transparent 55%),
+        var(--bg);
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    .grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle 1px at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 55%, transparent 100%);
+    }
+
+    /* ============== TOP EYEBROW ROW (mirrors redact.vortex-labs.de's section header pattern) ============== */
+    .top {
+      position: absolute;
+      top: 44px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .top-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+    }
+    .top-num .n { color: var(--accent); }
+    .top-plat {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+    }
+
+    /* ============== BODY ============== */
+    .body {
+      position: absolute;
+      top: 128px;
+      left: 56px;
+      right: 56px;
+      bottom: 88px;
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 40px;
+      align-items: stretch;
+      z-index: 4;
+    }
+
+    /* ---- LEFT ---- */
+    .copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 26px;
+    }
+
+    .headline {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 76px;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-top: 6px;
+    }
+    .headline .row { display: block; white-space: nowrap; }
+    .headline .accent { color: var(--accent); }
+    .headline .dot { color: var(--sunshine); }
+
+    .sub {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--ink-dim);
+      max-width: 460px;
+      line-height: 1.5;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: var(--accent-deep);
+      color: #241914;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* spec row — direct callback to the site's Detection/Runtime/Platform/Price row */
+    .specs {
+      display: flex;
+      gap: 36px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+      margin-top: auto;
+    }
+    .spec {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .spec .k {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .spec .v {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* ---- RIGHT: flat numbered cards, no window chrome (matches feature-card style) ---- */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+    .card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .card.hi {
+      border-color: rgba(213, 134, 100, 0.4);
+      background: linear-gradient(180deg, rgba(213,134,100,0.08), rgba(213,134,100,0.02)), var(--bg-card);
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .card-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    .card-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .card.hi .card-tag { color: var(--sunshine); }
+    .card-title {
+      font-family: var(--sans);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-dim);
+      line-height: 1.45;
+    }
+
+    /* ============== BOTTOM ============== */
+    .bottom {
+      position: absolute;
+      bottom: 48px; left: 56px; right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--ink-dim);
+      z-index: 5;
+    }
+    .bottom .left { color: var(--ink); font-weight: 500; }
+    .bottom .left .slash { color: var(--accent); }
+    .bottom .center {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--ink-faint);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .bottom .center .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <script>if(location.search.includes('export'))document.documentElement.classList.add('export');</script>
+  <article class="poster">
+    <div class="grid"></div>
+
+    <header class="top">
+      <span class="top-num"><span class="n">№ 09</span> — REDACT</span>
+      <span class="top-plat">macOS · iPadOS · iOS</span>
+    </header>
+
+    <div class="body">
+      <section class="copy">
+        <h1 class="headline">
+          <span class="row">Zwei Versionen.</span>
+          <span class="row">Vier Stunden.</span>
+          <span class="row"><span class="accent">Ein Produkt</span><span class="dot">.</span></span>
+        </h1>
+
+        <p class="sub">
+          O(1)-Pixelation, StoreKit-Paywall und ein Release-Abend, an dem der Changelog nicht mitkam.
+        </p>
+
+        <div class="specs">
+          <div class="spec">
+            <span class="k">Releases</span>
+            <span class="v">v1.0 → 1.2.1</span>
+          </div>
+          <div class="spec">
+            <span class="k">Performance</span>
+            <span class="v">O(1) Pixelation</span>
+          </div>
+          <div class="spec">
+            <span class="k">Infra</span>
+            <span class="v">GitHub Actions</span>
+          </div>
+          <div class="spec">
+            <span class="k">Preis</span>
+            <span class="v">Free · Pro</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stack">
+        <div class="card">
+          <div class="card-top">
+            <span class="card-num">№ 01</span>
+            <span class="card-tag">Shipped</span>
+          </div>
+          <div class="card-title">v1.0.0</div>
+          <div class="card-desc">Erstes Release, 720p-Free-Tier-Cap</div>
+        </div>
+
+        <div class="card hi">
+          <div class="card-top">
+            <span class="card-num">№ 02</span>
+            <span class="card-tag">+4h später</span>
+          </div>
+          <div class="card-title">v1.1.0</div>
+          <div class="card-desc">StoreKit-2-Paywall, Pro-Tier live</div>
+        </div>
+
+        <div class="card">
+          <div class="card-top">
+            <span class="card-num">№ 03</span>
+            <span class="card-tag">CI grün</span>
+          </div>
+          <div class="card-title">1.2.1</div>
+          <div class="card-desc">Release geschlossen, Branch durch</div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bottom">
+      <span class="left">tyfn<span class="slash">/</span>online</span>
+      <span class="center"><span class="dot"></span>from prototype to product · five weeks</span>
+      <span>Tayfun Ilker · 2026</span>
+    </footer>
+  </article>
+</body>
+</html>
